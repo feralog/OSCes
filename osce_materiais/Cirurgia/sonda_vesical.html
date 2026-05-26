@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sondagem Vesical (Sonda de Foley) · OSCE</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e3da;
+    --text: #1a1a1a;
+    --muted: #666;
+    --accent: #1a1a1a;
+    --green: #2d6a4f;
+    --green-bg: #e8f5ee;
+    --blue: #0d47a1;
+    --blue-bg: #e3f2fd;
+    --r: 8px;
+    --font-body: Georgia, 'Times New Roman', serif;
+    --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.75;
+    min-height: 100vh;
+    padding-bottom: 70px;
+  }
+
+  .site-header {
+    background: var(--accent);
+    color: #f5f0e8;
+    padding: 16px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+  .header-inner { max-width: 780px; margin: 0 auto; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--font-ui); font-size: 11px; letter-spacing: .4px;
+    color: #a89f8c; text-decoration: none; margin-bottom: 8px;
+    border: 1px solid #444; border-radius: 20px; padding: 2px 10px;
+    transition: color .15s, border-color .15s;
+  }
+  .back-btn:hover { color: #f5f0e8; border-color: #888; }
+  .header-eyebrow {
+    font-family: var(--font-ui); font-size: 10px; letter-spacing: 2.5px;
+    color: #a89f8c; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .header-title {
+    font-size: 19px; font-weight: normal; letter-spacing: -.3px; line-height: 1.3;
+  }
+  .check-progress-bar {
+    height: 3px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 10px;
+  }
+  .check-progress-fill {
+    height: 100%; background: linear-gradient(90deg,#f4c842,#7ecf8a);
+    border-radius: 2px; transition: width .4s ease;
+  }
+  .check-total-label {
+    font-family: var(--font-ui); font-size: 10px; color: #a89f8c; margin-top: 3px;
+  }
+
+  .main { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
+
+  .page-h1 { display: none; }
+  h2.section-heading {
+    font-family: var(--font-ui); font-size: 11px; font-weight: bold;
+    letter-spacing: 1.8px; text-transform: uppercase; color: #777;
+    margin: 30px 0 10px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--border);
+  }
+  h3.section-heading {
+    font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+    margin: 22px 0 8px; color: var(--text);
+  }
+  h4.section-heading, h5.section-heading {
+    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+    margin: 16px 0 6px; color: var(--muted);
+  }
+  p { margin: 10px 0; font-size: 15px; }
+  p.eyebrow-meta {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted);
+    font-style: italic; margin: 4px 0 20px;
+    border-left: 3px solid var(--border); padding-left: 10px;
+  }
+  code {
+    background: #f0ede8; border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; font-size: 13px;
+    font-family: 'Consolas', 'Monaco', monospace;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  ul, ol { padding-left: 22px; margin: 10px 0; }
+  li { margin: 5px 0; font-size: 15px; }
+
+  .table-wrap {
+    overflow-x: auto; margin: 16px 0;
+    border-radius: var(--r); border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  table { width: 100%; border-collapse: collapse; font-family: var(--font-ui); font-size: 13px; }
+  th {
+    background: #1a1a1a; color: #f5f0e8;
+    padding: 9px 12px; text-align: left; font-weight: 600;
+    font-size: 11px; letter-spacing: .5px;
+  }
+  td { padding: 8px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f5f2ee; }
+  tr:hover td { background: #ede8e2; }
+
+  .checklist {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 12px 14px 10px; margin: 16px 0;
+    display: flex; flex-direction: column; gap: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    cursor: pointer; padding: 6px 4px;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 14px; line-height: 1.5; transition: background .1s;
+    border-radius: 4px;
+  }
+  .check-item:last-of-type { border-bottom: none; }
+  .check-item:hover { background: #f8f5f0; }
+  .check-item input[type=checkbox] {
+    width: 18px; height: 18px; min-width: 18px;
+    margin-top: 2px; accent-color: var(--green); cursor: pointer;
+  }
+  .check-item input[type=checkbox]:checked + span {
+    color: var(--muted); text-decoration: line-through;
+  }
+  .check-item span { flex: 1; }
+  .check-sub { margin: 6px 0 2px 4px; padding-left: 18px; }
+  .check-sub li { font-size: 13px; color: var(--muted); margin: 3px 0; }
+  .check-note { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .check-progress {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);
+  }
+  .prog-text {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted); font-weight: 600;
+  }
+
+  .professor-block {
+    background: var(--blue-bg); border-left: 4px solid #1976d2;
+    border-radius: 0 var(--r) var(--r) 0; padding: 14px 16px; margin: 20px 0 8px;
+    font-size: 14px; line-height: 1.65; color: #0a2e6e;
+  }
+  .question-label {
+    font-family: var(--font-ui); font-weight: 700; font-size: 14px;
+    margin: 20px 0 6px; color: var(--text); padding-left: 2px;
+  }
+  .answer-block {
+    background: var(--green-bg); border-left: 4px solid var(--green);
+    border-radius: 0 var(--r) var(--r) 0; padding: 12px 16px; margin: 6px 0 20px;
+    font-size: 14px; line-height: 1.65; color: #1b4332;
+  }
+  blockquote {
+    border-left: 3px solid var(--border); padding: 8px 14px;
+    margin: 12px 0; color: var(--muted); font-style: italic; font-size: 14px;
+  }
+
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1a1a1a; padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 200; border-top: 1px solid #333;
+  }
+  .bottom-nav a {
+    color: #a89f8c; text-decoration: none; font-family: var(--font-ui);
+    font-size: 12px; padding: 5px 14px; border: 1px solid #444;
+    border-radius: 20px; transition: color .15s, border-color .15s;
+  }
+  .bottom-nav a:hover { color: #f5f0e8; border-color: #888; }
+  .bottom-total { font-family: var(--font-ui); font-size: 12px; color: #a89f8c; }
+
+  @media (max-width: 600px) {
+    .header-title { font-size: 16px; }
+    td, th { padding: 6px 8px; font-size: 12px; }
+    .check-item { font-size: 13px; }
+    p, li { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../../osce-plano.html" class="back-btn">← Plano de estudos</a>
+    <div class="header-eyebrow">Cirurgia</div>
+    <div class="header-title">Sondagem Vesical (Sonda de Foley)</div>
+    <div class="check-progress-bar" id="hdrBar" style="display:none">
+      <div class="check-progress-fill" id="hdrFill" style="width:0%"></div>
+    </div>
+    <div class="check-total-label" id="hdrLabel"></div>
+  </div>
+</header>
+
+<main class="main">
+<h1 class="page-h1">Sondagem Vesical (Sonda de Foley)</h1>
+<p class="eyebrow-meta">Cirurgia | Método: Checklist de Procedimento</p>
+<hr>
+<h2 class="section-heading">Indicações</h2>
+<ul><li>Monitorização horária da diurese (cirurgias, UTI, choque)</li><li>Pós-operatório de cirurgias pélvicas ou abdominais extensas</li><li>Procedimentos no trato urinário inferior</li><li>Retenção urinária aguda (obstrução)</li><li>Incontinência urinária intratável (proteção de feridas)</li><li>Administração intravesical de medicamentos</li></ul>
+<h2 class="section-heading">Contraindicações Relativas</h2>
+<ul><li>Trauma uretral (sangue no meato, hematoma perineal, próstata flutuante → fazer uretrocistografia antes)</li><li>Estenose uretral conhecida</li><li>Prostatite aguda</li><li>Cirurgia uretral/vesical recente</li></ul>
+<hr>
+<h2 class="section-heading">Material Necessário</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Item</th><th>Observação</th></tr></thead><tbody>
+<tr><td>Sonda de Foley</td><td>Duplo lúmen; tamanho 14–18 Fr no adulto (≥ 20 Fr em obstruções)</td></tr>
+<tr><td>Seringa 10 mL + SF 0,9%</td><td>Para inflar o balonete</td></tr>
+<tr><td>Sistema coletor fechado</td><td>Conector + bolsa coletora</td></tr>
+<tr><td>Campo estéril fenestrado</td><td></td></tr>
+<tr><td>Luvas estéreis</td><td></td></tr>
+<tr><td>Antisséptico</td><td>Clorexidina aquosa ou PVPI; <strong>nunca alcoólico</strong> em mucosas</td></tr>
+<tr><td>Gel lubrificante estéril</td><td>Facilita a passagem e reduz trauma uretral</td></tr>
+<tr><td>Gaze estéril</td><td></td></tr>
+</tbody></table></div>
+<p><strong>Tipos de sonda:</strong></p>
+<ul><li><strong>Látex (Foley clássico):</strong> macia, flexível, barata; risco de reação local e colonização bacteriana</li><li><strong>Silicone:</strong> maior biocompatibilidade, mínima toxicidade, menor colonização; preferível em uso prolongado</li><li><strong>PVC/Polietileno (CVA):</strong> rígida à temperatura ambiente, molda-se ao canal uretral pela temperatura corporal; facilita inserção em casos difíceis</li></ul>
+<hr>
+<h2 class="section-heading">Checklist — Passos do Procedimento</h2>
+<h3 class="section-heading">Preparo</h3>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span>Identificar o paciente e explicar o procedimento</span></label><label class="check-item"><input type="checkbox"><span>Posicionar: decúbito dorsal com membros inferiores ligeiramente abduzidos<ul class="check-sub"><li><strong>Mulher:</strong> pernas fletidas (posição ginecológica)</li><li><strong>Homem:</strong> membros inferiores estendidos</li></ul></span></label><label class="check-item"><input type="checkbox"><span>Reunir todo o material antes de iniciar (não interromper depois de abrir campo)</span></label><label class="check-item"><input type="checkbox"><span>Higienizar as mãos antes e após o procedimento</span></label><div class="check-progress"><span class="prog-text">0/4 marcados</span></div></div>
+<h3 class="section-heading">Antissepsia e Campo</h3>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span>Calçar luvas de procedimento para limpeza inicial do meato</span></label><label class="check-item"><input type="checkbox"><span><strong>Limpar o meato uretral</strong> com antisséptico (movimentos únicos, do centro para fora)<ul class="check-sub"><li>Mulher: separar lábios maiores e menores com uma mão (mão não dominante = contaminada a partir daqui)</li><li>Homem: retrair o prepúcio e limpar meato em movimentos circulares</li></ul></span></label><label class="check-item"><input type="checkbox"><span>Montar campo estéril sobre o paciente</span></label><label class="check-item"><input type="checkbox"><span><strong>Trocar para luvas estéreis</strong></span></label><label class="check-item"><input type="checkbox"><span>Organizar material sobre campo estéril (sonda, gel, seringa, coletor)</span></label><label class="check-item"><input type="checkbox"><span>Lubrificar a sonda com gel estéril</span></label><div class="check-progress"><span class="prog-text">0/6 marcados</span></div></div>
+<h3 class="section-heading">Inserção</h3>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span><strong>Mulher:</strong> introduzir a sonda delicadamente pela uretra (~5–7 cm) até refluxo de urina</span></label><label class="check-item"><input type="checkbox"><span><strong>Homem:</strong> segurar o pênis em 90° em relação ao corpo (retifica a uretra), introduzir ~15–20 cm até refluxo de urina</span></label><label class="check-item"><input type="checkbox"><span>⚠️ <strong>Só inflar o balonete APÓS confirmar refluxo de urina</strong> (sonda posicionada na bexiga)</span></label><label class="check-item"><input type="checkbox"><span>Inflar o balonete com <strong>10 mL de SF 0,9%</strong> (nunca ar, nunca mais que 10 mL)</span></label><label class="check-item"><input type="checkbox"><span>Tracionar levemente a sonda até sentir resistência (balonete ancorado no colo vesical)</span></label><label class="check-item"><input type="checkbox"><span>Conectar ao sistema coletor fechado</span></label><div class="check-progress"><span class="prog-text">0/6 marcados</span></div></div>
+<h3 class="section-heading">Fixação e Verificação</h3>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span>Fixar a sonda na coxa (homem) ou coxa/abdome (evitar tração)</span></label><label class="check-item"><input type="checkbox"><span>Sistema coletor abaixo do nível da bexiga (nunca no chão)</span></label><label class="check-item"><input type="checkbox"><span>Repor o prepúcio ao estado normal (<strong>parafimose</strong> se não reposicionar!)</span></label><label class="check-item"><input type="checkbox"><span>Registrar: calibre da sonda, volume infundido no balonete, aspecto e volume de urina inicial</span></label><div class="check-progress"><span class="prog-text">0/4 marcados</span></div></div>
+<hr>
+<h2 class="section-heading">Erros Clássicos (OSCE)</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Erro</th><th>Consequência</th></tr></thead><tbody>
+<tr><td>Inflar balonete sem confirmar posição na bexiga</td><td>Ruptura uretral ou lesão prostática</td></tr>
+<tr><td>Não reposicionar prepúcio</td><td>Parafimose → comprometimento vascular do pênis</td></tr>
+<tr><td>Contaminar a sonda ao inserir</td><td>ITUAC (Infecção do Trato Urinário Associada a Cateter)</td></tr>
+<tr><td>Usar antisséptico alcoólico no meato</td><td>Queimadura de mucosa</td></tr>
+<tr><td>Sistema coletor acima da bexiga</td><td>Refluxo de urina → infecção ascendente</td></tr>
+<tr><td>Bolsa coletora no chão</td><td>Contaminação, kinking do tubo</td></tr>
+<tr><td>Não lubrificar a sonda</td><td>Trauma uretral, falsa via</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Complicações</h2>
+<ul><li><strong>ITUAC:</strong> principal complicação (risco aumenta com tempo de permanência)</li><li><strong>Trauma uretral / falsa via:</strong> força excessiva na inserção</li><li><strong>Parafimose:</strong> esquecimento de reposicionar prepúcio</li><li><strong>Hematúria:</strong> lesão mucosa</li><li><strong>Retenção pós-remoção:</strong> disfunção vesical transitória</li></ul>
+<hr>
+<h2 class="section-heading">Alertas OSCE ⚠️</h2>
+<ul><li>Em homens, segurar o pênis perpendicular ao corpo retifica a uretra bulbar (evita falsa via)</li><li><strong>Sonda não passa?</strong> → Não forçar; chamar urologia; considerar cistostomia suprapúbica</li><li>Cistostomia suprapúbica: alternativa cruenta por punção suprapúbica (cateter ou trocater) — indicada quando a sondagem uretral é contraindicada</li><li>Retirar sonda o mais precocemente possível (cada dia aumenta o risco de ITUAC)</li><li>Diurese normal: <strong>0,5–1 mL/kg/h</strong> no adulto</li></ul>
+<hr>
+<h2 class="section-heading">Fonte</h2>
+<ul><li>Gerado a partir de: <code>conteudo_drenos_e_sondas.md</code> (Aula 9 — Drenos e Sondas — Cirurgia UNISA)</li></ul>
+</main>
+
+<nav class="bottom-nav">
+  <a href="../../osce-plano.html">← Voltar ao plano</a>
+  <span class="bottom-total" id="bottomTotal"></span>
+</nav>
+
+<script>
+(function() {
+  var KEY = 'osce_v1_' + location.pathname;
+  var state = JSON.parse(localStorage.getItem(KEY) || '{}');
+  var boxes = document.querySelectorAll('input[type=checkbox]');
+  var total = boxes.length;
+
+  boxes.forEach(function(cb, idx) {
+    if (state[idx]) cb.checked = true;
+    cb.addEventListener('change', function() {
+      state[idx] = cb.checked;
+      localStorage.setItem(KEY, JSON.stringify(state));
+      updateAll();
+    });
+  });
+
+  function updateAll() {
+    var done = 0;
+    boxes.forEach(function(c){ if (c.checked) done++; });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    var bar = document.getElementById('hdrBar');
+    var fill = document.getElementById('hdrFill');
+    var lbl = document.getElementById('hdrLabel');
+    var bot = document.getElementById('bottomTotal');
+    if (total > 0) {
+      bar.style.display = 'block';
+      fill.style.width = pct + '%';
+      lbl.textContent = done + '/' + total + ' itens marcados (' + pct + '%)';
+      bot.textContent = done + '/' + total + ' checados';
+    }
+    document.querySelectorAll('.checklist').forEach(function(cl) {
+      var cbs = cl.querySelectorAll('input[type=checkbox]');
+      var cd = 0;
+      cbs.forEach(function(c){ if (c.checked) cd++; });
+      var prog = cl.querySelector('.prog-text');
+      if (prog) prog.textContent = cd + '/' + cbs.length + ' marcados';
+    });
+  }
+
+  updateAll();
+})();
+</script>
+</body>
+</html>

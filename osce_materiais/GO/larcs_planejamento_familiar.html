@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LARCs e Planejamento Familiar · OSCE</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e3da;
+    --text: #1a1a1a;
+    --muted: #666;
+    --accent: #1a1a1a;
+    --green: #2d6a4f;
+    --green-bg: #e8f5ee;
+    --blue: #0d47a1;
+    --blue-bg: #e3f2fd;
+    --r: 8px;
+    --font-body: Georgia, 'Times New Roman', serif;
+    --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.75;
+    min-height: 100vh;
+    padding-bottom: 70px;
+  }
+
+  .site-header {
+    background: var(--accent);
+    color: #f5f0e8;
+    padding: 16px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+  .header-inner { max-width: 780px; margin: 0 auto; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--font-ui); font-size: 11px; letter-spacing: .4px;
+    color: #a89f8c; text-decoration: none; margin-bottom: 8px;
+    border: 1px solid #444; border-radius: 20px; padding: 2px 10px;
+    transition: color .15s, border-color .15s;
+  }
+  .back-btn:hover { color: #f5f0e8; border-color: #888; }
+  .header-eyebrow {
+    font-family: var(--font-ui); font-size: 10px; letter-spacing: 2.5px;
+    color: #a89f8c; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .header-title {
+    font-size: 19px; font-weight: normal; letter-spacing: -.3px; line-height: 1.3;
+  }
+  .check-progress-bar {
+    height: 3px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 10px;
+  }
+  .check-progress-fill {
+    height: 100%; background: linear-gradient(90deg,#f4c842,#7ecf8a);
+    border-radius: 2px; transition: width .4s ease;
+  }
+  .check-total-label {
+    font-family: var(--font-ui); font-size: 10px; color: #a89f8c; margin-top: 3px;
+  }
+
+  .main { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
+
+  .page-h1 { display: none; }
+  h2.section-heading {
+    font-family: var(--font-ui); font-size: 11px; font-weight: bold;
+    letter-spacing: 1.8px; text-transform: uppercase; color: #777;
+    margin: 30px 0 10px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--border);
+  }
+  h3.section-heading {
+    font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+    margin: 22px 0 8px; color: var(--text);
+  }
+  h4.section-heading, h5.section-heading {
+    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+    margin: 16px 0 6px; color: var(--muted);
+  }
+  p { margin: 10px 0; font-size: 15px; }
+  p.eyebrow-meta {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted);
+    font-style: italic; margin: 4px 0 20px;
+    border-left: 3px solid var(--border); padding-left: 10px;
+  }
+  code {
+    background: #f0ede8; border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; font-size: 13px;
+    font-family: 'Consolas', 'Monaco', monospace;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  ul, ol { padding-left: 22px; margin: 10px 0; }
+  li { margin: 5px 0; font-size: 15px; }
+
+  .table-wrap {
+    overflow-x: auto; margin: 16px 0;
+    border-radius: var(--r); border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  table { width: 100%; border-collapse: collapse; font-family: var(--font-ui); font-size: 13px; }
+  th {
+    background: #1a1a1a; color: #f5f0e8;
+    padding: 9px 12px; text-align: left; font-weight: 600;
+    font-size: 11px; letter-spacing: .5px;
+  }
+  td { padding: 8px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f5f2ee; }
+  tr:hover td { background: #ede8e2; }
+
+  .checklist {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 12px 14px 10px; margin: 16px 0;
+    display: flex; flex-direction: column; gap: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    cursor: pointer; padding: 6px 4px;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 14px; line-height: 1.5; transition: background .1s;
+    border-radius: 4px;
+  }
+  .check-item:last-of-type { border-bottom: none; }
+  .check-item:hover { background: #f8f5f0; }
+  .check-item input[type=checkbox] {
+    width: 18px; height: 18px; min-width: 18px;
+    margin-top: 2px; accent-color: var(--green); cursor: pointer;
+  }
+  .check-item input[type=checkbox]:checked + span {
+    color: var(--muted); text-decoration: line-through;
+  }
+  .check-item span { flex: 1; }
+  .check-sub { margin: 6px 0 2px 4px; padding-left: 18px; }
+  .check-sub li { font-size: 13px; color: var(--muted); margin: 3px 0; }
+  .check-note { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .check-progress {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);
+  }
+  .prog-text {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted); font-weight: 600;
+  }
+
+  .professor-block {
+    background: var(--blue-bg); border-left: 4px solid #1976d2;
+    border-radius: 0 var(--r) var(--r) 0; padding: 14px 16px; margin: 20px 0 8px;
+    font-size: 14px; line-height: 1.65; color: #0a2e6e;
+  }
+  .question-label {
+    font-family: var(--font-ui); font-weight: 700; font-size: 14px;
+    margin: 20px 0 6px; color: var(--text); padding-left: 2px;
+  }
+  .answer-block {
+    background: var(--green-bg); border-left: 4px solid var(--green);
+    border-radius: 0 var(--r) var(--r) 0; padding: 12px 16px; margin: 6px 0 20px;
+    font-size: 14px; line-height: 1.65; color: #1b4332;
+  }
+  blockquote {
+    border-left: 3px solid var(--border); padding: 8px 14px;
+    margin: 12px 0; color: var(--muted); font-style: italic; font-size: 14px;
+  }
+
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1a1a1a; padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 200; border-top: 1px solid #333;
+  }
+  .bottom-nav a {
+    color: #a89f8c; text-decoration: none; font-family: var(--font-ui);
+    font-size: 12px; padding: 5px 14px; border: 1px solid #444;
+    border-radius: 20px; transition: color .15s, border-color .15s;
+  }
+  .bottom-nav a:hover { color: #f5f0e8; border-color: #888; }
+  .bottom-total { font-family: var(--font-ui); font-size: 12px; color: #a89f8c; }
+
+  @media (max-width: 600px) {
+    .header-title { font-size: 16px; }
+    td, th { padding: 6px 8px; font-size: 12px; }
+    .check-item { font-size: 13px; }
+    p, li { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../../osce-plano.html" class="back-btn">← Plano de estudos</a>
+    <div class="header-eyebrow">GO · Ginecologia/Obstetrícia</div>
+    <div class="header-title">LARCs e Planejamento Familiar</div>
+    <div class="check-progress-bar" id="hdrBar" style="display:none">
+      <div class="check-progress-fill" id="hdrFill" style="width:0%"></div>
+    </div>
+    <div class="check-total-label" id="hdrLabel"></div>
+  </div>
+</header>
+
+<main class="main">
+<h1 class="page-h1">LARCs e Planejamento Familiar — Simulação de Estação OSCE</h1>
+<p class="eyebrow-meta">GO · Ginecologia/Obstetrícia | Método: Simulação</p>
+<hr>
+<h2 class="section-heading">ESTAÇÃO 1: Aconselhamento — Adolescente Nulípara</h2>
+<div class="professor-block"><strong>[PROFESSOR]:</strong> Paciente de 17 anos, nulípara, nega comorbidades, tabagismo negativo. Iniciou vida sexual há 2 semanas, parceiro fixo. Quer "o melhor método anticonceptivo".</div>
+<div class="question-label"><strong>Pergunta 1:</strong> Qual método você indicaria como primeira escolha?</div>
+<div class="answer-block"><strong>Resposta esperada:</strong> LARC (método de longa ação reversível): implante de etonogestrel ou DIU hormonal (SIU-LNG Kyleena). São os métodos com maior eficácia (>99%), sem uso diário, reversíveis. SBP e FEBRASGO indicam LARCs como primeira escolha para adolescentes — não há contraindicação por ser nulípara.</div>
+<div class="question-label"><strong>Pergunta 2:</strong> O que é "dupla proteção" e por que é importante?</div>
+<div class="answer-block"><strong>Resposta esperada:</strong> Dupla proteção = método hormonal (ou DIU) + preservativo. Na adolescência há alta incidência de ISTs e AIDS. O LARC protege contra gravidez mas não contra ISTs — o preservativo deve ser mantido sempre.</div>
+<div class="question-label"><strong>Pergunta 3:</strong> Quais são as contraindicações absolutas ao DIU nessa paciente?</div>
+<div class="answer-block"><strong>Resposta esperada:</strong> Cavidade uterina distorcida (septo, mioma submucoso, malformação), DIP ativa ou cervicite no momento da inserção, sangramento uterino anormal não investigado, câncer de colo/endométrio aguardando tratamento. Ser nulípara ou adolescente NÃO é contraindicação.</div>
+<hr>
+<h2 class="section-heading">ESTAÇÃO 2: Mulher com Contraindicação ao Estrogênio</h2>
+<div class="professor-block"><strong>[PROFESSOR]:</strong> Paciente de 38 anos, tabagista (1 maço/dia), 6 semanas de pós-parto, amamentando exclusivamente. Deseja contracepção imediata. Pressão arterial: 130×85 mmHg.</div>
+<div class="question-label"><strong>Pergunta 1:</strong> Quais métodos estão contraindicados e por quê?</div>
+<div class="answer-block"><strong>Resposta esperada:</strong> Métodos com estrogênio (ACO combinado, anel vaginal, adesivo, injetável mensal combinado) — categoria 4 OMS: tabagista >35 anos + risco tromboembólico. Amamentação <6 semanas também contraindica estrogênio (inibe prolactina). DIU só após 4 semanas pós-parto (risco de expulsão).</div>
+<div class="question-label"><strong>Pergunta 2:</strong> Quais as opções para essa paciente?</div>
+<div class="answer-block"><strong>Resposta esperada:</strong> Métodos sem estrogênio: minipílula (desogestrel 75 µg), injetável trimestral (AMPD/Depo-Provera 150 mg IM), implante de etonogestrel, DIU hormonal (SIU-LNG) ou DIU de cobre. Todos podem ser usados na amamentação. Preservativo como dupla proteção.</div>
+<div class="question-label"><strong>Pergunta 3:</strong> Ela pergunta se pode usar a pílula do dia seguinte como método regular. O que você responde?</div>
+<div class="answer-block"><strong>Resposta esperada:</strong> A contracepção de emergência (levonorgestrel 1,5 mg em dose única até 72h, ou DIU de cobre até 5 dias) NÃO deve ser usada rotineiramente — menor eficácia, não protege contra ISTs, causa sangramento irregular. Orientar método regular imediatamente.</div>
+<hr>
+<h2 class="section-heading">ESTAÇÃO 3: Escolha do DIU — Cobre vs. Hormonal</h2>
+<div class="professor-block"><strong>[PROFESSOR]:</strong> Paciente de 32 anos, G2P2, dismenorreia intensa, fluxo aumentado, sem gestação planejada nos próximos 5 anos. Nega comorbidades. Quer DIU.</div>
+<div class="question-label"><strong>Pergunta 1:</strong> Qual DIU você escolheria e por quê?</div>
+<div class="answer-block"><strong>Resposta esperada:</strong> DIU hormonal (SIU-LNG Mirena): além de contraceptivo de alta eficácia, reduz significativamente o fluxo menstrual (pode causar amenorreia) e a dismenorreia. Indicado como terapêutico em SUA, adenomiose, endometriose e dismenorreia. O DIU cobre aumentaria o fluxo, piorando o quadro.</div>
+<div class="question-label"><strong>Pergunta 2:</strong> Quais as diferenças entre DIU de cobre e DIU hormonal?</div>
+<div class="answer-block"><strong>Resposta esperada:</strong></div>
+<div class="table-wrap"><table>
+<thead><tr><th>Característica</th><th>DIU Cobre (TCu 380A)</th><th>DIU Hormonal (SIU-LNG Mirena)</th></tr></thead><tbody>
+<tr><td>Hormônio</td><td>Não</td><td>Sim (LNG 20 µg/dia local)</td></tr>
+<tr><td>Mecanismo</td><td>Espermicida inflamatório (fagocitose, prostaglandinas)</td><td>Muco cervical hostil + atrofia endometrial</td></tr>
+<tr><td>Efeito no fluxo</td><td>Pode aumentar</td><td>Reduz (amenorreia em ~20%)</td></tr>
+<tr><td>Duração</td><td>10 anos</td><td>5–8 anos</td></tr>
+<tr><td>Emergência</td><td>Até 5 dias</td><td>Não</td></tr>
+<tr><td>Indicação terapêutica</td><td>Emergência, sem estrogênio</td><td>SUA, endometriose, dismenorreia, TRH</td></tr>
+</tbody></table></div>
+<div class="question-label"><strong>Pergunta 3:</strong> Quais complicações do DIU você deve orientar à paciente?</div>
+<div class="answer-block"><strong>Resposta esperada:</strong> Perfuração uterina (1/1.000 inserções — prevenção: histerometria antes da inserção), expulsão (autoexame dos fios mensalmente), cistos de ovário funcionais (geralmente regridem), gravidez com DIU (rara, mas 80% são ectópicas — urgência). Acompanhamento: USG transvaginal anual.</div>
+<hr>
+<h2 class="section-heading">Pontos que o professor vai checar</h2>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span>Indica LARC como primeira escolha para adolescentes</span></label><label class="check-item"><input type="checkbox"><span>Conhece contraindicações ao estrogênio (tabagismo >35a, amamentação <6 sem, TEV ativo)</span></label><label class="check-item"><input type="checkbox"><span>Diferencia DIU cobre e DIU hormonal (indicações terapêuticas do SIU-LNG)</span></label><label class="check-item"><input type="checkbox"><span>Orienta sobre dupla proteção (hormonal + preservativo)</span></label><label class="check-item"><input type="checkbox"><span>Sabe contraindicações gerais ao DIU</span></label><label class="check-item"><input type="checkbox"><span>Conhece contracepção de emergência (LNG até 72h, DIU cobre até 5 dias)</span></label><label class="check-item"><input type="checkbox"><span>Orienta sobre retorno da fertilidade (imediato ao retirar DIU/implante)</span></label><div class="check-progress"><span class="prog-text">0/7 marcados</span></div></div>
+<h2 class="section-heading">Tabela de LARCs — Referência Rápida</h2>
+<figure style="margin:22px 0;text-align:center"><img src="larcs_pdf_aula_planejamento_familiar_pg27_img1.png" alt="Equacao planejamento familiar LARCs eficacia progestagenos seguranca CV" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Equação do PF: Eficácia+Rotina (LARCs eliminam erro humano) × Sintonia do Progestágeno (acne/TPM guiam escolha) × Segurança Cardiovascular (Categoria 4 OMS → usar desogestrel/DIU-Cu)</figcaption></figure>
+
+<div class="table-wrap"><table>
+<thead><tr><th>Método</th><th>Duração</th><th>Hormônio</th><th>Eficácia</th><th>Destaque</th></tr></thead><tbody>
+<tr><td>DIU cobre (TCu 380A)</td><td>10 anos</td><td>Não</td><td>>99%</td><td>Emergência (5 dias), amamentação</td></tr>
+<tr><td>SIU-LNG Mirena 52 mg</td><td>5–8 anos</td><td>LNG 20 µg/dia</td><td>>99%</td><td>SUA, endometriose, amenorreia</td></tr>
+<tr><td>SIU-LNG Kyleena 19,5 mg</td><td>5 anos</td><td>LNG 9 µg/dia</td><td>>99%</td><td>Nulíparas, adolescentes</td></tr>
+<tr><td>Implante etonogestrel</td><td>3 anos</td><td>ENG 30–40 µg/dia</td><td>>99,9%</td><td>Amamentação, adolescentes, obesidade</td></tr>
+</tbody></table></div>
+<h2 class="section-heading">Critérios de Elegibilidade OMS (Resumo)</h2>
+<ul><li>Categoria 1: sem restrição</li><li>Categoria 2: benefícios > riscos (usar com cautela)</li><li>Categoria 3: riscos > benefícios (evitar se possível)</li><li>Categoria 4: contraindicação absoluta</li></ul>
+<hr>
+<h2 class="section-heading">Fonte</h2>
+<ul><li>Gerado a partir de: <code>conteudo_planejamento_familiar.md</code> (Aula 03 + Aula Prática de Planejamento Familiar)</li><li>Seções consultadas: LARCs, DIU cobre e hormonal, contraindicações, contracepção de emergência, adolescência, critérios OMS</li><li>Gaps identificados: Passo a passo técnico da inserção do DIU não detalhado no material; complementado com conhecimento geral</li></ul>
+</main>
+
+<nav class="bottom-nav">
+  <a href="../../osce-plano.html">← Voltar ao plano</a>
+  <span class="bottom-total" id="bottomTotal"></span>
+</nav>
+
+<script>
+(function() {
+  var KEY = 'osce_v1_' + location.pathname;
+  var state = JSON.parse(localStorage.getItem(KEY) || '{}');
+  var boxes = document.querySelectorAll('input[type=checkbox]');
+  var total = boxes.length;
+
+  boxes.forEach(function(cb, idx) {
+    if (state[idx]) cb.checked = true;
+    cb.addEventListener('change', function() {
+      state[idx] = cb.checked;
+      localStorage.setItem(KEY, JSON.stringify(state));
+      updateAll();
+    });
+  });
+
+  function updateAll() {
+    var done = 0;
+    boxes.forEach(function(c){ if (c.checked) done++; });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    var bar = document.getElementById('hdrBar');
+    var fill = document.getElementById('hdrFill');
+    var lbl = document.getElementById('hdrLabel');
+    var bot = document.getElementById('bottomTotal');
+    if (total > 0) {
+      bar.style.display = 'block';
+      fill.style.width = pct + '%';
+      lbl.textContent = done + '/' + total + ' itens marcados (' + pct + '%)';
+      bot.textContent = done + '/' + total + ' checados';
+    }
+    document.querySelectorAll('.checklist').forEach(function(cl) {
+      var cbs = cl.querySelectorAll('input[type=checkbox]');
+      var cd = 0;
+      cbs.forEach(function(c){ if (c.checked) cd++; });
+      var prog = cl.querySelector('.prog-text');
+      if (prog) prog.textContent = cd + '/' + cbs.length + ' marcados';
+    });
+  }
+
+  updateAll();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcards Pediatria · OSCE</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d2e;
+    --card-front: #1a2230;
+    --card-back: #162033;
+    --accent: #4fc3f7;
+    --accent2: #81c784;
+    --text: #e8eaf6;
+    --muted: #9aa0bc;
+    --green: #4caf82;
+    --red: #e05c7b;
+    --yellow: #f9c846;
+    --border: #2d3154;
+    --r: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px 40px;
+  }
+  header { text-align: center; margin-bottom: 28px; }
+  header .eyebrow { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+  header h1 { font-size: 26px; font-weight: 700; }
+  .controls { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; justify-content: center; }
+  .controls button { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 13px; transition: background 0.2s; }
+  .controls button:hover { background: var(--border); }
+  .controls button.active { background: var(--accent); border-color: var(--accent); color: #0f1117; }
+  .filter-tags { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; justify-content: center; }
+  .filter-tags button { font-size: 11px; padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); cursor: pointer; transition: all 0.2s; }
+  .filter-tags button.active { background: var(--accent); border-color: var(--accent); color: #0f1117; font-weight: 600; }
+  .progress { font-size: 13px; color: var(--muted); margin-bottom: 20px; display: flex; gap: 16px; align-items: center; }
+  .progress-bar { width: 180px; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.3s; }
+  .scene { width: 100%; max-width: 640px; height: 380px;.scene { width: 100%; max-width: 640px; min-height: 380px; height: auto; perspective: 1200px; cursor: pointer; margin-bottom: 20px; }
+  .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.55s cubic-bezier(0.4,0,0.2,1); }
+  .card.flipped { transform: rotateY(180deg); }
+  .face { position: absolute; inset: 0; backface-visibility: hidden;.face { position: absolute; top: 0; left: 0; right: 0; bottom: 0; backface-visibility: hidden; border-radius: var(--r); padding: 28px 32px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border: 1px solid var(--border); }
+  .face.front { background: var(--card-front); }
+  .face.back { background: var(--card-back); transform: rotateY(180deg); border-color: var(--accent); }
+  .card-tag { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; font-weight: 600; }
+  .card-q { font-size: 17px; font-weight: 600; line-height: 1.5; }
+  .card-hint { margin-top: 12px; font-size: 12px; color: var(--muted); }
+  .card-a { font-size: 14px; line-height: 1.7; }
+  .card-a strong { color: var(--accent); }
+  .card-a .alert { color: var(--red); font-weight: 700; }
+  .card-a .ok { color: var(--green); font-weight: 700; }
+  .card-a .warn { color: var(--yellow); font-weight: 700; }
+  .nav { display: flex; gap: 12px; align-items: center; }
+  .nav button { background: var(--surface); border: 1px solid var(--border); color: var(--text); width: 44px; height: 44px; border-radius: 10px; font-size: 20px; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; justify-content: center; }
+  .nav button:hover { background: var(--border); }
+  .nav button:disabled { opacity: 0.3; cursor: not-allowed; }
+  .card-number { font-size: 14px; color: var(--muted); min-width: 60px; text-align: center; }
+  .result-btns { display: flex; gap: 10px; margin-top: 16px; }
+  .result-btns button { padding: 9px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 600; }
+  .btn-know { background: var(--green); color: #fff; }
+  .btn-dontknow { background: var(--red); color: #fff; }
+  .stats { margin-top: 8px; font-size: 12px; color: var(--muted); display: flex; gap: 16px; }
+  .stat-know { color: var(--green); }
+  .stat-dk { color: var(--red); }
+  .flip-hint { font-size: 11px; color: var(--muted); margin-bottom: 8px; text-align: center; }
+
+  .card-img { max-width: 100%; max-height: 200px; border-radius: 6px; margin-bottom: 10px; object-fit: contain; }
+  @media (max-width: 480px) {
+    .scene { height: 320px; }
+    .face { padding: 20px 16px; }
+    .card-q { font-size: 15px; }
+    .card-a { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Flashcards · Pediatria</div>
+  <h1>Pediatria — OSCE</h1>
+</header>
+
+<div class="controls">
+  <button id="btnAll" class="active" onclick="filterMode('all')">Todos</button>
+  <button id="btnRev" onclick="filterMode('review')">Revisar</button>
+  <button onclick="shuffle()">🔀 Embaralhar</button>
+  <button onclick="resetAll()">↺ Reiniciar</button>
+</div>
+
+<div class="filter-tags" id="tagFilters"></div>
+
+<div class="progress">
+  <span id="progText">0 / 35</span>
+  <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+</div>
+
+<div class="flip-hint">Clique no card para revelar · Teclas: ← → Espaço · 1=Não sei 2=Sei</div>
+<div class="scene" onclick="flipCard()">
+  <div class="card" id="cardEl">
+    <div class="face front">
+      <div class="card-tag" id="cardTag"></div>
+      <div class="card-q" id="cardQ"></div>
+      <div class="card-hint">👆 clique para ver a resposta</div>
+    </div>
+    <div class="face back">
+      <div class="card-tag" id="cardTagB"></div>
+      <div class="card-a" id="cardA"></div>
+    </div>
+  </div>
+</div>
+
+<div class="nav">
+  <button id="btnPrev" onclick="prevCard()">◀</button>
+  <span class="card-number" id="cardNum">1 / 35</span>
+  <button id="btnNext" onclick="nextCard()">▶</button>
+</div>
+
+<div class="result-btns" id="resultBtns" style="display:none">
+  <button class="btn-dontknow" onclick="markCard(false)">✗ Não sei</button>
+  <button class="btn-know" onclick="markCard(true)">✓ Sei</button>
+</div>
+
+<div class="stats">
+  <span>Sei: <span class="stat-know" id="statKnow">0</span></span>
+  <span>Revisar: <span class="stat-dk" id="statDk">0</span></span>
+</div>
+
+<script>
+const ALL_CARDS = [
+  // ── Cards Visuais com Imagem ──
+  { tag: "Reanimação", img: "atendimento_ao_rece_m_nascido_2026_1_pg06.png", q: "Qual o fluxo de decisão ao nascer (as 3 perguntas)?", a: "Todas SIM → pele-a-pele com mãe.<br><strong class='ok'>A termo? Respirando/chorando? Tônus?</strong><br>Qualquer NÃO → mesa de reanimação imediatamente." },
+  { tag: "Reanimação", img: "atendimento_ao_rece_m_nascido_2026_1_pg08.png", q: "Quais os passos iniciais nos primeiros 30 segundos?", a: "<strong>1. Aquecer</strong> (calor radiante) → <strong>2. Secar</strong> (corpo + cabeça, desprezar campos) → <strong>3. Posicionar</strong> (leve extensão) → <strong>4. Aspirar</strong> (só se obstrução visível — não é rotina)." },
+  { tag: "Reanimação", img: "atendimento_ao_rece_m_nascido_2026_1_pg11.png", q: "Quais os alvos de SatO₂ pré-ductal por minuto de vida?", a: "1 min: <strong>70–80%</strong> | 5 min: <strong>80–90%</strong> | 10 min: <strong>85–95%</strong>.<br><span class='alert'>Não suplementar O₂ se dentro dos alvos, mesmo que o bebê pareça cianótico.</span>" },
+  { tag: "Exantemas", img: "playbook_cl_nico_de_exantemas_pg11.png", q: "Identifique os achados clínicos de Escarlatina × Eritema Infeccioso no mapeamento anatômico", a: "<strong>Escarlatina:</strong> Sinal de Filatov (palidez perioral) + Sinal de Pastia (linhas nas dobras) + língua em framboesa.<br><strong>Eritema Infeccioso:</strong> face esbofeteada (eritema malar) + rendilhado em extremidades, poupa palmas/plantas." },
+  { tag: "Exantemas", img: "playbook_cl_nico_de_exantemas_pg12.png", q: "Qual a diferença na cinética febre × exantema entre Escarlatina e Eritema Infeccioso?", a: "<strong>Escarlatina:</strong> exantema surge durante a febre alta (juntos).<br><strong>Eritema Infeccioso:</strong> exantema surge <em>após</em> a queda da febre (fácies esbofeteada pós-doença febril)." },
+  { tag: "Sífilis/HIV", img: "protocolo_s_filis_e_hiv_neonatal_pg05.png", q: "Como a carga viral na 34ª semana define a via de parto no HIV?", a: "<strong class='ok'>CV <1.000 cópias/mL</strong> → parto vaginal (AZT intraparto não obrigatório).<br><strong class='alert'>CV ≥1.000 ou desconhecida</strong> → cesárea eletiva ≥38 semanas + AZT intraparto obrigatório." },
+  { tag: "Sífilis/HIV", img: "protocolo_s_filis_e_hiv_neonatal_pg09.png", q: "Descreva o fluxo de triagem para sífilis congênita ao nascer", a: "<strong class='alert'>Regra de Ouro: NUNCA usar sangue do cordão</strong> (risco de falso-reagente).<br>Mãe adequadamente tratada + RN assintomático + VDRL RN < materno → seguimento ambulatorial.<br>Qualquer desvio → investigação e tratamento." },
+  { tag: "Bronquiolite", img: "bronquiolite_x_lactente_sibilnate_x_asma_pg11.png", q: "Compare BVA (Bronquiolite Viral Aguda) × Lactente Sibilante nesta tabela", a: "<strong>BVA:</strong> 1º episódio, pródromo viral, taquipneia grave, SatO₂ ↓, sem atopia familiar.<br><strong>Lactente Sibilante:</strong> recorrente (>3 ep.), mãe asmática, expiração prolongada, SatO₂ preservada → pensar em asma." },
+  { tag: "Bronquiolite", img: "bronquiolite_x_lactente_sibilnate_x_asma_pg16.png", q: "Quais os 4 fenótipos de sibilância pelo consenso PRACTALL/Martínez?", a: "1. <strong>Transitória</strong> (viral, <2 anos, resolve)<br>2. <strong>Não-Atópica</strong> (exclusivamente viral)<br>3. <strong>Atópica Persistente</strong> (= Asma)<br>4. <strong>Intermitente Grave</strong> (episódios graves, fundo atópico)" },
+  { tag: "Pneumonia", img: "aula_pratica_pneumonia_pg06.png", q: "Quais os achados do exame físico torácico na pneumonia com derrame?", a: "<strong>Inspeção:</strong> aumento do hemitórax, tiragem intercostal/subcostal.<br><strong>Palpação:</strong> FTV diminuído.<br><strong>Percussão:</strong> macicez na base.<br><strong>Ausculta:</strong> MV reduzido + broncofonia diminuída." },
+
+  // Neonatologia — Reanimação
+  { tag: "Reanimação", q: "Quais são as 3 perguntas de avaliação imediata do RN ao nascer?", a: "1. É a <strong>termo</strong> (≥37 semanas)? 2. Está <strong>respirando ou chorando</strong>? 3. <strong>Tônus muscular em flexão</strong>? Se SIM às 3 → boa vitalidade → pele-a-pele com a mãe." },
+  { tag: "Reanimação", q: "O que é o 'Minuto de Ouro' na reanimação neonatal?", a: "A VPP deve ser iniciada dentro do <strong>primeiro minuto de vida</strong> quando indicada. Atrasar a ventilação aumenta o risco de lesão cerebral hipóxica." },
+  { tag: "Reanimação", q: "Qual a frequência e a técnica da VPP no RN?", a: "<strong>40–60 movimentos/min</strong> com a regra 'aperta-solta-solta'. Pressão inicial ~25 cmH₂O. Máscara cobrindo boca E nariz (técnica da letra C). Iniciar com ar ambiente (21%)." },
+  { tag: "Reanimação", q: "Quando iniciar massagem cardíaca no RN e qual a relação com a VPP?", a: "Quando FC <60 após <strong>30 segundos de VPP com técnica adequada</strong> + O₂ 60–100%. Relação: <strong class='alert'>3 compressões : 1 ventilação</strong> = 90 comp + 30 vent = 120 eventos/min." },
+  { tag: "Reanimação", q: "Qual a dose de adrenalina no RN e como preparar?", a: "Diluição <strong>1:10.000</strong> (1 mL adrenalina + 9 mL SF 0,9%). Via traqueal: 0,1 mg/kg. Via EV (catéter umbilical): <strong>0,01–0,03 mg/kg</strong>. Repetir a cada 3–5 min." },
+  // Neonatologia — RN Normal
+  { tag: "RN Normal", q: "Quais os 4 testes de triagem neonatal obrigatórios e quando realizá-los?", a: "<strong>Pezinho</strong> 3–5 dias (PKU, hipotireoidismo, etc). <strong>Orelhinha</strong> (OEA) antes da alta. <strong>Coraçãozinho</strong> (oximetria) após 24h. <strong>Olhinho</strong> (reflexo vermelho) antes da alta." },
+  { tag: "RN Normal", q: "Qual o clampeamento ideal do cordão umbilical e por quê?", a: "Clampeamento <strong>tardio ≥60 segundos</strong> após a extração. Benefícios: maior concentração de hemoglobina nas primeiras 24h e de ferritina nos primeiros 3–6 meses; reduz anemia do lactente. Pode elevar risco de policitemia." },
+  // TORCHS
+  { tag: "TORCHS", q: "Qual a diferença entre as calcificações da toxoplasmose e do CMV congênito?", a: "<strong>Toxoplasmose</strong>: calcificações <span class='alert'>difusas</span> (córtex cerebral + gânglios da base) + hidrocefalia + coriorretinite. <strong>CMV</strong>: calcificações <strong class='ok'>periventriculares</strong> + perda auditiva neurossensorial." },
+  { tag: "TORCHS", q: "Qual a tríade clássica da Rubéola Congênita?", a: "<strong>Surdez neurossensorial</strong> (mais frequente) + <strong>Cardiopatia</strong> (PCA + estenose da artéria pulmonar) + <strong>Catarata</strong> (leucocoria). Retinopatia em 'sal e pimenta'. Maior risco no 1º trimestre." },
+  { tag: "TORCHS", q: "Por que o aleitamento materno é contraindicado no HIV no Brasil?", a: "O vírus HIV é transmitido pelo leite materno (responsável por 25% da transmissão vertical pós-natal). <span class='alert'>Brasil proíbe amamentação</span> independente da carga viral (diferente de países de baixa renda com recomendação OMS). Fornecer fórmula até 2 anos." },
+  { tag: "TORCHS", q: "Qual a profilaxia do RN de mãe HIV+? E o esquema de alto risco?", a: "Todos os RN de mãe HIV+ recebem profilaxia ARV. <strong>Alto risco</strong> (sem TARV pré-natal, CV elevada/desconhecida): <strong>AZT + 3TC + RAL por 28 dias</strong> (RAL contraindicado se IG <37 sem → substituir por NVP). Baixo risco: AZT apenas 28 dias." },
+  // Icterícia
+  { tag: "Icterícia", q: "Quando a icterícia neonatal é sempre patológica?", a: "Icterícia nas primeiras <strong class='alert'>24 horas de vida</strong> = SEMPRE patológica. Também: BT >12 mg/dL em qualquer momento, duração >7 dias (RNT), BD >1 mg/dL." },
+  { tag: "Icterícia", q: "Quais são as zonas de Kramer 3 e 5 e seus valores de BT?", a: "<strong>Zona 3</strong> (umbigo → joelhos) = ~11–12 mg/dL. <strong>Zona 5</strong> (palmas e plantas) = >15 mg/dL — urgência. Sempre confirmar com bilirrubina sérica antes de decisão terapêutica." },
+  { tag: "Icterícia", q: "Icterícia por leite materno × do aleitamento — qual não pode interromper o AME?", a: "<strong>Icterícia por leite materno</strong>: diagnóstico de exclusão, boa oferta, peso normal → <span class='ok'>NUNCA suspender AME</span>. Icterícia do aleitamento: baixa oferta + perda de peso → rever técnica de amamentação." },
+  { tag: "Icterícia", q: "O que é atresia biliar e qual o prazo para cirurgia?", a: "Obliteração dos ductos biliares extra-hepáticos → colestase neonatal progressiva. <strong class='alert'>Cirurgia de Kasai antes dos 30 dias de vida</strong>. Principal indicação de transplante hepático em crianças. Suspeitar: icterícia >14 dias + fezes claras + BD elevada." },
+  // Pneumonia
+  { tag: "Pneumonia", q: "Qual a tríade clínica da pneumonia pediátrica e por que a sibilância NÃO faz parte?", a: "<strong>Febre + Tosse + Taquipneia</strong> (sem sibilância). Sibilância sugere bronquiolite ou asma (obstrução de vias aéreas). Taquipneia = sinal mais sensível de pneumonia." },
+  { tag: "Pneumonia", q: "Qual o ponto de corte de taquipneia em criança de 18 meses pela OMS?", a: "Faixa 2–11 meses: ≥50 irpm. Faixa <strong>1–5 anos: ≥40 irpm</strong>. 18 meses cai na faixa 1–5 anos → <strong class='alert'>≥40 irpm = taquipneia</strong> = pneumonia até prova em contrário." },
+  { tag: "Pneumonia", q: "Quando indicar internação na pneumonia pediátrica?", a: "SatO₂ <strong class='alert'><92%</strong>, MV abolido, desnutrição grave, sonolência/rebaixamento, recusa alimentar, prostração, lactentes <2 meses com FR ≥60 irpm, falha terapêutica ambulatorial." },
+  { tag: "Pneumonia", q: "Qual o antibiótico de 1ª linha na PAC pediátrica ambulatorial e a duração?", a: "<strong>Amoxicilina 50 mg/kg/dia</strong> de 8/8h ou 12/12h (máx 4 g/dia) por <strong>7 dias</strong> (até 10 dias). Se Mycoplasma (>5 anos): azitromicina 10 mg/kg/dia dose única 5 dias." },
+  // Bronquiolite
+  { tag: "Bronquiolite", q: "O que define Bronquiolite Viral Aguda (BVA)?", a: "Primeiro episódio de sibilância em lactente <strong><24 meses</strong>, precedido por pródromo viral (2–5 dias). Agente: <strong>VSR</strong> (principal). Diagnóstico clínico — não pedir RX de rotina." },
+  { tag: "Bronquiolite", q: "O que NÃO usar no tratamento da bronquiolite e o que usar?", a: "<span class='alert'>NÃO</span>: antibióticos, corticoides, broncodilatadores (sem evidência). <span class='ok'>USAR</span>: hidratação, O₂ se SatO₂ <92%, desobstrução nasal com SF, posicionamento. Apneia pode ser a primeira manifestação — alerta em <3 meses." },
+  // Meningite
+  { tag: "Meningite", q: "Qual a tríade clínica da meningite em criança >1 ano e os sinais em lactentes?", a: "<strong>>1 ano</strong>: Febre + Cefaleia + Vômitos + rigidez de nuca. <strong>Lactente</strong>: <span class='alert'>abaulamento de fontanela</span>, irritabilidade, recusa alimentar, letargia, convulsões." },
+  { tag: "Meningite", q: "Como é o líquor na meningite bacteriana vs viral?", a: "<strong class='alert'>Bacteriana</strong>: turvo, leucócitos >1000/mm³ (neutrófilos), glicose <30 mg/dL, proteína >40 mg/dL. <strong class='ok'>Viral</strong>: límpido, linfocitário 10–1000/mm³, glicose normal, proteína levemente elevada." },
+  { tag: "Meningite", q: "Qual o ATB empírico para meningite em criança >3 meses e quando usar dexametasona?", a: "<strong>Ceftriaxona 100 mg/kg/dia 12/12h</strong> (máx 4 g/dia). Adicionar vancomicina se suspeita de pneumococo resistente. Dexametasona <strong>0,15 mg/kg 6/6h 4 dias</strong>: administrar <span class='alert'>antes ou junto ao 1º ATB</span> para H. influenzae e pneumococo." },
+  { tag: "Meningite", q: "Qual a profilaxia para comunicantes domiciliares de meningococo?", a: "<strong>Rifampicina</strong>: criança 10 mg/kg 12/12h por <strong>2 dias</strong>; adulto 600 mg 12/12h 2 dias. Para Hib: 20 mg/kg/dia × 4 dias. Isolamento respiratório até 24h de ATB." },
+  // Exantemas
+  { tag: "Exantemas", q: "Qual o achado patognomônico do sarampo?", a: "<strong>Manchas de Koplik</strong>: pontos brancos na mucosa jugal, visíveis na fase catarral (1–2 dias antes do exantema). Exantema morbiliforme segue direção crânio-caudal retroauricular → face → MMII. <span class='alert'>Notificação compulsória.</span>" },
+  { tag: "Exantemas", q: "Varicela: quais as características do exantema e quando usar aciclovir?", a: "Exantema pápulo-vesicular <strong>polimórfico</strong> (lesões em todos os estágios simultâneos). Distribuição <strong>centrípeta</strong> (tronco > face > extremidades). Aciclovir: <span class='alert'>apenas para imunocomprometidos</span>, >12 anos, doença crônica de pele ou corticoide prolongado." },
+  { tag: "Exantemas", q: "Quais os sinais de Filatov e Pastia da escarlatina?", a: "<strong>Sinal de Filatov</strong>: palidez perioral em contraste com eritema facial. <strong>Sinal de Pastia</strong>: linhas avermelhadas nas dobras (axila, fossa cubital). Exantema <em>escarlatiniforme</em> (áspero como lixa). Língua em framboesa (3º–4º dia). Tratamento: penicilina 10 dias (previne febre reumática)." },
+  { tag: "Exantemas", q: "Exantema Súbito (Roséola): qual a sequência temporal e a complicação principal?", a: "Febre alta 3–5 dias → queda brusca em lise → <strong>aparecimento simultâneo do exantema</strong> maculopapular róseo. HHV-6/7. Faixa etária: 6 meses–3 anos. Complicação: <strong class='alert'>convulsão febril</strong>." },
+  { tag: "Exantemas", q: "Eritema Infeccioso (5ª doença): o que é 'fácies esbofeteada' e quem causa?", a: "<strong>Parvovírus B19</strong>. Eritema malar bilateral intenso (bochechas 'esbofeteadas') + rendilhado nas extremidades que recidiva com calor/sol. Faixa etária: 5–10 anos. Risco em gestantes: hidropsia fetal não imune." },
+  // ITU
+  { tag: "ITU", q: "Qual o quadro clínico de ITU em lactente <2 anos?", a: "Principal manifestação: <strong>Febre Sem Sinais de Localização (FSSL)</strong> — febre sem outro foco evidente. Em RN: síndrome séptica inespecífica. Pré-escolar: disúria + polaciúria + urgência miccional." },
+  { tag: "ITU", q: "Qual o padrão ouro para diagnóstico de ITU pediátrica?", a: "<strong>Urocultura ≥100.000 UFC/mL</strong> de um único agente. A urina 1 (piúria ≥5 piócitos/campo) é triagem — não diagnóstico. Saco coletor apenas para excluir ITU (alta taxa de contaminação). Método para lactente: <strong>cateterismo vesical</strong>." },
+  // Diarreia
+  { tag: "Diarreia", q: "O que é desidratação grave e qual o plano de tratamento?", a: "Perda ≥10% do peso, letargia, turgor >2 seg, pulso fraco. <strong>Plano C</strong>: <span class='alert'>SF 0,9% EV 20 mL/kg em 20–30 min</span> (expansão). Repetir até 3× conforme resposta. Após estabilização: manutenção ou TRO." },
+  { tag: "Diarreia", q: "Por que NÃO usar antibiótico na diarreia por E. coli entero-hemorrágica (EHEC)?", a: "ATB aumenta a liberação de toxina Shiga → <strong class='alert'>risco de Síndrome Hemolítico-Urêmica (SHU)</strong>: anemia hemolítica + trombocitopenia + insuficiência renal aguda. EHEC (O157:H7): apenas suporte." },
+  // Constipação
+  { tag: "Constipação", q: "Qual sinal de alarme sugere doença de Hirschsprung na constipação?", a: "Constipação desde os primeiros dias de vida + <strong>não eliminou mecônio nas primeiras 24h</strong> + distensão abdominal progressiva. Diagnóstico: enema opaco + <strong>biópsia retal</strong> (ausência de células ganglionares). Tratamento: cirurgia." },
+];
+
+let deck = [...ALL_CARDS];
+let current = 0;
+let isFlipped = false;
+let statusMap = {};
+let activeFilter = 'all';
+let activeTag = null;
+
+const tags = [...new Set(ALL_CARDS.map(c => c.tag))];
+
+function buildTagFilters() {
+  const container = document.getElementById('tagFilters');
+  container.innerHTML = '';
+  const allBtn = document.createElement('button');
+  allBtn.textContent = 'Todos os temas';
+  allBtn.className = 'active';
+  allBtn.id = 'tagAll';
+  allBtn.onclick = () => setTag(null);
+  container.appendChild(allBtn);
+  tags.forEach(tag => {
+    const btn = document.createElement('button');
+    btn.textContent = tag;
+    btn.id = 'tag_' + tag;
+    btn.onclick = () => setTag(tag);
+    container.appendChild(btn);
+  });
+}
+
+function setTag(tag) {
+  activeTag = tag;
+  document.querySelectorAll('.filter-tags button').forEach(b => b.classList.remove('active'));
+  const el = tag ? document.getElementById('tag_' + tag) : document.getElementById('tagAll');
+  if (el) el.classList.add('active');
+  rebuildDeck();
+}
+
+function rebuildDeck() {
+  let base = activeTag ? ALL_CARDS.filter(c => c.tag === activeTag) : [...ALL_CARDS];
+  if (activeFilter === 'review') {
+    base = base.filter(c => statusMap[c.q] === false || statusMap[c.q] === undefined);
+    if (base.length === 0) base = activeTag ? ALL_CARDS.filter(c => c.tag === activeTag) : [...ALL_CARDS];
+  }
+  deck = base;
+  current = 0;
+  render();
+}
+
+function render() {
+  const c = deck[current];
+  document.getElementById('cardTag').textContent = c.tag;
+  document.getElementById('cardTagB').textContent = c.tag;
+  document.getElementById('cardQ').textContent = c.q;
+  document.getElementById('cardA').innerHTML = c.a;
+  document.getElementById('cardNum').textContent = `${current + 1} / ${deck.length}`;
+  document.getElementById('cardEl').classList.remove('flipped');
+  isFlipped = false;
+  document.getElementById('resultBtns').style.display = 'none';
+  updateProgress();
+  document.getElementById('btnPrev').disabled = current === 0;
+  document.getElementById('btnNext').disabled = current === deck.length - 1;
+}
+
+function flipCard() {
+  isFlipped = !isFlipped;
+  document.getElementById('cardEl').classList.toggle('flipped', isFlipped);
+  document.getElementById('resultBtns').style.display = isFlipped ? 'flex' : 'none';
+}
+
+function nextCard() { if (current < deck.length - 1) { current++; render(); } }
+function prevCard() { if (current > 0) { current--; render(); } }
+
+function markCard(know) {
+  statusMap[deck[current].q] = know;
+  updateStats();
+  if (current < deck.length - 1) { current++; render(); }
+}
+
+function updateProgress() {
+  const done = Object.keys(statusMap).length;
+  const total = ALL_CARDS.length;
+  document.getElementById('progText').textContent = `${done} / ${total}`;
+  document.getElementById('progFill').style.width = `${(done / total) * 100}%`;
+}
+
+function updateStats() {
+  const vals = Object.values(statusMap);
+  document.getElementById('statKnow').textContent = vals.filter(v => v).length;
+  document.getElementById('statDk').textContent = vals.filter(v => !v).length;
+}
+
+function shuffle() {
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  current = 0; render();
+}
+
+function filterMode(mode) {
+  activeFilter = mode;
+  document.getElementById('btnAll').classList.toggle('active', mode === 'all');
+  document.getElementById('btnRev').classList.toggle('active', mode === 'review');
+  rebuildDeck();
+}
+
+function resetAll() {
+  statusMap = {};
+  activeFilter = 'all';
+  activeTag = null;
+  document.getElementById('btnAll').classList.add('active');
+  document.getElementById('btnRev').classList.remove('active');
+  document.getElementById('statKnow').textContent = '0';
+  document.getElementById('statDk').textContent = '0';
+  setTag(null);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') nextCard();
+  else if (e.key === 'ArrowLeft') prevCard();
+  else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+  else if (e.key === '1' && isFlipped) markCard(false);
+  else if (e.key === '2' && isFlipped) markCard(true);
+});
+
+buildTagFilters();
+render();
+</script>
+</body>
+</html>

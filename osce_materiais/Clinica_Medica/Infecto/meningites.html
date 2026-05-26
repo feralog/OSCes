@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meningites · OSCE</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e3da;
+    --text: #1a1a1a;
+    --muted: #666;
+    --accent: #1a1a1a;
+    --green: #2d6a4f;
+    --green-bg: #e8f5ee;
+    --blue: #0d47a1;
+    --blue-bg: #e3f2fd;
+    --r: 8px;
+    --font-body: Georgia, 'Times New Roman', serif;
+    --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.75;
+    min-height: 100vh;
+    padding-bottom: 70px;
+  }
+
+  .site-header {
+    background: var(--accent);
+    color: #f5f0e8;
+    padding: 16px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+  .header-inner { max-width: 780px; margin: 0 auto; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--font-ui); font-size: 11px; letter-spacing: .4px;
+    color: #a89f8c; text-decoration: none; margin-bottom: 8px;
+    border: 1px solid #444; border-radius: 20px; padding: 2px 10px;
+    transition: color .15s, border-color .15s;
+  }
+  .back-btn:hover { color: #f5f0e8; border-color: #888; }
+  .header-eyebrow {
+    font-family: var(--font-ui); font-size: 10px; letter-spacing: 2.5px;
+    color: #a89f8c; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .header-title {
+    font-size: 19px; font-weight: normal; letter-spacing: -.3px; line-height: 1.3;
+  }
+  .check-progress-bar {
+    height: 3px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 10px;
+  }
+  .check-progress-fill {
+    height: 100%; background: linear-gradient(90deg,#f4c842,#7ecf8a);
+    border-radius: 2px; transition: width .4s ease;
+  }
+  .check-total-label {
+    font-family: var(--font-ui); font-size: 10px; color: #a89f8c; margin-top: 3px;
+  }
+
+  .main { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
+
+  .page-h1 { display: none; }
+  h2.section-heading {
+    font-family: var(--font-ui); font-size: 11px; font-weight: bold;
+    letter-spacing: 1.8px; text-transform: uppercase; color: #777;
+    margin: 30px 0 10px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--border);
+  }
+  h3.section-heading {
+    font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+    margin: 22px 0 8px; color: var(--text);
+  }
+  h4.section-heading, h5.section-heading {
+    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+    margin: 16px 0 6px; color: var(--muted);
+  }
+  p { margin: 10px 0; font-size: 15px; }
+  p.eyebrow-meta {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted);
+    font-style: italic; margin: 4px 0 20px;
+    border-left: 3px solid var(--border); padding-left: 10px;
+  }
+  code {
+    background: #f0ede8; border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; font-size: 13px;
+    font-family: 'Consolas', 'Monaco', monospace;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  ul, ol { padding-left: 22px; margin: 10px 0; }
+  li { margin: 5px 0; font-size: 15px; }
+
+  .table-wrap {
+    overflow-x: auto; margin: 16px 0;
+    border-radius: var(--r); border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  table { width: 100%; border-collapse: collapse; font-family: var(--font-ui); font-size: 13px; }
+  th {
+    background: #1a1a1a; color: #f5f0e8;
+    padding: 9px 12px; text-align: left; font-weight: 600;
+    font-size: 11px; letter-spacing: .5px;
+  }
+  td { padding: 8px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f5f2ee; }
+  tr:hover td { background: #ede8e2; }
+
+  .checklist {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 12px 14px 10px; margin: 16px 0;
+    display: flex; flex-direction: column; gap: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    cursor: pointer; padding: 6px 4px;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 14px; line-height: 1.5; transition: background .1s;
+    border-radius: 4px;
+  }
+  .check-item:last-of-type { border-bottom: none; }
+  .check-item:hover { background: #f8f5f0; }
+  .check-item input[type=checkbox] {
+    width: 18px; height: 18px; min-width: 18px;
+    margin-top: 2px; accent-color: var(--green); cursor: pointer;
+  }
+  .check-item input[type=checkbox]:checked + span {
+    color: var(--muted); text-decoration: line-through;
+  }
+  .check-item span { flex: 1; }
+  .check-sub { margin: 6px 0 2px 4px; padding-left: 18px; }
+  .check-sub li { font-size: 13px; color: var(--muted); margin: 3px 0; }
+  .check-note { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .check-progress {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);
+  }
+  .prog-text {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted); font-weight: 600;
+  }
+
+  .professor-block {
+    background: var(--blue-bg); border-left: 4px solid #1976d2;
+    border-radius: 0 var(--r) var(--r) 0; padding: 14px 16px; margin: 20px 0 8px;
+    font-size: 14px; line-height: 1.65; color: #0a2e6e;
+  }
+  .question-label {
+    font-family: var(--font-ui); font-weight: 700; font-size: 14px;
+    margin: 20px 0 6px; color: var(--text); padding-left: 2px;
+  }
+  .answer-block {
+    background: var(--green-bg); border-left: 4px solid var(--green);
+    border-radius: 0 var(--r) var(--r) 0; padding: 12px 16px; margin: 6px 0 20px;
+    font-size: 14px; line-height: 1.65; color: #1b4332;
+  }
+  blockquote {
+    border-left: 3px solid var(--border); padding: 8px 14px;
+    margin: 12px 0; color: var(--muted); font-style: italic; font-size: 14px;
+  }
+
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1a1a1a; padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 200; border-top: 1px solid #333;
+  }
+  .bottom-nav a {
+    color: #a89f8c; text-decoration: none; font-family: var(--font-ui);
+    font-size: 12px; padding: 5px 14px; border: 1px solid #444;
+    border-radius: 20px; transition: color .15s, border-color .15s;
+  }
+  .bottom-nav a:hover { color: #f5f0e8; border-color: #888; }
+  .bottom-total { font-family: var(--font-ui); font-size: 12px; color: #a89f8c; }
+
+  @media (max-width: 600px) {
+    .header-title { font-size: 16px; }
+    td, th { padding: 6px 8px; font-size: 12px; }
+    .check-item { font-size: 13px; }
+    p, li { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../../../osce-plano.html" class="back-btn">← Plano de estudos</a>
+    <div class="header-eyebrow">Clínica Médica · Infectologia</div>
+    <div class="header-title">Meningites</div>
+    <div class="check-progress-bar" id="hdrBar" style="display:none">
+      <div class="check-progress-fill" id="hdrFill" style="width:0%"></div>
+    </div>
+    <div class="check-total-label" id="hdrLabel"></div>
+  </div>
+</header>
+
+<main class="main">
+<h1 class="page-h1">Meningites</h1>
+<p class="eyebrow-meta">Clínica Médica · Infectologia | Método: Simulação OSCE</p>
+<hr>
+<h2 class="section-heading">TABELA-MESTRE — LCR nas Meningites</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Parâmetro</th><th><strong>Normal</strong></th><th><strong>Bacteriana</strong></th><th><strong>Viral</strong></th><th><strong>TB/Fúngica</strong></th></tr></thead><tbody>
+<tr><td>Aspecto</td><td>Límpido, cristal d'água</td><td><strong>Turvo/purulento</strong></td><td>Límpido</td><td>Límpido/levemente turvo</td></tr>
+<tr><td>Leucócitos/mm³</td><td>0–10</td><td><strong>> 1.000</strong></td><td>< 300 (média 80)</td><td>< 1.000</td></tr>
+<tr><td>Célula predominante</td><td>Linfomono</td><td><strong>Neutrófilos</strong></td><td>Monócitos</td><td><strong>Linfomono</strong></td></tr>
+<tr><td>Proteína (mg/dL)</td><td>15–40</td><td><strong>> 100 (muito elevada)</strong></td><td>50–100</td><td>> 100</td></tr>
+<tr><td>Glicose (mg/dL)</td><td>45–100</td><td><strong>< 45 (muito baixa)</strong></td><td>Normal</td><td>Normal ou baixa</td></tr>
+<tr><td>Glicorraquia / glicemia</td><td>2/3</td><td>< 1/3</td><td>Normal (≥ 2/3)</td><td>Baixa</td></tr>
+<tr><td>Lactato no LCR</td><td>—</td><td><strong>> 3,5 mmol/L</strong></td><td>< 3,5 mmol/L</td><td>—</td></tr>
+</tbody></table></div>
+<blockquote><strong>Regra do lactato:</strong> LCR lactato > 3,5 mmol/L = bacteriana; < 3,5 = viral (alta sensibilidade e especificidade)</blockquote>
+<hr>
+<h2 class="section-heading">Agentes por Faixa Etária</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Faixa Etária</th><th>Agentes Principais</th></tr></thead><tbody>
+<tr><td><strong>RN (< 1 mês)</strong></td><td>Streptococcus agalactiae (GBS), E. coli, Listeria</td></tr>
+<tr><td><strong>1–3 meses</strong></td><td>GBS, E. coli, Listeria, S. pneumoniae, N. meningitidis</td></tr>
+<tr><td><strong>3 meses – 5 anos</strong></td><td><strong>N. meningitidis</strong>, S. pneumoniae, H. influenzae (vacinados: raro)</td></tr>
+<tr><td><strong>5–18 anos</strong></td><td><strong>N. meningitidis</strong>, S. pneumoniae</td></tr>
+<tr><td><strong>18–50 anos</strong></td><td>N. meningitidis, S. pneumoniae</td></tr>
+<tr><td><strong>> 50 anos</strong></td><td>S. pneumoniae, Listeria, gram-negativos</td></tr>
+<tr><td><strong>Imunocomprometidos</strong></td><td>Cryptococcus, Listeria, gram-negativos, TB</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">ESTAÇÃO 1 — Caso: Meningite Bacteriana Aguda</h2>
+<p><strong>[CASO]:</strong> Homem, 19 anos, estudante universitário. Início abrupto de cefaleia intensa "a pior da vida", febre (39,5°C), rigidez de nuca, fotofobia há 12 horas. Petéquias em tronco e membros inferiores. Glasgow 13.</p>
+<div class="question-label"><strong>Pergunta 1:</strong> Qual o diagnóstico e conduta imediata?</div>
+<blockquote><strong>Meningococcemia com meningite meningocócica</strong> (petéquias + meningismo + febre = emergência).</blockquote>
+<blockquote></blockquote>
+<blockquote><strong>Conduta imediata (nessa ordem):</strong></blockquote>
+<blockquote>1. Isolamento respiratório</blockquote>
+<blockquote>2. Hemoculturas (antes do ATB)</blockquote>
+<blockquote>3. <strong>Dexametasona 0,15 mg/kg EV</strong> (iniciar 30 min antes ou junto ao ATB)</blockquote>
+<blockquote>4. <strong>Antibiótico empírico imediato</strong> (não aguardar LCR se há risco de herniação)</blockquote>
+<blockquote>5. TC crânio se déficit focal/papiledema antes da punção</blockquote>
+<blockquote>6. Punção lombar para confirmar (se sem contra-indicações)</blockquote>
+<blockquote>7. Suporte hemodinâmico</blockquote>
+<div class="question-label"><strong>Pergunta 2:</strong> Qual o antibiótico empírico e específico?</div>
+<blockquote><strong>Empírico adulto jovem:</strong> ceftriaxona 2 g EV 12/12h (cobertura para pneumococo + meningococo)</blockquote>
+<blockquote></blockquote>
+<blockquote><strong>Específico:</strong></blockquote>
+<blockquote>- Meningococo: penicilina G ou ceftriaxona × 7–10 dias</blockquote>
+<blockquote>- Pneumococo: penicilina G + vancomicina (se resistência) × 10–14 dias</blockquote>
+<blockquote>- Listeria (> 50 anos): ampicilina + gentamicina × 21 dias</blockquote>
+<div class="question-label"><strong>Pergunta 3:</strong> Como e para quem fazer quimioprofilaxia?</div>
+<blockquote><strong>Quem:</strong> contatos próximos nos últimos 10 dias antes do início dos sintomas:</blockquote>
+<blockquote>- Moradores do mesmo domicílio</blockquote>
+<blockquote>- Contato em instituição fechada (presídio, orfanato, creche, acampamento)</blockquote>
+<blockquote>- Exposição direta a secreções (beijos, utensílios)</blockquote>
+<blockquote>- Profissionais de saúde sem EPI</blockquote>
+<blockquote>- Gestantes expostas</blockquote>
+<blockquote>- Viagem aérea > 8h sentado ao lado</blockquote>
+<blockquote></blockquote>
+<blockquote><strong>Como:</strong></blockquote>
+<blockquote>| Fármaco | Dose | Via | Duração |</blockquote>
+<blockquote>|---|---|---|---|</blockquote>
+<blockquote>| <strong>Rifampicina</strong> | Adulto: 600 mg 12/12h; < 12a: 10 mg/kg 12/12h (máx 600 mg) | VO | 2 dias |</blockquote>
+<blockquote>| Ceftriaxona | Adulto > 12a: 250 mg; < 12a: 125 mg | IM | Dose única |</blockquote>
+<blockquote>| Ciprofloxacina | 500 mg (somente adultos) | VO | Dose única |</blockquote>
+<hr>
+<h2 class="section-heading">ESTAÇÃO 2 — Caso: Meningite Viral</h2>
+<p><strong>[CASO]:</strong> Menino, 8 anos, com cefaleia e febre moderada há 3 dias. Rigidez de nuca leve, sem petéquias, sem alteração de consciência. Amigdalite purulenta concomitante. LCR: límpido, 90 leucócitos (90% mononucleares), proteína 55 mg/dL, glicose 52 mg/dL (glicemia = 82 mg/dL).</p>
+<div class="question-label"><strong>Pergunta 1:</strong> Qual o diagnóstico?</div>
+<blockquote><strong>Meningite viral</strong> (muito provável por enterovírus) — LCR límpido, pleocitose leve mononuclear, proteína levemente elevada, glicose normal.</blockquote>
+<div class="question-label"><strong>Pergunta 2:</strong> Como diferenciar de bacteriana?</div>
+<blockquote>- LCR: bacteriana = turvo, neutrófilos, proteína > 100, glicose < 45, lactato > 3,5</blockquote>
+<blockquote>- Viral: límpido, monócitos, proteína levemente elevada, glicose normal, lactato < 3,5</blockquote>
+<blockquote>- Se dúvida: repetir LCR 24h ou aguardar cultura</blockquote>
+<div class="question-label"><strong>Pergunta 3:</strong> Qual o tratamento?</div>
+<blockquote><strong>Viral:</strong> suporte (analgésicos, hidratação, repouso); internação até diagnóstico definitivo.</blockquote>
+<blockquote><strong>Herpética (HSV):</strong> aciclovir 10 mg/kg EV 8/8h × 14–21 dias (diagnóstico por PCR do LCR)</blockquote>
+<hr>
+<h2 class="section-heading">Contra-indicações à Punção Lombar</h2>
+<ul><li>Sinais de hipertensão intracraniana ao exame físico (papiledema, tríade de Cushing)</li><li>Déficits neurológicos focais</li><li>Glasgow < 8 ou deterioração rápida</li><li>Infecção no local da punção</li><li>→ <strong>Realizar TC crânio antes</strong> se qualquer dessas situações</li></ul>
+<p><strong>Tríade de Cushing (HIC):</strong> HAS + bradicardia + respiração irregular (Cheyne-Stokes)</p>
+<hr>
+<h2 class="section-heading">Complicações da Meningite Bacteriana</h2>
+<ul><li>Hidrocefalia comunicante (obstrução granulações aracnoidianas por resíduos inflamatórios)</li><li>HIC → herniação</li><li>Empiema subdural</li><li>Abscesso cerebral</li><li>Trombose venosa cerebral</li><li>AVC isquêmico</li><li>Surdez neurossensorial (dreada pós-pneumocócica)</li><li>Paralisia de pares cranianos (VI par: estrabismo/diplopia)</li></ul>
+<hr>
+<h2 class="section-heading">Pontos que o Professor Vai Checar</h2>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span>Petéquias + meningismo = meningococcemia até prova em contrário → ATB IMEDIATO</span></label><label class="check-item"><input type="checkbox"><span>Dexametasona <strong>ANTES</strong> do ATB (30 min) — reduz inflamação e sequelas</span></label><label class="check-item"><input type="checkbox"><span>LCR lactato > 3,5 = bacteriana; < 3,5 = viral</span></label><label class="check-item"><input type="checkbox"><span>Quimioprofilaxia para contatos domiciliares (rifampicina 2 dias)</span></label><label class="check-item"><input type="checkbox"><span>TC crânio antes da punção lombar se déficit focal/papiledema</span></label><div class="check-progress"><span class="prog-text">0/5 marcados</span></div></div>
+<h2 class="section-heading">Alertas OSCE ⚠️</h2>
+<ul><li><strong>TODAS as meningites são de notificação compulsória</strong></li><li>Meningococcemia pode não ter meningite (meningismo pode estar ausente!)</li><li>Petéquia que não desaparece à vitropressão = sangramento real (não vasodilatação como exantema)</li><li>Não atrasar ATB para esperar exames → hemoculturas e ATB empírico imediato</li><li>Aciclovir EV → meningite herpética; NÃO em enterovírus</li><li>Isolamento: meningococo e HIb = 24h pós-ATB; caxumba = enquanto há aumento das parótidas</li></ul>
+<hr>
+<h2 class="section-heading">Fonte</h2>
+<ul><li>Gerado a partir de: <code>conteudo_meningites.md</code> (Aulas 1 e 3 — Meningites — Infectologia CM)</li></ul>
+</main>
+
+<nav class="bottom-nav">
+  <a href="../../../osce-plano.html">← Voltar ao plano</a>
+  <span class="bottom-total" id="bottomTotal"></span>
+</nav>
+
+<script>
+(function() {
+  var KEY = 'osce_v1_' + location.pathname;
+  var state = JSON.parse(localStorage.getItem(KEY) || '{}');
+  var boxes = document.querySelectorAll('input[type=checkbox]');
+  var total = boxes.length;
+
+  boxes.forEach(function(cb, idx) {
+    if (state[idx]) cb.checked = true;
+    cb.addEventListener('change', function() {
+      state[idx] = cb.checked;
+      localStorage.setItem(KEY, JSON.stringify(state));
+      updateAll();
+    });
+  });
+
+  function updateAll() {
+    var done = 0;
+    boxes.forEach(function(c){ if (c.checked) done++; });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    var bar = document.getElementById('hdrBar');
+    var fill = document.getElementById('hdrFill');
+    var lbl = document.getElementById('hdrLabel');
+    var bot = document.getElementById('bottomTotal');
+    if (total > 0) {
+      bar.style.display = 'block';
+      fill.style.width = pct + '%';
+      lbl.textContent = done + '/' + total + ' itens marcados (' + pct + '%)';
+      bot.textContent = done + '/' + total + ' checados';
+    }
+    document.querySelectorAll('.checklist').forEach(function(cl) {
+      var cbs = cl.querySelectorAll('input[type=checkbox]');
+      var cd = 0;
+      cbs.forEach(function(c){ if (c.checked) cd++; });
+      var prog = cl.querySelector('.prog-text');
+      if (prog) prog.textContent = cd + '/' + cbs.length + ' marcados';
+    });
+  }
+
+  updateAll();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Papanicolau · OSCE</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e3da;
+    --text: #1a1a1a;
+    --muted: #666;
+    --accent: #1a1a1a;
+    --green: #2d6a4f;
+    --green-bg: #e8f5ee;
+    --blue: #0d47a1;
+    --blue-bg: #e3f2fd;
+    --r: 8px;
+    --font-body: Georgia, 'Times New Roman', serif;
+    --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.75;
+    min-height: 100vh;
+    padding-bottom: 70px;
+  }
+
+  .site-header {
+    background: var(--accent);
+    color: #f5f0e8;
+    padding: 16px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+  .header-inner { max-width: 780px; margin: 0 auto; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--font-ui); font-size: 11px; letter-spacing: .4px;
+    color: #a89f8c; text-decoration: none; margin-bottom: 8px;
+    border: 1px solid #444; border-radius: 20px; padding: 2px 10px;
+    transition: color .15s, border-color .15s;
+  }
+  .back-btn:hover { color: #f5f0e8; border-color: #888; }
+  .header-eyebrow {
+    font-family: var(--font-ui); font-size: 10px; letter-spacing: 2.5px;
+    color: #a89f8c; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .header-title {
+    font-size: 19px; font-weight: normal; letter-spacing: -.3px; line-height: 1.3;
+  }
+  .check-progress-bar {
+    height: 3px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 10px;
+  }
+  .check-progress-fill {
+    height: 100%; background: linear-gradient(90deg,#f4c842,#7ecf8a);
+    border-radius: 2px; transition: width .4s ease;
+  }
+  .check-total-label {
+    font-family: var(--font-ui); font-size: 10px; color: #a89f8c; margin-top: 3px;
+  }
+
+  .main { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
+
+  .page-h1 { display: none; }
+  h2.section-heading {
+    font-family: var(--font-ui); font-size: 11px; font-weight: bold;
+    letter-spacing: 1.8px; text-transform: uppercase; color: #777;
+    margin: 30px 0 10px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--border);
+  }
+  h3.section-heading {
+    font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+    margin: 22px 0 8px; color: var(--text);
+  }
+  h4.section-heading, h5.section-heading {
+    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+    margin: 16px 0 6px; color: var(--muted);
+  }
+  p { margin: 10px 0; font-size: 15px; }
+  p.eyebrow-meta {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted);
+    font-style: italic; margin: 4px 0 20px;
+    border-left: 3px solid var(--border); padding-left: 10px;
+  }
+  code {
+    background: #f0ede8; border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; font-size: 13px;
+    font-family: 'Consolas', 'Monaco', monospace;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  ul, ol { padding-left: 22px; margin: 10px 0; }
+  li { margin: 5px 0; font-size: 15px; }
+
+  .table-wrap {
+    overflow-x: auto; margin: 16px 0;
+    border-radius: var(--r); border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  table { width: 100%; border-collapse: collapse; font-family: var(--font-ui); font-size: 13px; }
+  th {
+    background: #1a1a1a; color: #f5f0e8;
+    padding: 9px 12px; text-align: left; font-weight: 600;
+    font-size: 11px; letter-spacing: .5px;
+  }
+  td { padding: 8px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f5f2ee; }
+  tr:hover td { background: #ede8e2; }
+
+  .checklist {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 12px 14px 10px; margin: 16px 0;
+    display: flex; flex-direction: column; gap: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    cursor: pointer; padding: 6px 4px;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 14px; line-height: 1.5; transition: background .1s;
+    border-radius: 4px;
+  }
+  .check-item:last-of-type { border-bottom: none; }
+  .check-item:hover { background: #f8f5f0; }
+  .check-item input[type=checkbox] {
+    width: 18px; height: 18px; min-width: 18px;
+    margin-top: 2px; accent-color: var(--green); cursor: pointer;
+  }
+  .check-item input[type=checkbox]:checked + span {
+    color: var(--muted); text-decoration: line-through;
+  }
+  .check-item span { flex: 1; }
+  .check-sub { margin: 6px 0 2px 4px; padding-left: 18px; }
+  .check-sub li { font-size: 13px; color: var(--muted); margin: 3px 0; }
+  .check-note { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .check-progress {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);
+  }
+  .prog-text {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted); font-weight: 600;
+  }
+
+  .professor-block {
+    background: var(--blue-bg); border-left: 4px solid #1976d2;
+    border-radius: 0 var(--r) var(--r) 0; padding: 14px 16px; margin: 20px 0 8px;
+    font-size: 14px; line-height: 1.65; color: #0a2e6e;
+  }
+  .question-label {
+    font-family: var(--font-ui); font-weight: 700; font-size: 14px;
+    margin: 20px 0 6px; color: var(--text); padding-left: 2px;
+  }
+  .answer-block {
+    background: var(--green-bg); border-left: 4px solid var(--green);
+    border-radius: 0 var(--r) var(--r) 0; padding: 12px 16px; margin: 6px 0 20px;
+    font-size: 14px; line-height: 1.65; color: #1b4332;
+  }
+  blockquote {
+    border-left: 3px solid var(--border); padding: 8px 14px;
+    margin: 12px 0; color: var(--muted); font-style: italic; font-size: 14px;
+  }
+
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1a1a1a; padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 200; border-top: 1px solid #333;
+  }
+  .bottom-nav a {
+    color: #a89f8c; text-decoration: none; font-family: var(--font-ui);
+    font-size: 12px; padding: 5px 14px; border: 1px solid #444;
+    border-radius: 20px; transition: color .15s, border-color .15s;
+  }
+  .bottom-nav a:hover { color: #f5f0e8; border-color: #888; }
+  .bottom-total { font-family: var(--font-ui); font-size: 12px; color: #a89f8c; }
+
+  @media (max-width: 600px) {
+    .header-title { font-size: 16px; }
+    td, th { padding: 6px 8px; font-size: 12px; }
+    .check-item { font-size: 13px; }
+    p, li { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../../osce-plano.html" class="back-btn">← Plano de estudos</a>
+    <div class="header-eyebrow">GO · Ginecologia</div>
+    <div class="header-title">Papanicolau</div>
+    <div class="check-progress-bar" id="hdrBar" style="display:none">
+      <div class="check-progress-fill" id="hdrFill" style="width:0%"></div>
+    </div>
+    <div class="check-total-label" id="hdrLabel"></div>
+  </div>
+</header>
+
+<main class="main">
+<h1 class="page-h1">Papanicolau — Colpocitologia Oncótica Cervical</h1>
+<p class="eyebrow-meta">GO · Ginecologia | Método: Resumo Clínico</p>
+<h2 class="section-heading">Definição</h2>
+<p>Exame de rastreamento do câncer do colo uterino que coleta células da ectocérvice e endocérvice para análise citológica. Detecta lesões precursoras (NIC) antes de evolução para carcinoma invasor. A coleta adequada inclui obrigatoriamente a JEC (junção escamocolunar), local onde ocorrem ~90% dos cânceres do colo.</p>
+<h2 class="section-heading">Indicações e Periodicidade</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Grupo</th><th>Início</th><th>Frequência</th></tr></thead><tbody>
+<tr><td>Mulheres com vida sexual ativa</td><td>25 anos</td><td>Anual × 2 consecutivos normais → a cada 3 anos</td></tr>
+<tr><td>HIV+ / imunossuprimidas</td><td>Ao diagnóstico</td><td>Semestral (2 primeiros anos) → anual</td></tr>
+<tr><td>Gestantes</td><td>Qualquer trimestre</td><td>Seguir rotina (sem cureta endocervical)</td></tr>
+<tr><td>≥ 65 anos com 2 exames normais</td><td>Encerrar rastreamento</td><td>—</td></tr>
+</tbody></table></div>
+<h2 class="section-heading">Material Necessário</h2>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span>Espéculo vaginal (tamanho adequado para a paciente)</span></label><label class="check-item"><input type="checkbox"><span>Espátula de Ayre (ponta longa para ectocérvice)</span></label><label class="check-item"><input type="checkbox"><span>Escovinha endocervical (cytobrush)</span></label><label class="check-item"><input type="checkbox"><span>Lâmina de vidro com extremidade fosca — identificar com <strong>lápis</strong> (nunca caneta)</span></label><label class="check-item"><input type="checkbox"><span>Fixador: álcool etílico 95% ou spray fixador (aplicar em <10 segundos)</span></label><label class="check-item"><input type="checkbox"><span>Formulário de requisição completo (DUM, número de gestações, ACO, queixas)</span></label><div class="check-progress"><span class="prog-text">0/6 marcados</span></div></div>
+<h2 class="section-heading">Passo a Passo da Coleta</h2>
+<h3 class="section-heading">Orientações pré-coleta (dizer à paciente)</h3>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span>Sem relação sexual nas <strong>48h anteriores</strong></span></label><label class="check-item"><input type="checkbox"><span>Sem duchas, cremes ou medicamentos vaginais nas 48h anteriores</span></label><label class="check-item"><input type="checkbox"><span>Fora do período menstrual (aguardar ≥5 dias após término)</span></label><div class="check-progress"><span class="prog-text">0/3 marcados</span></div></div>
+<h3 class="section-heading">Procedimento</h3>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span><strong>1.</strong> Posicionar em litotomia, preservar privacidade</span></label><label class="check-item"><input type="checkbox"><span><strong>2.</strong> Introduzir espéculo <strong>sem lubrificante</strong> (gel interfere na análise das células)</span></label><label class="check-item"><input type="checkbox"><span><strong>3.</strong> Visualizar o colo e identificar a JEC (junção escamocolunar — limite entre epitélio escamoso e colunar)</span></label><label class="check-item"><input type="checkbox"><span><strong>4.</strong> Coleta ectocervical: ponta longa da <strong>espátula de Ayre</strong> encaixada no orifício cervical externo, girar <strong>360°</strong> com pressão suave → espalhar na <strong>metade superior</strong> da lâmina em movimento único</span></label><label class="check-item"><input type="checkbox"><span><strong>5.</strong> Coleta endocervical: <strong>escovinha</strong> inserida no canal cervical, girar <strong>90–180°</strong> → rolar (não esfregar) na <strong>metade inferior</strong> da lâmina</span></label><label class="check-item"><input type="checkbox"><span><strong>6.</strong> <strong>Fixar imediatamente</strong> (< 10 segundos) com álcool 95° ou spray — não deixar secar!</span></label><label class="check-item"><input type="checkbox"><span><strong>7.</strong> Identificar a lâmina com nome e data (lápis na extremidade fosca)</span></label><label class="check-item"><input type="checkbox"><span><strong>8.</strong> Retirar espéculo com cuidado</span></label><label class="check-item"><input type="checkbox"><span><strong>9.</strong> Preencher formulário com dados clínicos da paciente</span></label><div class="check-progress"><span class="prog-text">0/9 marcados</span></div></div>
+<blockquote>⚠️ Ordem correta: ectocérvice ANTES da endocérvice (evitar contaminação por sangue da escovinha)</blockquote>
+<h2 class="section-heading">Sistema Bethesda — Resultado e Conduta</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Resultado</th><th>Significado</th><th>Conduta</th></tr></thead><tbody>
+<tr><td><strong>Negativo para neoplasia</strong></td><td>Normal (pode ter infecção — tratar e repetir)</td><td>Rastreamento de rotina (3 anos)</td></tr>
+<tr><td><strong>ASC-US</strong></td><td>Células escamosas atípicas, baixo risco</td><td>Repetir em 6 meses ou HPV-teste</td></tr>
+<tr><td><strong>ASC-H</strong></td><td>Atípicas — não exclui HSIL</td><td>Colposcopia imediata</td></tr>
+<tr><td><strong>LSIL (NIC 1)</strong></td><td>Lesão de baixo grau (HPV, NIC 1)</td><td>Repetir em 6 meses (maioria regride)</td></tr>
+<tr><td><strong>HSIL (NIC 2/3)</strong></td><td>Lesão de alto grau</td><td>Colposcopia + biópsia → tratamento</td></tr>
+<tr><td><strong>Carcinoma escamoso</strong></td><td>Câncer invasor</td><td>Encaminhamento urgente — oncologia</td></tr>
+<tr><td><strong>AGC</strong></td><td>Células glandulares atípicas</td><td>Colposcopia + curetagem endocervical</td></tr>
+<tr><td><strong>Adenocarcinoma in situ / invasor</strong></td><td>Câncer glandular</td><td>Encaminhamento urgente</td></tr>
+<tr><td><strong>Insatisfatório</strong></td><td>Material inadequado</td><td>Repetir imediatamente</td></tr>
+</tbody></table></div>
+<h2 class="section-heading">Diagnóstico Diferencial dos Achados ao Especular</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Achado</th><th>Pensar em</th></tr></thead><tbody>
+<tr><td>Colo friável, sangra ao toque</td><td>NIC avançado, carcinoma invasor</td></tr>
+<tr><td>Ectopia (área avermelhada ao redor do orifício)</td><td>Normal em jovens e usuárias de ACO (não é lesão)</td></tr>
+<tr><td>Leucoplasia (área branca antes do ácido)</td><td>HPV, NIC</td></tr>
+<tr><td>Mosaico / pontilhado após ácido acético</td><td>Lesão de alto grau → colposcopia</td></tr>
+<tr><td>Exsudato branco em vagina</td><td>Candidíase, tricomoníase — coletar Papanicolau mesmo assim, tratar infecção e repetir</td></tr>
+</tbody></table></div>
+<h2 class="section-heading">Como Descrever ao Professor Durante o Procedimento</h2>
+<ul><li>"Vou introduzir o espéculo sem lubrificante para não interferir na coleta."</li><li>"Estou identificando a JEC — vou coletar primeiro a ectocérvice com a espátula de Ayre, girando 360°."</li><li>"Agora coleto a endocérvice com a escovinha, girando 90° dentro do canal."</li><li>"Fixo imediatamente na lâmina com álcool 95° — é essencial não deixar secar."</li></ul>
+<h2 class="section-heading">Perguntas que o professor provavelmente vai fazer</h2>
+<ol><li>Por que não usar lubrificante no espéculo? → Interfere na fixação e análise das células</li><li>Qual a sequência correta de coleta? → Ectocérvice (espátula) ANTES da endocérvice (escovinha)</li><li>O que é a JEC e por que é importante? → Junção escamocolunar — local de 90% dos cânceres do colo; coleta deve incluí-la</li><li>Quando NÃO fazer o Papanicolau? → Fluxo menstrual intenso; menos de 5 dias após término da menstruação</li><li>O que é resultado insatisfatório? → Material inadequado para análise (poucas células, fixação errada) → repetir</li></ol>
+<h2 class="section-heading">Alertas OSCE ⚠️</h2>
+<ul><li><strong>Fixar em <10 segundos</strong> — o erro mais frequente é deixar secar a lâmina</li><li>Identificar a lâmina com <strong>lápis</strong> (o álcool apaga caneta)</li><li><strong>Ectocérvice antes da endocérvice</strong> — inverter contamina com sangue</li><li><strong>Sem lubrificante</strong> no espéculo</li><li>Em gestantes: <strong>não usar cureta endocervical</strong> — escovinha com rotação de apenas 90° ou omitir endocérvice</li><li>Tricomoníase ou candidíase no exame → tratar infecção e repetir Papanicolau em 3 meses (inflamação interfere na leitura)</li><li>ASC-H ≠ ASC-US: ASC-H vai para colposcopia imediata; ASC-US pode aguardar 6 meses</li></ul>
+<hr>
+<h2 class="section-heading">Fonte</h2>
+<ul><li>Gerado a partir de: <strong>Conhecimento geral</strong> — não há arquivo específico sobre Papanicolau na pasta do estudante</li><li>Baseado em: INCA, FEBRASGO, Ministério da Saúde (Manual de Gestão da Qualidade para Laboratório de Citopatologia, 2016)</li><li>Gaps identificados: Nenhum material específico sobre Papanicolau encontrado na pasta de referências</li></ul>
+</main>
+
+<nav class="bottom-nav">
+  <a href="../../osce-plano.html">← Voltar ao plano</a>
+  <span class="bottom-total" id="bottomTotal"></span>
+</nav>
+
+<script>
+(function() {
+  var KEY = 'osce_v1_' + location.pathname;
+  var state = JSON.parse(localStorage.getItem(KEY) || '{}');
+  var boxes = document.querySelectorAll('input[type=checkbox]');
+  var total = boxes.length;
+
+  boxes.forEach(function(cb, idx) {
+    if (state[idx]) cb.checked = true;
+    cb.addEventListener('change', function() {
+      state[idx] = cb.checked;
+      localStorage.setItem(KEY, JSON.stringify(state));
+      updateAll();
+    });
+  });
+
+  function updateAll() {
+    var done = 0;
+    boxes.forEach(function(c){ if (c.checked) done++; });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    var bar = document.getElementById('hdrBar');
+    var fill = document.getElementById('hdrFill');
+    var lbl = document.getElementById('hdrLabel');
+    var bot = document.getElementById('bottomTotal');
+    if (total > 0) {
+      bar.style.display = 'block';
+      fill.style.width = pct + '%';
+      lbl.textContent = done + '/' + total + ' itens marcados (' + pct + '%)';
+      bot.textContent = done + '/' + total + ' checados';
+    }
+    document.querySelectorAll('.checklist').forEach(function(cl) {
+      var cbs = cl.querySelectorAll('input[type=checkbox]');
+      var cd = 0;
+      cbs.forEach(function(c){ if (c.checked) cd++; });
+      var prog = cl.querySelector('.prog-text');
+      if (prog) prog.textContent = cd + '/' + cbs.length + ' marcados';
+    });
+  }
+
+  updateAll();
+})();
+</script>
+</body>
+</html>

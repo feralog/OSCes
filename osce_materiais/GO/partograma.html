@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Partograma · OSCE</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e3da;
+    --text: #1a1a1a;
+    --muted: #666;
+    --accent: #1a1a1a;
+    --green: #2d6a4f;
+    --green-bg: #e8f5ee;
+    --blue: #0d47a1;
+    --blue-bg: #e3f2fd;
+    --r: 8px;
+    --font-body: Georgia, 'Times New Roman', serif;
+    --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.75;
+    min-height: 100vh;
+    padding-bottom: 70px;
+  }
+
+  .site-header {
+    background: var(--accent);
+    color: #f5f0e8;
+    padding: 16px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+  .header-inner { max-width: 780px; margin: 0 auto; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--font-ui); font-size: 11px; letter-spacing: .4px;
+    color: #a89f8c; text-decoration: none; margin-bottom: 8px;
+    border: 1px solid #444; border-radius: 20px; padding: 2px 10px;
+    transition: color .15s, border-color .15s;
+  }
+  .back-btn:hover { color: #f5f0e8; border-color: #888; }
+  .header-eyebrow {
+    font-family: var(--font-ui); font-size: 10px; letter-spacing: 2.5px;
+    color: #a89f8c; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .header-title {
+    font-size: 19px; font-weight: normal; letter-spacing: -.3px; line-height: 1.3;
+  }
+  .check-progress-bar {
+    height: 3px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 10px;
+  }
+  .check-progress-fill {
+    height: 100%; background: linear-gradient(90deg,#f4c842,#7ecf8a);
+    border-radius: 2px; transition: width .4s ease;
+  }
+  .check-total-label {
+    font-family: var(--font-ui); font-size: 10px; color: #a89f8c; margin-top: 3px;
+  }
+
+  .main { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
+
+  .page-h1 { display: none; }
+  h2.section-heading {
+    font-family: var(--font-ui); font-size: 11px; font-weight: bold;
+    letter-spacing: 1.8px; text-transform: uppercase; color: #777;
+    margin: 30px 0 10px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--border);
+  }
+  h3.section-heading {
+    font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+    margin: 22px 0 8px; color: var(--text);
+  }
+  h4.section-heading, h5.section-heading {
+    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+    margin: 16px 0 6px; color: var(--muted);
+  }
+  p { margin: 10px 0; font-size: 15px; }
+  p.eyebrow-meta {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted);
+    font-style: italic; margin: 4px 0 20px;
+    border-left: 3px solid var(--border); padding-left: 10px;
+  }
+  code {
+    background: #f0ede8; border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; font-size: 13px;
+    font-family: 'Consolas', 'Monaco', monospace;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  ul, ol { padding-left: 22px; margin: 10px 0; }
+  li { margin: 5px 0; font-size: 15px; }
+
+  .table-wrap {
+    overflow-x: auto; margin: 16px 0;
+    border-radius: var(--r); border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  table { width: 100%; border-collapse: collapse; font-family: var(--font-ui); font-size: 13px; }
+  th {
+    background: #1a1a1a; color: #f5f0e8;
+    padding: 9px 12px; text-align: left; font-weight: 600;
+    font-size: 11px; letter-spacing: .5px;
+  }
+  td { padding: 8px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f5f2ee; }
+  tr:hover td { background: #ede8e2; }
+
+  .checklist {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 12px 14px 10px; margin: 16px 0;
+    display: flex; flex-direction: column; gap: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    cursor: pointer; padding: 6px 4px;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 14px; line-height: 1.5; transition: background .1s;
+    border-radius: 4px;
+  }
+  .check-item:last-of-type { border-bottom: none; }
+  .check-item:hover { background: #f8f5f0; }
+  .check-item input[type=checkbox] {
+    width: 18px; height: 18px; min-width: 18px;
+    margin-top: 2px; accent-color: var(--green); cursor: pointer;
+  }
+  .check-item input[type=checkbox]:checked + span {
+    color: var(--muted); text-decoration: line-through;
+  }
+  .check-item span { flex: 1; }
+  .check-sub { margin: 6px 0 2px 4px; padding-left: 18px; }
+  .check-sub li { font-size: 13px; color: var(--muted); margin: 3px 0; }
+  .check-note { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .check-progress {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);
+  }
+  .prog-text {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted); font-weight: 600;
+  }
+
+  .professor-block {
+    background: var(--blue-bg); border-left: 4px solid #1976d2;
+    border-radius: 0 var(--r) var(--r) 0; padding: 14px 16px; margin: 20px 0 8px;
+    font-size: 14px; line-height: 1.65; color: #0a2e6e;
+  }
+  .question-label {
+    font-family: var(--font-ui); font-weight: 700; font-size: 14px;
+    margin: 20px 0 6px; color: var(--text); padding-left: 2px;
+  }
+  .answer-block {
+    background: var(--green-bg); border-left: 4px solid var(--green);
+    border-radius: 0 var(--r) var(--r) 0; padding: 12px 16px; margin: 6px 0 20px;
+    font-size: 14px; line-height: 1.65; color: #1b4332;
+  }
+  blockquote {
+    border-left: 3px solid var(--border); padding: 8px 14px;
+    margin: 12px 0; color: var(--muted); font-style: italic; font-size: 14px;
+  }
+
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1a1a1a; padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 200; border-top: 1px solid #333;
+  }
+  .bottom-nav a {
+    color: #a89f8c; text-decoration: none; font-family: var(--font-ui);
+    font-size: 12px; padding: 5px 14px; border: 1px solid #444;
+    border-radius: 20px; transition: color .15s, border-color .15s;
+  }
+  .bottom-nav a:hover { color: #f5f0e8; border-color: #888; }
+  .bottom-total { font-family: var(--font-ui); font-size: 12px; color: #a89f8c; }
+
+  @media (max-width: 600px) {
+    .header-title { font-size: 16px; }
+    td, th { padding: 6px 8px; font-size: 12px; }
+    .check-item { font-size: 13px; }
+    p, li { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../../osce-plano.html" class="back-btn">← Plano de estudos</a>
+    <div class="header-eyebrow">GO · Obstetrícia</div>
+    <div class="header-title">Partograma</div>
+    <div class="check-progress-bar" id="hdrBar" style="display:none">
+      <div class="check-progress-fill" id="hdrFill" style="width:0%"></div>
+    </div>
+    <div class="check-total-label" id="hdrLabel"></div>
+  </div>
+</header>
+
+<main class="main">
+<h1 class="page-h1">Partograma — Simulação de Estação OSCE</h1>
+<p class="eyebrow-meta">GO · Obstetrícia | Método: Simulação</p>
+<hr>
+<h2 class="section-heading">ESTAÇÃO 1: Fase Ativa Normal — Parto Eutócico</h2>
+<figure style="margin:22px 0;text-align:center"><img src="parto_pdf_aula_04_partograma_pg5_img1.png" alt="Curva de Friedman fase latencia vs ativa" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Curva de Friedman: Fase de Latência (até 4 cm) → Fase Ativa (aceleração → dilatação máxima → desaceleração → 2º período)</figcaption></figure>
+
+<figure style="margin:22px 0;text-align:center"><img src="parto_pdf_aula_04_partograma_pg4_img1.png" alt="Partograma de Philpott linha de alerta e acao" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Partograma de Philpott: Linha de Alerta (traçado cruzando os quadrados diagonalmente) e Linha de Ação (4h à direita da linha de alerta)</figcaption></figure>
+
+<figure style="margin:22px 0;text-align:center"><img src="parto_pdf_aula_04_partograma_pg3_img1.png" alt="Plano de De Lee escala pelve feto" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Plano de De Lee: espinha isquiática = plano 0. Acima: −1, −2, −3 (móvel). Abaixo: +1, +2, +3 (encravado). Vulva = +4</figcaption></figure>
+
+<figure style="margin:22px 0;text-align:center"><img src="parto_pdf_aula_04_partograma_pg3_img2.png" alt="Variedades de posicao cefalica OA OT OP" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Variedades de posição: OA (occipito-anterior), OT (transversa), OP (posterior), com variantes direita (D) e esquerda (E)</figcaption></figure>
+
+<figure style="margin:22px 0;text-align:center"><img src="parto_pdf_aula_04_partograma_pg5_img3.png" alt="Partograma preenchido caso fase ativa normal" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Partograma: caso de fase ativa normal — dilatação progressiva seguindo a linha de alerta, FCF estável, contrações regulares</figcaption></figure>
+
+<div class="professor-block"><strong>[PROFESSOR]:</strong> Primigesta, 25 anos, 39 semanas. Internada às 08h com colo 5 cm, apagamento 80%, apresentação cefálica, plano −1 de De Lee, OEA. DU: 3 contrações/10 min, duração 40 seg. BCF: 142 bpm. Membrana íntegra (I). Às 10h: 7 cm, plano 0. Às 12h: 9 cm, plano +1. Às 13h: total, plano +2.</div>
+<div class="question-label"><strong>Pergunta 1:</strong> O que você registra no partograma na abertura às 08h?</div>
+<div class="answer-block"><strong>Resposta esperada:</strong> Dilatação (▲) em 5 cm, descida fetal (⏺) em −1 de De Lee, variedade OEA, DU 3/40''/10', BCF 142 bpm, membranas íntegras (I). A linha de alerta inicia 1 hora após a abertura; a linha de ação, 4 horas depois da linha de alerta.</div>
+<div class="question-label"><strong>Pergunta 2:</strong> Como você avalia a progressão do trabalho de parto?</div>
+<div class="answer-block"><strong>Resposta esperada:</strong> Progressão normal — ≥1 cm/h na fase ativa. De 5→9 cm em 4h = 1 cm/h. Parto eutócico, não cruzou a linha de alerta. A fase ativa vai de 5 cm (internação/abertura) até dilatação total.</div>
+<div class="question-label"><strong>Pergunta 3:</strong> O que é plano +2 de De Lee e o que significa OEA?</div>
+<div class="answer-block"><strong>Resposta esperada:</strong> Plano De Lee: zero = espinhas ciáticas; valores negativos = acima; positivos = abaixo. Plano +2 = cabeça 2 cm abaixo das espinhas — descida progressiva, período expulsivo próximo. OEA = occipital esquerdo anterior = posição mais favorável ao parto.</div>
+<hr>
+<h2 class="section-heading">ESTAÇÃO 2: Parada Secundária de Dilatação — DPC</h2>
+<figure style="margin:22px 0;text-align:center"><img src="parto_pdf_aula_04_partograma_pg6_img1.png" alt="Partograma parada secundaria de dilatacao DPC" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Partograma: parada de progressão — dilatação cruza linha de alerta e atinge linha de ação → indicação de conduta ativa (amniotomia/ocitocina/cesárea)</figcaption></figure>
+
+<div class="professor-block"><strong>[PROFESSOR]:</strong> Primigesta, 28 anos, 38 semanas. Internada às 10h: 7 cm, plano −1, OET, LA claro. DU: 4/45''/10', BCF 138 bpm. Às 12h: 7 cm, plano −1. Às 14h: ainda 7 cm, plano −1, BCF 136 bpm, DU inalterada.</div>
+<div class="question-label"><strong>Pergunta 1:</strong> Qual o diagnóstico?</div>
+<div class="answer-block"><strong>Resposta esperada:</strong> Parada secundária de dilatação — ausência de progressão em 2 toques consecutivos com intervalo ≥2 horas na presença de contrações eficazes (≥3/10 min). Causa mais provável: desproporção cefalopélvica (DPC), relativa ou absoluta.</div>
+<div class="question-label"><strong>Pergunta 2:</strong> Qual a conduta?</div>
+<div class="answer-block"><strong>Resposta esperada:</strong> (1) Mobilização para posição vertical; (2) Alívio da dor (métodos não farmacológicos ou analgesia peridural); (3) Amniotomia se membranas íntegras; (4) Avaliar DU — se inadequada, ocitocina. Se DPC relativa → avaliar fórcipe de rotação. Se DPC absoluta → cesárea.</div>
+<div class="question-label"><strong>Pergunta 3:</strong> A variedade OET preocupa aqui? Por quê?</div>
+<div class="answer-block"><strong>Resposta esperada:</strong> Sim. OET (occipital transverso) é posição de transição — deveria rotar para anterior durante a descida. Persistência de OET contribui para parada por dificuldade de encaixe e progressão fetal.</div>
+<hr>
+<h2 class="section-heading">ESTAÇÃO 3: Sofrimento Fetal Agudo + Taquissistolia</h2>
+<figure style="margin:22px 0;text-align:center"><img src="parto_pdf_aula_04_partograma_pg6_img2.png" alt="Partograma sofrimento fetal taquissistolia" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Partograma: taquissistolia e alteração de FCF — contrações >5 em 10 min + BCF alterado → conduta imediata (decúbito lateral, O₂, suspender ocitocina, cesárea de urgência)</figcaption></figure>
+
+<figure style="margin:22px 0;text-align:center"><img src="parto_pdf_aula_04_partograma_pg7_img1.png" alt="Partograma caso parada com recuperacao" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Partograma adicional: progressão que cruza linha de alerta, com recuperação após intervenção — aprendizado de leitura dinâmica</figcaption></figure>
+
+<div class="professor-block"><strong>[PROFESSOR]:</strong> Multípara (G3P2), 38 semanas. 15h: 6 cm, plano 0, OEA, LA claro, BCF 162 bpm, DU: 6 contrações/10 min, duração 60 seg. Às 15h30: BCF 98 bpm, LA tinto de mecônio (M). Está usando ocitocina.</div>
+<div class="question-label"><strong>Pergunta 1:</strong> O que indica BCF 162 e depois 98 bpm?</div>
+<div class="answer-block"><strong>Resposta esperada:</strong> BCF >160 = taquicardia fetal (sinal precoce de sofrimento). BCF <110 = bradicardia (sinal grave, sofrimento fetal agudo). LA com mecônio confirma hipóxia — registro no partograma: letra "M".</div>
+<div class="question-label"><strong>Pergunta 2:</strong> O que é taquissistolia e qual o seu risco?</div>
+<div class="answer-block"><strong>Resposta esperada:</strong> Taquissistolia = >5 contrações/10 min (normal: 2–5). Causa hiperestimulação uterina → reduz perfusão placentária → hipóxia fetal. A ocitocina em uso é a causa provável — deve ser suspensa imediatamente.</div>
+<div class="question-label"><strong>Pergunta 3:</strong> Qual a conduta imediata?</div>
+<div class="answer-block"><strong>Resposta esperada:</strong> (1) Suspender ocitocina; (2) Decúbito lateral esquerdo; (3) Oxigênio à mãe; (4) Toques a cada 15 min no expulsivo; (5) Se BCF não recuperar → resolução imediata: fórcipe de alívio (se cabeça encaixada, plano ≥+2) ou cesárea de urgência.</div>
+<hr>
+<h2 class="section-heading">Pontos que o professor vai checar</h2>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span>Sabe abrir o partograma na fase ativa (≥4–5 cm)</span></label><label class="check-item"><input type="checkbox"><span>Registra corretamente: ▲ dilatação, ⏺ descida, variedade de posição, DU, BCF, membranas</span></label><label class="check-item"><input type="checkbox"><span>Posiciona linha de alerta (1h após abertura) e linha de ação (4h após alerta)</span></label><label class="check-item"><input type="checkbox"><span>Diagnostica parada secundária de dilatação (2 toques ≥2h, contrações eficazes)</span></label><label class="check-item"><input type="checkbox"><span>Reconhece sofrimento fetal (BCF <110 ou >160 + mecônio)</span></label><label class="check-item"><input type="checkbox"><span>Conduta correta para cada distócia</span></label><label class="check-item"><input type="checkbox"><span>Sabe que taquissistolia = >5 contrações/10 min → suspender ocitocina</span></label><div class="check-progress"><span class="prog-text">0/7 marcados</span></div></div>
+<h2 class="section-heading">Tabela de Referência Rápida</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Parâmetro</th><th>Normal</th><th>Alarme</th></tr></thead><tbody>
+<tr><td>BCF</td><td>110–160 bpm</td><td><110 ou >160</td></tr>
+<tr><td>DU</td><td>2–5 contrações/10 min, 30–50 seg</td><td>>5/10 min (taquissistolia)</td></tr>
+<tr><td>Progressão dilatação</td><td>≥1 cm/h na fase ativa</td><td><1 cm/h = fase ativa prolongada</td></tr>
+<tr><td>Parada secundária de dilatação</td><td>—</td><td>2 toques sem progressão, ≥2h, DU eficaz</td></tr>
+<tr><td>Parada secundária de descida</td><td>—</td><td>2 toques sem progressão, ≥1h</td></tr>
+</tbody></table></div>
+<h2 class="section-heading">Símbolos Essenciais do Partograma</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Símbolo/Sigla</th><th>Significado</th></tr></thead><tbody>
+<tr><td>▲</td><td>Dilatação cervical (cm)</td></tr>
+<tr><td>⏺</td><td>Altura da apresentação (plano De Lee)</td></tr>
+<tr><td>OEA / ODA / OEP / ODP / OET / ODT</td><td>Variedade de posição fetal</td></tr>
+<tr><td>I / C / M / S / A</td><td>Membranas: Íntegra / Clara / Mecônio / Sangue / Ausente</td></tr>
+<tr><td>DU N°/seg/10'</td><td>Dinâmica uterina</td></tr>
+<tr><td>Plano 0</td><td>Espinhas ciáticas (referência)</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Fonte</h2>
+<ul><li>Gerado a partir de: <code>conteudo_partograma.md</code> (Aula 04 — Partograma + Aula Prática Partograma)</li><li>Seções consultadas: distócias, linhas de alerta e ação, símbolos, DU, BCF, sofrimento fetal, parto precipitado</li><li>Gaps identificados: Imagens do partograma preenchido estão como placeholders IMG no conteúdo extraído (slides não renderizados como texto)</li></ul>
+</main>
+
+<nav class="bottom-nav">
+  <a href="../../osce-plano.html">← Voltar ao plano</a>
+  <span class="bottom-total" id="bottomTotal"></span>
+</nav>
+
+<script>
+(function() {
+  var KEY = 'osce_v1_' + location.pathname;
+  var state = JSON.parse(localStorage.getItem(KEY) || '{}');
+  var boxes = document.querySelectorAll('input[type=checkbox]');
+  var total = boxes.length;
+
+  boxes.forEach(function(cb, idx) {
+    if (state[idx]) cb.checked = true;
+    cb.addEventListener('change', function() {
+      state[idx] = cb.checked;
+      localStorage.setItem(KEY, JSON.stringify(state));
+      updateAll();
+    });
+  });
+
+  function updateAll() {
+    var done = 0;
+    boxes.forEach(function(c){ if (c.checked) done++; });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    var bar = document.getElementById('hdrBar');
+    var fill = document.getElementById('hdrFill');
+    var lbl = document.getElementById('hdrLabel');
+    var bot = document.getElementById('bottomTotal');
+    if (total > 0) {
+      bar.style.display = 'block';
+      fill.style.width = pct + '%';
+      lbl.textContent = done + '/' + total + ' itens marcados (' + pct + '%)';
+      bot.textContent = done + '/' + total + ' checados';
+    }
+    document.querySelectorAll('.checklist').forEach(function(cl) {
+      var cbs = cl.querySelectorAll('input[type=checkbox]');
+      var cd = 0;
+      cbs.forEach(function(c){ if (c.checked) cd++; });
+      var prog = cl.querySelector('.prog-text');
+      if (prog) prog.textContent = cd + '/' + cbs.length + ' marcados';
+    });
+  }
+
+  updateAll();
+})();
+</script>
+</body>
+</html>

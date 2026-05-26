@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcards Clínica Médica · OSCE</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d2e;
+    --card-front: #1a2230;
+    --card-back: #162033;
+    --accent: #a78bfa;
+    --accent2: #81c784;
+    --text: #e8eaf6;
+    --muted: #9aa0bc;
+    --green: #4caf82;
+    --red: #e05c7b;
+    --yellow: #f9c846;
+    --border: #2d3154;
+    --r: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px 40px;
+  }
+  header { text-align: center; margin-bottom: 28px; }
+  header .eyebrow { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+  header h1 { font-size: 26px; font-weight: 700; }
+  .controls { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; justify-content: center; }
+  .controls button { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 13px; transition: background 0.2s; }
+  .controls button:hover { background: var(--border); }
+  .controls button.active { background: var(--accent); border-color: var(--accent); color: #0f1117; }
+  .filter-tags { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; justify-content: center; }
+  .filter-tags button { font-size: 11px; padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); cursor: pointer; transition: all 0.2s; }
+  .filter-tags button.active { background: var(--accent); border-color: var(--accent); color: #0f1117; font-weight: 600; }
+  .progress { font-size: 13px; color: var(--muted); margin-bottom: 20px; display: flex; gap: 16px; align-items: center; }
+  .progress-bar { width: 180px; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.3s; }
+  .scene { width: 100%; max-width: 640px; height: 380px; perspective: 1200px; cursor: pointer; margin-bottom: 20px; }
+  .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.55s cubic-bezier(0.4,0,0.2,1); }
+  .card.flipped { transform: rotateY(180deg); }
+  .face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: var(--r); padding: 28px 32px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border: 1px solid var(--border); }
+  .face.front { background: var(--card-front); }
+  .face.back { background: var(--card-back); transform: rotateY(180deg); border-color: var(--accent); }
+  .card-tag { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; font-weight: 600; }
+  .card-q { font-size: 17px; font-weight: 600; line-height: 1.5; }
+  .card-hint { margin-top: 12px; font-size: 12px; color: var(--muted); }
+  .card-a { font-size: 14px; line-height: 1.7; }
+  .card-a strong { color: var(--accent); }
+  .card-a .alert { color: var(--red); font-weight: 700; }
+  .card-a .ok { color: var(--green); font-weight: 700; }
+  .card-a .warn { color: var(--yellow); font-weight: 700; }
+  .nav { display: flex; gap: 12px; align-items: center; }
+  .nav button { background: var(--surface); border: 1px solid var(--border); color: var(--text); width: 44px; height: 44px; border-radius: 10px; font-size: 20px; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; justify-content: center; }
+  .nav button:hover { background: var(--border); }
+  .nav button:disabled { opacity: 0.3; cursor: not-allowed; }
+  .card-number { font-size: 14px; color: var(--muted); min-width: 60px; text-align: center; }
+  .result-btns { display: flex; gap: 10px; margin-top: 16px; }
+  .result-btns button { padding: 9px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 600; }
+  .btn-know { background: var(--green); color: #fff; }
+  .btn-dontknow { background: var(--red); color: #fff; }
+  .stats { margin-top: 8px; font-size: 12px; color: var(--muted); display: flex; gap: 16px; }
+  .stat-know { color: var(--green); }
+  .stat-dk { color: var(--red); }
+  .flip-hint { font-size: 11px; color: var(--muted); margin-bottom: 8px; text-align: center; }
+  @media (max-width: 480px) {
+    .scene { height: 320px; }
+    .face { padding: 20px 16px; }
+    .card-q { font-size: 15px; }
+    .card-a { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Flashcards · Clínica Médica</div>
+  <h1>Clínica Médica — OSCE</h1>
+</header>
+
+<div class="controls">
+  <button id="btnAll" class="active" onclick="filterMode('all')">Todos</button>
+  <button id="btnRev" onclick="filterMode('review')">Revisar</button>
+  <button onclick="shuffle()">🔀 Embaralhar</button>
+  <button onclick="resetAll()">↺ Reiniciar</button>
+</div>
+
+<div class="filter-tags" id="tagFilters"></div>
+
+<div class="progress">
+  <span id="progText">0 / 55</span>
+  <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+</div>
+
+<div class="flip-hint">Clique no card para revelar · Teclas: ← → Espaço · 1=Não sei 2=Sei</div>
+<div class="scene" onclick="flipCard()">
+  <div class="card" id="cardEl">
+    <div class="face front">
+      <div class="card-tag" id="cardTag"></div>
+      <div class="card-q" id="cardQ"></div>
+      <div class="card-hint">👆 clique para ver a resposta</div>
+    </div>
+    <div class="face back">
+      <div class="card-tag" id="cardTagB"></div>
+      <div class="card-a" id="cardA"></div>
+    </div>
+  </div>
+</div>
+
+<div class="nav">
+  <button id="btnPrev" onclick="prevCard()">◀</button>
+  <span class="card-number" id="cardNum">1 / 55</span>
+  <button id="btnNext" onclick="nextCard()">▶</button>
+</div>
+
+<div class="result-btns" id="resultBtns" style="display:none">
+  <button class="btn-dontknow" onclick="markCard(false)">✗ Não sei</button>
+  <button class="btn-know" onclick="markCard(true)">✓ Sei</button>
+</div>
+
+<div class="stats">
+  <span>Sei: <span class="stat-know" id="statKnow">0</span></span>
+  <span>Revisar: <span class="stat-dk" id="statDk">0</span></span>
+</div>
+
+<script>
+const ALL_CARDS = [
+  // ── NEFROLOGIA ──
+  { tag: "DRC", q: "Qual a definição de DRC e quais os 2 critérios diagnósticos?", a: "Alteração estrutural ou funcional renal por <strong>≥ 3 meses</strong>. Critérios: (1) TFG <strong>≤ 60 mL/min/1,73m²</strong> (estágio G3+) OU (2) <strong>marcador de lesão renal</strong> (proteinúria ≥30 mg/g creat, hematúria, imagem alterada)." },
+  { tag: "DRC", q: "Quais os 5 critérios para iniciar diálise de urgência na DRC?", a: "<strong>AHAI + 3 S:</strong> (1) Acidose metabólica refratária (pH <7,1); (2) Hipercalemia refratária (K >6,5 + ECG alterado); (3) Hipervolemia refratária ao diurético; (4) Síndrome urêmica (encefalopatia, pericardite); (5) TFG <10 com sintomas." },
+  { tag: "DRC", q: "Qual a combinação farmacológica atual de 1ª linha para nefroproteção na DRC?", a: "<strong>iECA ou BRA + iSGLT-2</strong> (dapagliflozina ou empagliflozina). Os iSGLT-2 retardam a progressão independentemente do DM. Fineranona pode ser adicionada em DRC diabética com A2/A3. <span class='alert'>NÃO combinar iECA + BRA juntos</span> (hipercalemia + LRA)." },
+  { tag: "DRC", q: "Por que a FAV é preferida ao cateter de duplo lúmen na hemodiálise?", a: "FAV (fístula arteriovenosa): <strong>menor risco infeccioso</strong>, maior durabilidade, melhor fluxo. Cateter = acesso temporário com alto risco de bacteremia e trombose. Criar FAV <strong>3–6 meses antes</strong> do início da diálise (tempo de maturação)." },
+  { tag: "DRC", q: "Qual o alvo de hemoglobina no tratamento da anemia da DRC com EPO?", a: "Hb alvo: <strong>10–11,5 g/dL</strong>. <span class='alert'>Não ultrapassar 13 g/dL</span> — risco de AVC, trombose e morte cardiovascular. Repor ferro antes de EPO se ferritina <200 ng/mL ou saturação <20%." },
+  { tag: "Nefrótica", q: "Qual a tétrade diagnóstica da síndrome nefrótica?", a: "<strong>1. Proteinúria maciça</strong> (>3,5 g/24h) · <strong>2. Hipoalbuminemia</strong> (albumina <3,0 g/dL) · <strong>3. Edema</strong> (anasarca) · <strong>4. Hiperlipidemia</strong>. Mecanismo do edema: underfilling → ↑SRAA → retenção Na+H₂O." },
+  { tag: "Nefrótica", q: "No adulto com síndrome nefrótica, por que biopsiar sempre? Qual a causa mais comum?", a: "<span class='alert'>No adulto: biópsia SEMPRE</span> — ao contrário da criança (2–7 anos, lesão mínima, tratar empiricamente). Adulto: causas variadas (membranosa, GESF, lesão mínima) exigem diagnóstico para guiar imunossupressão. Causa mais comum global: <strong>Nefropatia Membranosa</strong> (anti-PLA2R +)." },
+  { tag: "Nefrótica", q: "Como diferenciar síndrome nefrótica de nefrítica pelos 4 achados-chave?", a: "<table style='font-size:12px;border-collapse:collapse'><tr><td style='padding:2px 6px'><strong>Nefrótica</strong></td><td style='padding:2px 6px'><strong>Nefrítica</strong></td></tr><tr><td>Proteinúria maciça >3,5g</td><td>Proteinúria leve</td></tr><tr><td>Sem hematúria</td><td><span class='alert'>Hematúria + cilindros</span></td></tr><tr><td>Edema intenso</td><td>Edema discreto</td></tr><tr><td>C3 <span class='ok'>normal</span></td><td>C3 <span class='alert'>baixo</span> (GNDA)</td></tr></table>" },
+  { tag: "Nefrolitíase", q: "Qual o tipo de cálculo radiotransparente na radiografia? Qual o pH urinário característico?", a: "<strong>Ácido úrico</strong> — radiotransparente (não visível no Rx simples; visível apenas em TC e USG). pH urinário ácido (< 5,5). Tratamento preventivo: <strong>alcalinizar urina</strong> (citrato K, pH alvo ≥ 6,5) + alopurinol se hiperuricosúria." },
+  { tag: "Nefrolitíase", q: "Febre + cólica renal + oligúria = emergência. O que é e qual a conduta?", a: "<strong>Pionefrosis</strong> (obstrução + infecção do sistema coletor). <span class='alert'>Emergência cirúrgica!</span> Conduta: hemoculturas + ATB EV (cobertura gram-negativo) + <strong>drenagem urgente</strong> (cateter duplo J ou nefrostomia percutânea). Não aguardar — mortalidade alta." },
+
+  // ── ENDOCRINOLOGIA ──
+  { tag: "Cushing", q: "Qual a causa mais comum de síndrome de Cushing no geral? E a mais comum endógena?", a: "<strong>Global (mais comum): iatrogênica</strong> (uso crônico de corticoides exógenos). Endógena mais comum: <strong>Doença de Cushing</strong> (adenoma hipofisário secretor de ACTH) — 60–70% dos casos endógenos." },
+  { tag: "Cushing", q: "ACTH baixo vs alto no Cushing: o que isso indica e qual o próximo passo?", a: "ACTH <strong>< 6 pg/mL</strong> → <strong>ACTH-independente → adrenal</strong> → TC de adrenais. ACTH <strong>> 6 pg/mL</strong> → <strong>ACTH-dependente → hipofisário ou ectópico</strong> → RM hipófise + supressão dexametasona 8 mg." },
+  { tag: "Cushing", q: "Quais os 3 testes para confirmar hipercortisolismo no Cushing e seus pontos de corte?", a: "(1) <strong>Cortisol salivar noturno</strong> (22–23h): VN <150 ng/dL — dois testes. (2) <strong>Supressão dexametasona 1 mg overnight</strong>: cortisol 8h >1,8 μg/dL = sem supressão. (3) <strong>Cortisol livre urinário 24h</strong>: >50 μg/24h. Confirmar com ≥ 2 testes positivos." },
+  { tag: "Cushing", q: "Qual o sinal mais específico (alta especificidade) da síndrome de Cushing?", a: "<strong>Estrias violáceas largas</strong> (>1 cm) — alta especificidade. Outros específicos: fraqueza muscular proximal (miopatia corticoide) + osteoporose com fratura espontânea + pletora facial. Obesidade e HAS são inespecíficos (muito comuns)." },
+  { tag: "Cushing", q: "Qual o tratamento de 1ª linha da doença de Cushing e a taxa de remissão?", a: "<strong>Cirurgia transesfenoidal</strong> (ressecção do adenoma hipofisário) — 1ª linha. Remissão em <strong>80–90%</strong> dos microadenomas. Se falha/recidiva: radioterapia, cetoconazol/osilodrostat, ou adrenalectomia bilateral (último recurso)." },
+  { tag: "Addison", q: "Qual a diferença entre insuficiência adrenal primária e secundária? Como diferenciar?", a: "<strong>Primária (Addison)</strong>: ACTH ↑ → <span class='alert'>hiperpigmentação</span> (MSH estimula melanócitos), hiponatremia, hipercalemia. Causa: autoimune, TB, HIV. <strong>Secundária</strong>: ACTH ↓ → <span class='ok'>sem hiperpigmentação</span>. Causa principal: <strong>uso crônico de corticoide</strong> (60%)." },
+  { tag: "Hipertireoidismo", q: "Qual a tríade diagnóstica da Doença de Graves? Como confirmar?", a: "<strong>1. Bócio difuso</strong> · <strong>2. Oftalmopatia</strong> (exoftalmia/proptose) · <strong>3. TRAb positivo</strong> (95% dos casos). Confirmar: TSH suprimido + T4 livre ↑ + <strong class='alert'>TRAb +</strong>. Cintilografia: captação difusa e aumentada." },
+  { tag: "Hipertireoidismo", q: "PTU vs Metimazol: quando preferir cada um?", a: "<strong>PTU preferido:</strong> <span class='alert'>1º trimestre da gestação</span> (metimazol teratogênico no 1º tri — aplasia cutis) + <span class='alert'>crise tireotóxica</span> (bloqueia conversão periférica T4→T3). <strong>Metimazol preferido:</strong> todos os outros casos (menor toxicidade hepática, 1x/dia)." },
+  { tag: "Hipertireoidismo", q: "Qual a sequência de tratamento da crise tireotóxica? (sigla BITS)", a: "<strong>B</strong>etabloqueador (propranolol 60–80 mg 4/4h ou EV) + <strong>I</strong>odo (Lugol — iniciar 1h APÓS PTU) + <strong>T</strong>ireostático (PTU 200–400 mg 6/6h, antes do iodo) + <strong>S</strong>uporte + corticoide (dexametasona 2 mg 6/6h). Tratar causa precipitante." },
+  { tag: "Hipertireoidismo", q: "Quais as 2 complicações cirúrgicas da tireoidectomia total?", a: "(1) <strong>Hipoparatireoidismo</strong> (hipocalcemia) — paratireoides inadvertidamente removidas: formigamento perioral, sinal de Chvostek/Trousseau, convulsões → repor cálcio + calcitriol. (2) <strong>Paralisia das pregas vocais</strong> (lesão do nervo laríngeo recorrente) → disfonia/disfagia." },
+  { tag: "Hipertireoidismo", q: "Tireoidite subaguda (Quervain): quais os achados diagnósticos e as 3 fases clínicas?", a: "<strong>Dor cervical intensa + VHS ↑↑ + febre pós-infecção viral</strong>. Cintilografia: <span class='alert'>captação muito baixa</span> (destruição folicular). Fases: (1) Tireotoxicose 4–6 sem → (2) Hipotireoidismo transitório → (3) Eutireoidismo (recuperação). Tratamento: AINEs + betabloqueadores." },
+
+  // ── GASTROENTEROLOGIA ──
+  { tag: "DRGE", q: "Quais 4 manifestações extraesofágicas (atípicas) da DRGE?", a: "(1) <strong>ORL</strong>: rouquidão matinal, laringite posterior, pigarro. (2) <strong>Pulmonar</strong>: tosse crônica noturna, asma com piora noturna. (3) <strong>Dental</strong>: erosão do esmalte (face palatina). (4) Globus + dor torácica não cardíaca. Suspeitar DRGE em pacientes com tosse/rouquidão sem causa aparente." },
+  { tag: "DRGE", q: "Qual o erro mais comum no uso do IBP e qual o horário correto?", a: "Erro: tomar IBP com a refeição ou após. Correto: <strong>30–60 minutos ANTES do café da manhã</strong> (IBP requer bomba ativa para ser eficaz). Duração: 8 semanas para esofagite erosiva. Se resposta parcial: dobrar dose ou trocar IBP." },
+  { tag: "DRGE", q: "Los Angeles A/B confirma DRGE? Qual o próximo passo?", a: "<span class='alert'>NÃO confirma</span> — LA A/B pode ser incidental. Próximo passo: <strong>pHmetria esofágica 24h sem IBP</strong> (suspender 7 dias antes). Exposição ácida >6% = DRGE confirmada. LA C/D = DRGE estabelecida (não precisa de pHmetria para confirmar)." },
+  { tag: "DRGE", q: "O que é o esôfago de Barrett e qual o principal risco?", a: "Metaplasia intestinal especializada no esôfago distal (substituição epitélio escamoso por colunar). Risco: <strong>adenocarcinoma esofágico</strong> (0,5–2%/ano com displasia de alto grau). Fatores de risco: DRGE crônica, homem, branco, obeso, >55a, tabagismo. Vigilância: EDA + biópsia a cada 3–5 anos." },
+  { tag: "Diarreia Aguda", q: "Por que NÃO usar antibiótico na diarreia por EHEC? O que pode ocorrer?", a: "EHEC (E. coli O157:H7): ATB aumenta liberação de <span class='alert'>toxina Shiga</span> → risco de <strong>Síndrome Hemolítico-Urêmica (SHU)</strong> = anemia hemolítica microangiopática + trombocitopenia + IRA. Tratamento: apenas suporte." },
+  { tag: "Diarreia Aguda", q: "Quando a loperamida é contraindicada na diarreia aguda?", a: "<span class='alert'>CONTRAINDICADA</span> em: disenteria com febre + sangue (EHEC, Shigella) → risco de <strong>megacólon tóxico</strong>. Indicada apenas em diarreia aquosa afebril sem sangue (viajante, pós-infeccioso)." },
+  { tag: "Diarreia Aguda", q: "Qual o tratamento do Clostridioides difficile leve vs grave?", a: "<strong>C. diff leve/moderado:</strong> vancomicina VO 125 mg 4×/dia 10 dias (preferível) ou metronidazol VO 500 mg 3×/dia 10 dias. <strong>C. diff grave/fulminante:</strong> vancomicina VO 500 mg 4×/dia ± metronidazol EV + considerar fidaxomicina. Diagnóstico: GDH + toxinas A/B + PCR." },
+  { tag: "Diarreia Crônica", q: "Quais os 5 sinais de alarme que distinguem diarreia crônica orgânica de funcional?", a: "(1) Idade >45 anos; (2) Diarreia noturna que acorda; (3) Perda de peso não intencional; (4) Hematoquezia; (5) Massa palpável / adenomegalia. <strong>Qualquer alarme → colonoscopia urgente</strong>. Sem alarme + <45 anos + longa evolução = provavelmente funcional (SII)." },
+  { tag: "Diarreia Crônica", q: "Esteatorreia: como identificar e qual o exame confirmatório?", a: "Fezes <strong>volumosas, brilhantes, fétidas (rançosas) e flutuantes</strong> = esteatorreia (gordura fecal >7g/24h). Diagnóstico: <strong>elastase fecal <200 μg/g</strong> = insuficiência pancreática exócrina. <strong>Anti-transglutaminase IgA</strong> para celíaca. Sudan III = triagem de gordura fecal." },
+  { tag: "Icterícia", q: "Sinal de Courvoisier-Terrier: o que é e o que indica?", a: "<strong>Vesícula biliar palpável + indolor + icterícia</strong> = sinal de Courvoisier-Terrier. Indica <span class='alert'>obstrução biliar distal por tumor</span> (câncer de cabeça do pâncreas — mais comum) até prova em contrário. Ao contrário da coledocolitíase (vesícula pequena, fibrótica, dor intensa)." },
+  { tag: "Icterícia", q: "Tríade de Charcot vs Pêntada de Reynolds: quais os componentes e o que indicam?", a: "<strong>Tríade de Charcot:</strong> febre + icterícia + dor = <span class='warn'>colangite</span> (coledocolitíase infectada). <strong>Pêntada de Reynolds:</strong> Charcot + <span class='alert'>hipotensão + confusão mental</span> = <span class='alert'>colangite grave/supurativa → drenagem cirúrgica urgente</span>." },
+  { tag: "Icterícia", q: "Síndrome de Gilbert: o que é, quando piora e como tratar?", a: "Déficit parcial de UGT1A1 → ↓ conjugação da bilirrubina → <strong>icterícia flutuante BI elevada 2–5 mg/dL</strong>. Piora com: jejum, estresse, exercício físico, infecção. BD normal. Totalmente <span class='ok'>benigno</span> — <strong>não requer tratamento</strong>; apenas orientar e tranquilizar." },
+  { tag: "Obstipação", q: "Quais as 3 categorias de obstipação crônica e seus mecanismos?", a: "(1) <strong>Trânsito normal</strong> (60%): percepção alterada, erro alimentar. (2) <strong>Trânsito lento</strong> (15–20%): reflexo gastrocólico ↓, alteração neurônios mioentéricos; mulheres jovens; <1 evacuação/semana. (3) <strong>Distúrbios da defecação</strong> (25%): disfunção assoalho pélvico, Hirschsprung → biofeedback ou cirurgia." },
+  { tag: "Obstipação", q: "Qual o laxativo osmótico de 1ª escolha para uso crônico e por quê?", a: "<strong>Polietilenoglicol 3350 (macrogol) 17 g/dia</strong> — mais seguro para uso crônico: sem risco de dependência, sem melanose coli, sem distúrbio eletrolítico. Distúrbios da defecação com puboretalis paradoxal: <strong>biofeedback anorretal</strong> é a 1ª linha (superior a laxativos)." },
+
+  // ── HEMATOLOGIA ──
+  { tag: "Hemólise", q: "Quais os 4 marcadores laboratoriais de hemólise ativa?", a: "↓ <strong>Haptoglobina</strong> (mais sensível) + ↑ <strong>DHL</strong> + ↑ <strong>Bilirrubina Indireta</strong> + ↑ <strong>Reticulócitos</strong>. Na hemólise intravascular: <span class='alert'>hemoglobinúria</span> (urina escura) + LRA + CIVD. Na extravascular: esplenomegalia progressiva." },
+  { tag: "AHAI", q: "Qual o teste diagnóstico da AHAI e qual o tratamento de 1ª linha?", a: "<strong>Coombs direto positivo</strong> (anticorpo ligado à hemácia). Tratamento 1ª linha: <strong>prednisona 1–2 mg/kg/dia</strong> por 2–4 semanas → desmame lento. Refratária: rituximabe (anti-CD20). 3ª linha: esplenectomia (~70% remissão). Tratar causa base (LES, linfoma, fármacos)." },
+  { tag: "Falciforme", q: "Como manejar a crise vaso-oclusiva da anemia falciforme? Qual analgésico é contraindicado?", a: "Hidratação EV + <strong>analgesia escalonada</strong>: AINEs/dipirona → tramadol → <strong>morfina</strong> (opioide de escolha). <span class='alert'>NÃO usar meperidina</span> — metabólito normeperidina é neurotóxico (convulsões). Oxigênio se SatO₂ <95%. Não transfundir rotineiramente." },
+  { tag: "Falciforme", q: "O que é a Síndrome Torácica Aguda (STA) e por que é importante?", a: "<strong>Causa de óbito mais frequente</strong> na anemia falciforme. Critério: <strong>infiltrado pulmonar novo</strong> + febre ≥38,5°C OU ↓ SatO₂ ≥3% OU ↑ FR. Conduta: O₂, hidratação controlada, <strong>ceftriaxona + azitromicina</strong>, transfusão simples ou exsanguíneo-transfusão." },
+  { tag: "Falciforme", q: "Qual a droga que reduz a frequência de crises na anemia falciforme e seu mecanismo?", a: "<strong>Hidroxiureia</strong> (15–35 mg/kg/dia) — aumenta produção de <strong>HbF</strong> (hemoglobina fetal), que inibe a polimerização da HbS → reduz crises, STA, hospitalização e mortalidade. Outros: ácido fólico 5 mg/dia, profilaxia com penicilina V (0–5 anos), vacina pneumocócica." },
+  { tag: "Falciforme", q: "Crise aplástica na anemia falciforme: qual o agente e o achado laboratorial diagnóstico?", a: "<strong>Parvovírus B19</strong> infeta precursores eritroides → ↓↓↓ reticulócitos (<1%) + ↓ Hb aguda. <span class='alert'>Não confundir</span> com crise hemolítica (↑ reticulócitos, ↑ DHL). Tratamento: suporte transfusional + isolamento respiratório (parvovírus transmissível)." },
+  { tag: "Esferocitose", q: "Como diferenciar esferocitose hereditária de AHAI (ambas têm esferócitos)?", a: "<strong>Esferocitose hereditária:</strong> Coombs direto <span class='ok'>NEGATIVO</span>, herança AD (75%), fragilidade osmótica ↑, EMA-binding test ↓. <strong>AHAI:</strong> Coombs direto <span class='alert'>POSITIVO</span>. Sem hiperpigmentação (não há autoanticorpo). Esplenectomia após 7 anos." },
+  { tag: "Anemias Microcíticas", q: "Qual a tríade laboratorial que diferencia anemia ferropriva de ADC?", a: "<table style='font-size:12px;border-collapse:collapse'><tr><td style='padding:2px 6px'></td><td style='padding:2px 6px'><strong>Ferropriva</strong></td><td style='padding:2px 6px'><strong>ADC</strong></td></tr><tr><td>Ferro</td><td>↓</td><td>↓</td></tr><tr><td><strong>Ferritina</strong></td><td><span class='alert'>↓</span></td><td><span class='ok'>Normal/↑</span></td></tr><tr><td><strong>TIBC</strong></td><td><span class='alert'>↑</span></td><td><span class='ok'>↓</span></td></tr></table>ADC: ferro sequestrado nos macrófagos por hepcidina ↑. <span class='alert'>NÃO responde a ferro VO.</span>" },
+  { tag: "Anemias Microcíticas", q: "Como confirmar talassemia β menor? Quais achados sugestivos no hemograma?", a: "Hemograma: MCV <strong>muito baixo desproporcional</strong> à anemia leve + eritrócitos <strong>>5,5×10⁶/μL</strong> (eritrocitose relativa) + RDW <strong>normal</strong> + ferro e ferritina normais. Confirmação: <strong>EFHb com HbA2 >3,5%</strong> (patognomônico). <span class='alert'>Não tratar com ferro</span>." },
+  { tag: "Anemias Microcíticas", q: "Quais são os sinais clínicos específicos da anemia ferropriva grave?", a: "<strong>Coiloniquia</strong> (unhas em colher) + <strong>Glossite</strong> (língua lisa, avermelhada) + <strong>Queilite angular</strong> + <strong>Síndrome de Plummer-Vinson</strong> (disfagia + membrana esofágica + ferropriva) + pagofagia (compulsão por gelo/papel/terra). RDW ↑ (anisocitose)." },
+  { tag: "Anemias Macrocíticas", q: "Qual o achado mais precoce no hemograma da anemia megaloblástica?", a: "<strong>Neutrófilos hipersegmentados</strong> (≥5 lóbulos em >5% ou qualquer neutrófilo com ≥6 lóbulos) — sinal mais precoce, precede a anemia. Outros: macroovalócitos, VCM >110 fL, pancitopenia, reticulocitopenia. DHL muito elevado + BI ↑ leve (hemólise intramedular)." },
+  { tag: "Anemias Macrocíticas", q: "Qual a manifestação neurológica exclusiva da deficiência de B12 (não ocorre no folato)?", a: "<strong>Degeneração subaguda combinada da medula:</strong> neuropatia periférica em <strong>luva e meia</strong> (parestesias pés > mãos) + ataxia (déficit propriocepção/vibratória) + déficit cognitivo/demência. <span class='alert'>Pode preceder a anemia</span>. Pode ser irreversível → tratar urgente." },
+  { tag: "Anemias Macrocíticas", q: "Qual exame diferencia deficiência de B12 de folato quando ambos têm homocisteína elevada?", a: "<strong>Ácido metilmalônico</strong> — elevado <strong>APENAS na deficiência de B12</strong> (folato: metilmalônico normal). Além disso: B12 <200 pg/mL + folato sérico <2 ng/mL. <span class='alert'>NUNCA tratar com folato sem excluir B12</span> — folato corrige anemia mas a neuropatia por B12 progride (dano irreversível)." },
+  { tag: "Anemias Macrocíticas", q: "Macrocitose por alcoolismo vs megaloblástica: quais as diferenças?", a: "<strong>Alcoolismo</strong>: eritrócitos <strong>arredondados</strong> (não ovalados), VCM raramente >110, <span class='alert'>sem hipersegmentação de neutrófilos</span>, GGT ↑↑. <strong>Megaloblástica</strong>: macroovalócitos, VCM >110–130, neutrófilos hipersegmentados, DHL muito elevado. Causa: efeito tóxico direto do álcool + deficiência de folato." },
+
+  // ── INFECTOLOGIA ──
+  { tag: "Leptospirose", q: "Quais os sinais clínicos que diferenciam leptospirose de dengue na fase precoce?", a: "<strong>Leptospirose:</strong> <span class='alert'>sufusão conjuntival</span> (hiperemia sem secreção, em 55%) + <strong>mialgia intensa em panturrilha</strong> + exposição epidemiológica (enchente, ratos). Dengue: dor retro-orbitária, rash petequial, plaquetopenia mais intensa. Leptospirose: leucocitose com desvio (dengue: leucopenia)." },
+  { tag: "Leptospirose", q: "O que é a Síndrome de Weil? Quais os 3 componentes e a gravidade?", a: "<strong>Leptospirose grave</strong>. Tríade: (1) <strong>Icterícia</strong> (bilirrubina >30–40 mg/dL — <span class='alert'>icterícia rubínica/avermelhada</span>) + (2) <strong>IRA</strong> (15–40%; inicialmente não oligúrica + hipocalemia) + (3) <strong>Hemorragia pulmonar</strong> (SHPS — causa de óbito). Plaquetopenia presente." },
+  { tag: "Leptospirose", q: "Qual o ATB de escolha na fase precoce e na fase grave da leptospirose?", a: "<strong>Fase precoce</strong> (ambulatorial): amoxicilina 500 mg VO 8/8h 5–7 dias ou <strong>doxiciclina</strong> 100 mg VO 12/12h 5–7 dias. <strong>Fase grave</strong> (internação): <span class='alert'>penicilina G cristalina</span> 1,5 milhões UI EV 6/6h (mínimo 7 dias). Alternativa: ceftriaxona 1–2 g EV/dia." },
+  { tag: "Leptospirose", q: "O que é a reação de Jarisch-Herxheimer e como manejar?", a: "Resposta inflamatória aguda 9–21% dos pacientes após início do ATB para leptospirose (lise rápida das espiroquetas). Clínica: <strong>febre + calafrios + hipotensão</strong>. Manejo: <strong>suporte</strong> (fluidos EV, vasopressores se necessário, corticoide). Não suspender o ATB." },
+  { tag: "Meningite", q: "Qual o achado do LCR que melhor diferencia meningite bacteriana de viral?", a: "<strong>Lactato no LCR:</strong> >3,5 mmol/L = <span class='alert'>bacteriana</span>; <3,5 mmol/L = <span class='ok'>viral</span>. Outros diferenciais: bacteriana = turvo + neutrófilos >1000 + glicose <45 + proteína >100. Viral = límpido + linfócitos <300 + glicose normal + proteína 50–100." },
+  { tag: "Meningite", q: "Quais os agentes de meningite em adultos jovens (18–50 anos)?", a: "<strong>N. meningitidis</strong> (meningococo — sorogrupos B e C mais comuns no Brasil) e <strong>S. pneumoniae</strong> (pneumococo). Em >50 anos: adicionar <strong>Listeria monocytogenes</strong> → cobrir com ampicilina + ceftriaxona. Imunocomprometidos: Cryptococcus, TB." },
+  { tag: "Meningite", q: "Qual o papel da dexametasona no tratamento da meningite bacteriana?", a: "Reduz a inflamação meníngea → menor dano neurológico e risco de surdez. Dose: adulto <strong>6 mg EV 12/12h 4 dias</strong>. <span class='alert'>Iniciar 30 minutos ANTES ou junto à 1ª dose do ATB</span>. Evidência mais forte: meningite por H. influenzae e pneumococo. Controverso na meningococcemia." },
+  { tag: "Meningite", q: "Quem deve receber quimioprofilaxia para meningococo e com qual fármaco?", a: "<strong>Quem:</strong> contatos próximos em até 10 dias (domicílio, instituição fechada, exposição direta às secreções, voos >8h ao lado). <strong>Fármaco de escolha:</strong> <strong>rifampicina</strong> — adulto 600 mg VO 12/12h 2 dias; criança 10 mg/kg 12/12h 2 dias. Alternativas: ceftriaxona IM dose única ou ciprofloxacina VO dose única (adultos)." },
+  { tag: "Mononucleose", q: "Por que NÃO prescrever amoxicilina na mononucleose? Qual o risco?", a: "90% dos pacientes com mononucleose que recebem amoxicilina/ampicilina desenvolvem <span class='alert'>exantema maculopapular generalizado intenso</span>. <strong>Não rotular como alérgico à penicilina</strong> — é uma reação específica da mononucleose (estado imunológico alterado pelo EBV), não alergia verdadeira. Após a infecção, a sensibilidade normaliza." },
+  { tag: "Mononucleose", q: "Qual o achado laboratorial característico da mononucleose e qual a sorologia específica?", a: "<strong>Linfócitos atípicos</strong> (virocitócitos) no esfregaço + linfocitose + ↑ transaminases em 90%. Sorologia específica: <strong>Anti-VCA IgM</strong> (infecção aguda, desaparece em 4–6 semanas) + anti-VCA IgG (persiste para sempre). Anti-EBNA: aparece 3–4 semanas depois = infecção passada. Monospot (heterófilos): triagem rápida." },
+];
+
+let deck = [...ALL_CARDS];
+let current = 0;
+let isFlipped = false;
+let statusMap = {};
+let activeFilter = 'all';
+let activeTag = null;
+
+const tags = [...new Set(ALL_CARDS.map(c => c.tag))];
+
+function buildTagFilters() {
+  const container = document.getElementById('tagFilters');
+  container.innerHTML = '';
+  const allBtn = document.createElement('button');
+  allBtn.textContent = 'Todos os temas';
+  allBtn.className = 'active';
+  allBtn.id = 'tagAll';
+  allBtn.onclick = () => setTag(null);
+  container.appendChild(allBtn);
+  tags.forEach(tag => {
+    const btn = document.createElement('button');
+    btn.textContent = tag;
+    btn.id = 'tag_' + tag;
+    btn.onclick = () => setTag(tag);
+    container.appendChild(btn);
+  });
+}
+
+function setTag(tag) {
+  activeTag = tag;
+  document.querySelectorAll('.filter-tags button').forEach(b => b.classList.remove('active'));
+  const el = tag ? document.getElementById('tag_' + tag) : document.getElementById('tagAll');
+  if (el) el.classList.add('active');
+  rebuildDeck();
+}
+
+function rebuildDeck() {
+  let base = activeTag ? ALL_CARDS.filter(c => c.tag === activeTag) : [...ALL_CARDS];
+  if (activeFilter === 'review') {
+    base = base.filter(c => statusMap[c.q] === false || statusMap[c.q] === undefined);
+    if (base.length === 0) base = activeTag ? ALL_CARDS.filter(c => c.tag === activeTag) : [...ALL_CARDS];
+  }
+  deck = base;
+  current = 0;
+  render();
+}
+
+function render() {
+  const c = deck[current];
+  document.getElementById('cardTag').textContent = c.tag;
+  document.getElementById('cardTagB').textContent = c.tag;
+  document.getElementById('cardQ').textContent = c.q;
+  document.getElementById('cardA').innerHTML = c.a;
+  document.getElementById('cardNum').textContent = `${current + 1} / ${deck.length}`;
+  document.getElementById('cardEl').classList.remove('flipped');
+  isFlipped = false;
+  document.getElementById('resultBtns').style.display = 'none';
+  updateProgress();
+  document.getElementById('btnPrev').disabled = current === 0;
+  document.getElementById('btnNext').disabled = current === deck.length - 1;
+}
+
+function flipCard() {
+  isFlipped = !isFlipped;
+  document.getElementById('cardEl').classList.toggle('flipped', isFlipped);
+  document.getElementById('resultBtns').style.display = isFlipped ? 'flex' : 'none';
+}
+
+function nextCard() { if (current < deck.length - 1) { current++; render(); } }
+function prevCard() { if (current > 0) { current--; render(); } }
+
+function markCard(know) {
+  statusMap[deck[current].q] = know;
+  updateStats();
+  if (current < deck.length - 1) { current++; render(); }
+}
+
+function updateProgress() {
+  const done = Object.keys(statusMap).length;
+  const total = ALL_CARDS.length;
+  document.getElementById('progText').textContent = `${done} / ${total}`;
+  document.getElementById('progFill').style.width = `${(done / total) * 100}%`;
+}
+
+function updateStats() {
+  const vals = Object.values(statusMap);
+  document.getElementById('statKnow').textContent = vals.filter(v => v).length;
+  document.getElementById('statDk').textContent = vals.filter(v => !v).length;
+}
+
+function shuffle() {
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  current = 0; render();
+}
+
+function filterMode(mode) {
+  activeFilter = mode;
+  document.getElementById('btnAll').classList.toggle('active', mode === 'all');
+  document.getElementById('btnRev').classList.toggle('active', mode === 'review');
+  rebuildDeck();
+}
+
+function resetAll() {
+  statusMap = {};
+  activeFilter = 'all';
+  activeTag = null;
+  document.getElementById('btnAll').classList.add('active');
+  document.getElementById('btnRev').classList.remove('active');
+  document.getElementById('statKnow').textContent = '0';
+  document.getElementById('statDk').textContent = '0';
+  setTag(null);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') nextCard();
+  else if (e.key === 'ArrowLeft') prevCard();
+  else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+  else if (e.key === '1' && isFlipped) markCard(false);
+  else if (e.key === '2' && isFlipped) markCard(true);
+});
+
+buildTagFilters();
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nefrolitíase (Litíase Urinária) · OSCE</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e3da;
+    --text: #1a1a1a;
+    --muted: #666;
+    --accent: #1a1a1a;
+    --green: #2d6a4f;
+    --green-bg: #e8f5ee;
+    --blue: #0d47a1;
+    --blue-bg: #e3f2fd;
+    --r: 8px;
+    --font-body: Georgia, 'Times New Roman', serif;
+    --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.75;
+    min-height: 100vh;
+    padding-bottom: 70px;
+  }
+
+  .site-header {
+    background: var(--accent);
+    color: #f5f0e8;
+    padding: 16px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+  .header-inner { max-width: 780px; margin: 0 auto; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--font-ui); font-size: 11px; letter-spacing: .4px;
+    color: #a89f8c; text-decoration: none; margin-bottom: 8px;
+    border: 1px solid #444; border-radius: 20px; padding: 2px 10px;
+    transition: color .15s, border-color .15s;
+  }
+  .back-btn:hover { color: #f5f0e8; border-color: #888; }
+  .header-eyebrow {
+    font-family: var(--font-ui); font-size: 10px; letter-spacing: 2.5px;
+    color: #a89f8c; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .header-title {
+    font-size: 19px; font-weight: normal; letter-spacing: -.3px; line-height: 1.3;
+  }
+  .check-progress-bar {
+    height: 3px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 10px;
+  }
+  .check-progress-fill {
+    height: 100%; background: linear-gradient(90deg,#f4c842,#7ecf8a);
+    border-radius: 2px; transition: width .4s ease;
+  }
+  .check-total-label {
+    font-family: var(--font-ui); font-size: 10px; color: #a89f8c; margin-top: 3px;
+  }
+
+  .main { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
+
+  .page-h1 { display: none; }
+  h2.section-heading {
+    font-family: var(--font-ui); font-size: 11px; font-weight: bold;
+    letter-spacing: 1.8px; text-transform: uppercase; color: #777;
+    margin: 30px 0 10px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--border);
+  }
+  h3.section-heading {
+    font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+    margin: 22px 0 8px; color: var(--text);
+  }
+  h4.section-heading, h5.section-heading {
+    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+    margin: 16px 0 6px; color: var(--muted);
+  }
+  p { margin: 10px 0; font-size: 15px; }
+  p.eyebrow-meta {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted);
+    font-style: italic; margin: 4px 0 20px;
+    border-left: 3px solid var(--border); padding-left: 10px;
+  }
+  code {
+    background: #f0ede8; border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; font-size: 13px;
+    font-family: 'Consolas', 'Monaco', monospace;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  ul, ol { padding-left: 22px; margin: 10px 0; }
+  li { margin: 5px 0; font-size: 15px; }
+
+  .table-wrap {
+    overflow-x: auto; margin: 16px 0;
+    border-radius: var(--r); border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  table { width: 100%; border-collapse: collapse; font-family: var(--font-ui); font-size: 13px; }
+  th {
+    background: #1a1a1a; color: #f5f0e8;
+    padding: 9px 12px; text-align: left; font-weight: 600;
+    font-size: 11px; letter-spacing: .5px;
+  }
+  td { padding: 8px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f5f2ee; }
+  tr:hover td { background: #ede8e2; }
+
+  .checklist {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 12px 14px 10px; margin: 16px 0;
+    display: flex; flex-direction: column; gap: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    cursor: pointer; padding: 6px 4px;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 14px; line-height: 1.5; transition: background .1s;
+    border-radius: 4px;
+  }
+  .check-item:last-of-type { border-bottom: none; }
+  .check-item:hover { background: #f8f5f0; }
+  .check-item input[type=checkbox] {
+    width: 18px; height: 18px; min-width: 18px;
+    margin-top: 2px; accent-color: var(--green); cursor: pointer;
+  }
+  .check-item input[type=checkbox]:checked + span {
+    color: var(--muted); text-decoration: line-through;
+  }
+  .check-item span { flex: 1; }
+  .check-sub { margin: 6px 0 2px 4px; padding-left: 18px; }
+  .check-sub li { font-size: 13px; color: var(--muted); margin: 3px 0; }
+  .check-note { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .check-progress {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);
+  }
+  .prog-text {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted); font-weight: 600;
+  }
+
+  .professor-block {
+    background: var(--blue-bg); border-left: 4px solid #1976d2;
+    border-radius: 0 var(--r) var(--r) 0; padding: 14px 16px; margin: 20px 0 8px;
+    font-size: 14px; line-height: 1.65; color: #0a2e6e;
+  }
+  .question-label {
+    font-family: var(--font-ui); font-weight: 700; font-size: 14px;
+    margin: 20px 0 6px; color: var(--text); padding-left: 2px;
+  }
+  .answer-block {
+    background: var(--green-bg); border-left: 4px solid var(--green);
+    border-radius: 0 var(--r) var(--r) 0; padding: 12px 16px; margin: 6px 0 20px;
+    font-size: 14px; line-height: 1.65; color: #1b4332;
+  }
+  blockquote {
+    border-left: 3px solid var(--border); padding: 8px 14px;
+    margin: 12px 0; color: var(--muted); font-style: italic; font-size: 14px;
+  }
+
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1a1a1a; padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 200; border-top: 1px solid #333;
+  }
+  .bottom-nav a {
+    color: #a89f8c; text-decoration: none; font-family: var(--font-ui);
+    font-size: 12px; padding: 5px 14px; border: 1px solid #444;
+    border-radius: 20px; transition: color .15s, border-color .15s;
+  }
+  .bottom-nav a:hover { color: #f5f0e8; border-color: #888; }
+  .bottom-total { font-family: var(--font-ui); font-size: 12px; color: #a89f8c; }
+
+  @media (max-width: 600px) {
+    .header-title { font-size: 16px; }
+    td, th { padding: 6px 8px; font-size: 12px; }
+    .check-item { font-size: 13px; }
+    p, li { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../../../osce-plano.html" class="back-btn">← Plano de estudos</a>
+    <div class="header-eyebrow">Clínica Médica · Nefrologia</div>
+    <div class="header-title">Nefrolitíase (Litíase Urinária)</div>
+    <div class="check-progress-bar" id="hdrBar" style="display:none">
+      <div class="check-progress-fill" id="hdrFill" style="width:0%"></div>
+    </div>
+    <div class="check-total-label" id="hdrLabel"></div>
+  </div>
+</header>
+
+<main class="main">
+<h1 class="page-h1">Nefrolitíase (Litíase Urinária)</h1>
+<p class="eyebrow-meta">Clínica Médica · Nefrologia | Método: Resumo Clínico</p>
+<hr>
+<h2 class="section-heading">Definição e Epidemiologia</h2>
+<p>Formação de cálculos no trato urinário. Prevalência de 10–15% na população geral. Recorrência de 50% em 10 anos sem prevenção.</p>
+<p><strong>Fatores de risco:</strong> baixa ingesta hídrica, dieta hiperpróteica e hipersódica, hipercalciúria, hiperoxalúria, hiperuricosúria, infecções urinárias, obstrução anatômica, hiperparatireoidismo, doença inflamatória intestinal.</p>
+<hr>
+<h2 class="section-heading">Tipos de Cálculo</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Tipo</th><th>Frequência</th><th>Característica</th><th>Rx</th></tr></thead><tbody>
+<tr><td><strong>Oxalato de cálcio</strong> (monoidratado / diidratado)</td><td>70–80%</td><td>Hipercalciúria + hiperoxalúria</td><td><strong>Radiopaco</strong></td></tr>
+<tr><td><strong>Fosfato de cálcio</strong></td><td>10–20%</td><td>Associado a ATR tipo 1, hiperparatireoidismo</td><td>Radiopaco</td></tr>
+<tr><td><strong>Ácido úrico</strong></td><td>5–10%</td><td>pH urinário baixo; hiperuricosúria; gota</td><td><strong>Radiotransparente</strong> (visível só na TC/US)</td></tr>
+<tr><td><strong>Estruvita</strong> (fosfato amônio-magnésio)</td><td>5–15%</td><td>Infecção por bactérias urease+ (Proteus, Klebsiella); formam cálculo coraliforme</td><td>Radiopaco</td></tr>
+<tr><td><strong>Cistina</strong></td><td>< 1%</td><td>Cistinúria (defeito genético); pH ácido</td><td>Levemente radiopaco</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Quadro Clínico</h2>
+<p><strong>Cólica renal (nefrolitíase em progressão/obstrução):</strong></p>
+<ul><li>Dor lombar unilateral em cólica, de forte intensidade, irradiação "em cinturão" para flanco, fossas ilíacas e genitália externa</li><li>Náuseas, vômitos, inquietação (paciente não consegue ficar quieto — diferencial de abdome agudo cirúrgico)</li><li>Hematúria macro ou microscópica (95%)</li><li>Disúria, urgência, polaciúria (cálculo ureterovesical)</li><li>Febre + cólica = <strong>emergência</strong> (obstrução + infecção = pionefrosis)</li></ul>
+<p><strong>Cálculo assintomático:</strong> descoberto incidentalmente em imagem</p>
+<hr>
+<h2 class="section-heading">Diagnóstico</h2>
+<p><strong>Exames de imagem:</strong></p>
+<ul><li><strong>TC de abdome e pelve sem contraste:</strong> padrão ouro — identifica todos os tipos, determina tamanho e localização</li><li>Ultrassonografia: primeira linha em gestantes e crianças; não visualiza cálculos de ureter médio</li><li>Rx simples de abdome: apenas cálculos radiopacos; pouco sensível</li></ul>
+<p><strong>Laboratorial:</strong></p>
+<ul><li>Urinálise: hematúria (95%), piúria (infecção associada)</li><li>Urocultura: se febre</li><li>Creatinina, eletrólitos</li><li>Cálcio, ácido úrico sérico</li><li>Urina 24h (em recorrentes): cálcio, oxalato, ácido úrico, citrato, volume</li></ul>
+<hr>
+<h2 class="section-heading">Tratamento</h2>
+<h3 class="section-heading">Crise Aguda (Cólica Renal)</h3>
+<ol><li><strong>Analgesia:</strong> AINEs (cetorolaco, ibuprofeno) — 1ª linha; opioides se refratário</li><li>Hidratação (não forçar)</li><li><strong>Alfa-bloqueador</strong> (tamsulosina 0,4 mg/dia): facilita expulsão de cálculos ureterais < 10 mm</li><li>Observar passagem espontânea: cálculos < 5 mm → 70–80% passam; > 10 mm → raramente passam</li></ol>
+<h3 class="section-heading">Intervenção (se não passa espontaneamente)</h3>
+<ul><li><strong>ESWL</strong> (litotripsia extracorpórea): cálculos renais < 2 cm, ureterais < 1 cm</li><li><strong>Ureteroscopia (URS):</strong> cálculos ureterais; alta taxa de sucesso</li><li><strong>Nefrolitotomia percutânea (NLPC):</strong> cálculos renais grandes (> 2 cm) ou coraliformes</li></ul>
+<h3 class="section-heading">Indicação de Internação/Intervenção de Urgência</h3>
+<ul><li>Obstrução com infecção (pionefrosis) → <strong>drenagem urgente</strong> (cateter duplo J ou nefrostomia)</li><li>Dor refratária</li><li>Anúria (obstrução bilateral ou rim único)</li><li>Insuficiência renal aguda</li></ul>
+<hr>
+<h2 class="section-heading">Prevenção de Recorrência (por tipo)</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Tipo</th><th>Medida</th></tr></thead><tbody>
+<tr><td><strong>Todos</strong></td><td>Ingestão hídrica ≥ 2,5–3 L/dia (diurese > 2 L/dia)</td></tr>
+<tr><td><strong>Oxalato de Ca</strong></td><td>Reduzir oxalato (espinafre, beterraba, chocolate); citrato de potássio (alcaliniza urina); tiazídicos se hipercalciúria</td></tr>
+<tr><td><strong>Ácido úrico</strong></td><td>Alcalinizar urina (citrato K, bicarbonato) para pH ≥ 6,5; alopurinol se hiperuricosúria</td></tr>
+<tr><td><strong>Estruvita</strong></td><td>Tratar infecção; acidificação urinária</td></tr>
+<tr><td><strong>Cistina</strong></td><td>Grande volume hídrico; D-penicilamina; alcalinizar urina</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Alertas OSCE ⚠️</h2>
+<ul><li>Febre + cólica renal = pionefrosis → emergência cirúrgica (drenagem urgente)</li><li>Cálculo de ácido úrico = radiotransparente → TC, não Rx</li><li>Cálculo de estruvita = infecção crônica por Proteus → pH urinário alcalino</li><li>Tamsulosina acelera expulsão de cálculos ureterais < 10 mm</li><li>Hematúria após crise de cólica sem pus → nefrolitíase; hematúria com clínica de ITU → pielonefrite com cálculo</li></ul>
+<hr>
+<h2 class="section-heading">Fonte</h2>
+<ul><li>Gerado a partir de conhecimento geral (OSCE CM) — sem arquivo-fonte específico</li></ul>
+</main>
+
+<nav class="bottom-nav">
+  <a href="../../../osce-plano.html">← Voltar ao plano</a>
+  <span class="bottom-total" id="bottomTotal"></span>
+</nav>
+
+<script>
+(function() {
+  var KEY = 'osce_v1_' + location.pathname;
+  var state = JSON.parse(localStorage.getItem(KEY) || '{}');
+  var boxes = document.querySelectorAll('input[type=checkbox]');
+  var total = boxes.length;
+
+  boxes.forEach(function(cb, idx) {
+    if (state[idx]) cb.checked = true;
+    cb.addEventListener('change', function() {
+      state[idx] = cb.checked;
+      localStorage.setItem(KEY, JSON.stringify(state));
+      updateAll();
+    });
+  });
+
+  function updateAll() {
+    var done = 0;
+    boxes.forEach(function(c){ if (c.checked) done++; });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    var bar = document.getElementById('hdrBar');
+    var fill = document.getElementById('hdrFill');
+    var lbl = document.getElementById('hdrLabel');
+    var bot = document.getElementById('bottomTotal');
+    if (total > 0) {
+      bar.style.display = 'block';
+      fill.style.width = pct + '%';
+      lbl.textContent = done + '/' + total + ' itens marcados (' + pct + '%)';
+      bot.textContent = done + '/' + total + ' checados';
+    }
+    document.querySelectorAll('.checklist').forEach(function(cl) {
+      var cbs = cl.querySelectorAll('input[type=checkbox]');
+      var cd = 0;
+      cbs.forEach(function(c){ if (c.checked) cd++; });
+      var prog = cl.querySelector('.prog-text');
+      if (prog) prog.textContent = cd + '/' + cbs.length + ' marcados';
+    });
+  }
+
+  updateAll();
+})();
+</script>
+</body>
+</html>

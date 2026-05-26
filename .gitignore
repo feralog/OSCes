@@ -1,0 +1,4 @@
+Complementos/imagens/
+__pycache__/
+*.pyc
+.temp/

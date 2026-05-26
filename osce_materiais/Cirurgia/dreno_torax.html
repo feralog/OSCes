@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drenagem Torácica (Dreno de Tórax) · OSCE</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e3da;
+    --text: #1a1a1a;
+    --muted: #666;
+    --accent: #1a1a1a;
+    --green: #2d6a4f;
+    --green-bg: #e8f5ee;
+    --blue: #0d47a1;
+    --blue-bg: #e3f2fd;
+    --r: 8px;
+    --font-body: Georgia, 'Times New Roman', serif;
+    --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.75;
+    min-height: 100vh;
+    padding-bottom: 70px;
+  }
+
+  .site-header {
+    background: var(--accent);
+    color: #f5f0e8;
+    padding: 16px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+  .header-inner { max-width: 780px; margin: 0 auto; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--font-ui); font-size: 11px; letter-spacing: .4px;
+    color: #a89f8c; text-decoration: none; margin-bottom: 8px;
+    border: 1px solid #444; border-radius: 20px; padding: 2px 10px;
+    transition: color .15s, border-color .15s;
+  }
+  .back-btn:hover { color: #f5f0e8; border-color: #888; }
+  .header-eyebrow {
+    font-family: var(--font-ui); font-size: 10px; letter-spacing: 2.5px;
+    color: #a89f8c; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .header-title {
+    font-size: 19px; font-weight: normal; letter-spacing: -.3px; line-height: 1.3;
+  }
+  .check-progress-bar {
+    height: 3px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 10px;
+  }
+  .check-progress-fill {
+    height: 100%; background: linear-gradient(90deg,#f4c842,#7ecf8a);
+    border-radius: 2px; transition: width .4s ease;
+  }
+  .check-total-label {
+    font-family: var(--font-ui); font-size: 10px; color: #a89f8c; margin-top: 3px;
+  }
+
+  .main { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
+
+  .page-h1 { display: none; }
+  h2.section-heading {
+    font-family: var(--font-ui); font-size: 11px; font-weight: bold;
+    letter-spacing: 1.8px; text-transform: uppercase; color: #777;
+    margin: 30px 0 10px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--border);
+  }
+  h3.section-heading {
+    font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+    margin: 22px 0 8px; color: var(--text);
+  }
+  h4.section-heading, h5.section-heading {
+    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+    margin: 16px 0 6px; color: var(--muted);
+  }
+  p { margin: 10px 0; font-size: 15px; }
+  p.eyebrow-meta {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted);
+    font-style: italic; margin: 4px 0 20px;
+    border-left: 3px solid var(--border); padding-left: 10px;
+  }
+  code {
+    background: #f0ede8; border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; font-size: 13px;
+    font-family: 'Consolas', 'Monaco', monospace;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  ul, ol { padding-left: 22px; margin: 10px 0; }
+  li { margin: 5px 0; font-size: 15px; }
+
+  .table-wrap {
+    overflow-x: auto; margin: 16px 0;
+    border-radius: var(--r); border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  table { width: 100%; border-collapse: collapse; font-family: var(--font-ui); font-size: 13px; }
+  th {
+    background: #1a1a1a; color: #f5f0e8;
+    padding: 9px 12px; text-align: left; font-weight: 600;
+    font-size: 11px; letter-spacing: .5px;
+  }
+  td { padding: 8px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f5f2ee; }
+  tr:hover td { background: #ede8e2; }
+
+  .checklist {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 12px 14px 10px; margin: 16px 0;
+    display: flex; flex-direction: column; gap: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    cursor: pointer; padding: 6px 4px;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 14px; line-height: 1.5; transition: background .1s;
+    border-radius: 4px;
+  }
+  .check-item:last-of-type { border-bottom: none; }
+  .check-item:hover { background: #f8f5f0; }
+  .check-item input[type=checkbox] {
+    width: 18px; height: 18px; min-width: 18px;
+    margin-top: 2px; accent-color: var(--green); cursor: pointer;
+  }
+  .check-item input[type=checkbox]:checked + span {
+    color: var(--muted); text-decoration: line-through;
+  }
+  .check-item span { flex: 1; }
+  .check-sub { margin: 6px 0 2px 4px; padding-left: 18px; }
+  .check-sub li { font-size: 13px; color: var(--muted); margin: 3px 0; }
+  .check-note { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .check-progress {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);
+  }
+  .prog-text {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted); font-weight: 600;
+  }
+
+  .professor-block {
+    background: var(--blue-bg); border-left: 4px solid #1976d2;
+    border-radius: 0 var(--r) var(--r) 0; padding: 14px 16px; margin: 20px 0 8px;
+    font-size: 14px; line-height: 1.65; color: #0a2e6e;
+  }
+  .question-label {
+    font-family: var(--font-ui); font-weight: 700; font-size: 14px;
+    margin: 20px 0 6px; color: var(--text); padding-left: 2px;
+  }
+  .answer-block {
+    background: var(--green-bg); border-left: 4px solid var(--green);
+    border-radius: 0 var(--r) var(--r) 0; padding: 12px 16px; margin: 6px 0 20px;
+    font-size: 14px; line-height: 1.65; color: #1b4332;
+  }
+  blockquote {
+    border-left: 3px solid var(--border); padding: 8px 14px;
+    margin: 12px 0; color: var(--muted); font-style: italic; font-size: 14px;
+  }
+
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1a1a1a; padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 200; border-top: 1px solid #333;
+  }
+  .bottom-nav a {
+    color: #a89f8c; text-decoration: none; font-family: var(--font-ui);
+    font-size: 12px; padding: 5px 14px; border: 1px solid #444;
+    border-radius: 20px; transition: color .15s, border-color .15s;
+  }
+  .bottom-nav a:hover { color: #f5f0e8; border-color: #888; }
+  .bottom-total { font-family: var(--font-ui); font-size: 12px; color: #a89f8c; }
+
+  @media (max-width: 600px) {
+    .header-title { font-size: 16px; }
+    td, th { padding: 6px 8px; font-size: 12px; }
+    .check-item { font-size: 13px; }
+    p, li { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../../osce-plano.html" class="back-btn">← Plano de estudos</a>
+    <div class="header-eyebrow">Cirurgia</div>
+    <div class="header-title">Drenagem Torácica (Dreno de Tórax)</div>
+    <div class="check-progress-bar" id="hdrBar" style="display:none">
+      <div class="check-progress-fill" id="hdrFill" style="width:0%"></div>
+    </div>
+    <div class="check-total-label" id="hdrLabel"></div>
+  </div>
+</header>
+
+<main class="main">
+<h1 class="page-h1">Drenagem Torácica (Dreno de Tórax)</h1>
+<p class="eyebrow-meta">Cirurgia | Método: Checklist de Procedimento</p>
+<hr>
+<h2 class="section-heading">Conceito e Finalidade</h2>
+<p>A drenagem torácica é um procedimento para restaurar a <strong>pressão negativa do espaço pleural</strong> (normal: −12 a −8 cmH₂O), permitindo a retirada de ar, líquido ou sangue acumulados.</p>
+<p><strong>Funções:</strong> profilática, terapêutica, diagnóstica</p>
+<hr>
+<h2 class="section-heading">Indicações</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Conteúdo a drenar</th><th>Condição clínica</th></tr></thead><tbody>
+<tr><td><strong>Ar</strong></td><td>Pneumotórax (traumático, iatrogênico, espontâneo com instabilidade)</td></tr>
+<tr><td><strong>Sangue</strong></td><td>Hemotórax</td></tr>
+<tr><td><strong>Líquido</strong></td><td>Derrame pleural volumoso, empiema, quilotórax</td></tr>
+<tr><td><strong>Ar + Sangue</strong></td><td>Hemopneumotórax</td></tr>
+</tbody></table></div>
+<blockquote><strong>Pneumotórax hipertensivo:</strong> agulha de alívio imediata (2º EIC, linha hemiclavicular) ANTES do dreno</blockquote>
+<hr>
+<h2 class="section-heading">Sítio de Inserção</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Conteúdo</th><th>Local preferencial</th><th>Motivo</th></tr></thead><tbody>
+<tr><td><strong>Líquido/sangue</strong></td><td><strong>5º EIC, linha axilar média ou anterior</strong></td><td>Fluido acumula na base (gravidade)</td></tr>
+<tr><td><strong>Ar (pneumotórax)</strong></td><td><strong>2–3º EIC, linha hemiclavicular</strong></td><td>Ar sobe para o ápice</td></tr>
+</tbody></table></div>
+<blockquote><strong>Regra da costela superior:</strong> sempre dissecar e inserir <strong>acima da borda superior da costela inferior</strong> — o feixe vásculo-nervoso intercostal corre na borda <strong>inferior</strong> de cada costela</blockquote>
+<hr>
+<h2 class="section-heading">Material Necessário</h2>
+<ul><li>Dreno torácico (tubular, silicone, fenestrado, marcação radiopaca): n° 28–32 Fr adulto</li><li>Campo estéril, luvas estéreis, avental</li><li>Antisséptico: clorexidina alcoólica 2% (deixar secar)</li><li>Anestesia local: lidocaína 1–2% s/vasoconstritor</li><li>Bisturi, pinça Kelly (hemostática curva)</li><li>Fio de sutura não absorvível (nylon 0 ou 1) para fixação</li><li>Sistema de drenagem com selo d'água (3 frascos ou sistema comercial fechado)</li><li>Equipamento de proteção: óculos, máscara</li></ul>
+<hr>
+<h2 class="section-heading">Checklist — Passos do Procedimento</h2>
+<h3 class="section-heading">Preparo</h3>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span>Confirmar indicação (clínico + imagem: RX/USG/TC)</span></label><label class="check-item"><input type="checkbox"><span>Consentimento (se possível)</span></label><label class="check-item"><input type="checkbox"><span>Posição: <strong>decúbito dorsal com cabeceira elevada</strong>, membro superior ipsilateral estendido sob a cabeça e cotovelo fletido (expõe axila)</span></label><label class="check-item"><input type="checkbox"><span>Monitorização: SpO₂, ECG, PA</span></label><label class="check-item"><input type="checkbox"><span>Acesso venoso calibroso</span></label><div class="check-progress"><span class="prog-text">0/5 marcados</span></div></div>
+<h3 class="section-heading">Antissepsia e Anestesia</h3>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span>Antissepsia ampla da região (clorexidina alcoólica 2%, deixar secar)</span></label><label class="check-item"><input type="checkbox"><span>Campo estéril</span></label><label class="check-item"><input type="checkbox"><span>Luvas estéreis + paramentação</span></label><label class="check-item"><input type="checkbox"><span>Anestesia local: infiltrar pele, tecido subcutâneo, músculos intercostais e pleura parietal com lidocaína 1–2%<ul class="check-sub"><li>Injetar <strong>logo acima da borda superior da costela inferior</strong></li><li>Aspirar antes de injetar (evitar injeção intravascular)</li></ul></span></label><div class="check-progress"><span class="prog-text">0/4 marcados</span></div></div>
+<h3 class="section-heading">Incisão e Dissecção</h3>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span>Incisão na pele: <strong>2–3 cm de comprimento</strong> no local selecionado</span></label><label class="check-item"><input type="checkbox"><span>Dissecção romba com <strong>pinça Kelly (hemostática curva)</strong> no tecido subcutâneo e músculos (serrátil anterior e intercostais)</span></label><label class="check-item"><input type="checkbox"><span>Avançar <strong>acima da costela inferior</strong> (protege o feixe vásculo-nervoso)</span></label><label class="check-item"><input type="checkbox"><span>Puncionar a <strong>pleura parietal</strong> com a pinça Kelly <strong>fechada</strong> e abrir dentro da cavidade</span></label><label class="check-item"><input type="checkbox"><span>Confirmar acesso: saída de ar ou fluido ao abrir a pinça</span></label><label class="check-item"><input type="checkbox"><span>Introduzir o <strong>dedo indicador</strong> para confirmar a posição intrapleural e afastar possíveis aderências</span></label><div class="check-progress"><span class="prog-text">0/6 marcados</span></div></div>
+<h3 class="section-heading">Inserção do Dreno</h3>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span>Inserir o dreno <strong>guiado pelo dedo</strong> (nunca usar trocater para inserção — risco de laceração)</span></label><label class="check-item"><input type="checkbox"><span>Direcionar o dreno:<ul class="check-sub"><li><strong>Para fluido:</strong> direção posteroinferior</li><li><strong>Para ar:</strong> direção anterossuperior</li></ul></span></label><label class="check-item"><input type="checkbox"><span>Avançar até todos os orifícios do dreno estarem dentro da cavidade</span></label><label class="check-item"><input type="checkbox"><span>Conectar imediatamente ao sistema de drenagem com <strong>selo d'água</strong></span></label><div class="check-progress"><span class="prog-text">0/4 marcados</span></div></div>
+<h3 class="section-heading">Fixação e Curativo</h3>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span>Fixar o dreno com sutura em <strong>bolsa de tabaco</strong> ou sutura em U ao redor do dreno</span></label><label class="check-item"><input type="checkbox"><span>Curativo oclusivo estéril ao redor do dreno</span></label><label class="check-item"><input type="checkbox"><span>Verificar flutuação da coluna d'água com a respiração (confirma posicionamento)</span></label><label class="check-item"><input type="checkbox"><span><strong>RX de tórax imediato</strong> para confirmar posição e expansão pulmonar</span></label><div class="check-progress"><span class="prog-text">0/4 marcados</span></div></div>
+<hr>
+<h2 class="section-heading">Sistema de Drenagem com Selo D'água</h2>
+<figure style="margin:22px 0;text-align:center"><img src="drenos_sondas_pdf_aula_9_drenos_e_sondas_6s_unisa_pdf_pg28_img2.png" alt="Sistema dreno toracico frasco selo dagua" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Sistema de drenagem: dreno de tórax conectado a frasco lacrado (selo d'água) com câmara de coleta e válvula unidirecional — impede entrada de ar na pleura</figcaption></figure>
+
+<p>``<code> [ Câmara de coleta ] → [ Câmara de selo d'água ] → [ Câmara de sucção ] </code>``</p>
+<ul><li><strong>Câmara de coleta:</strong> acumula o líquido drenado (medir e registrar)</li><li><strong>Câmara de selo d'água:</strong> impede refluxo de ar/líquido para o tórax (coluna de 2 cm H₂O)</li><li><strong>Câmara de sucção:</strong> aspiração ativa regulada (−20 cmH₂O)</li></ul>
+<p><strong>Sinais normais:</strong></p>
+<ul><li>Flutuação com a respiração = posição correta</li><li>Borbulhamento intermitente = drenagem de ar (esperado no início)</li><li>Borbulhamento contínuo = vazamento aéreo persistente (fístula broncopleural?)</li></ul>
+<hr>
+<h2 class="section-heading">Retirada do Dreno</h2>
+<ul><li>Quando: drenagem < 100–150 mL/24h + pulmão expandido no RX</li><li>Técnica: pedir ao paciente para realizar manobra de Valsalva (ou apneia expiratória) → retirar rapidamente → curativo oclusivo imediato</li><li>RX de tórax após retirada para confirmar ausência de pneumotórax</li></ul>
+<hr>
+<h2 class="section-heading">Complicações</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Complicação</th><th>Causa</th></tr></thead><tbody>
+<tr><td>Lesão do feixe vásculo-nervoso</td><td>Inserção abaixo da borda inferior da costela</td></tr>
+<tr><td>Laceração pulmonar / cardíaca</td><td>Uso de trocater ou inserção sem cuidado</td></tr>
+<tr><td>Empiema</td><td>Técnica não estéril</td></tr>
+<tr><td>Posição incorreta do dreno</td><td>Dreno intraparenquimatoso ou extracavitário</td></tr>
+<tr><td>Edema de reexpansão</td><td>Drenagem rápida de grande volume (> 1.500 mL de uma vez)</td></tr>
+<tr><td>Enfisema subcutâneo</td><td>Orifício do dreno exteriorizado</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Alertas OSCE ⚠️</h2>
+<ul><li><strong>Sempre dissecção acima da costela inferior</strong> — lesão do feixe neurovascular intercostal = complicação grave</li><li>Pneumotórax hipertensivo = agulha de alívio ANTES do dreno (não esperar RX)</li><li>Flutuação da coluna d'água confirma posição intrapleural; ausência de flutuação = obstrução do dreno (dobrado?) ou pulmão totalmente expandido</li><li>Sistema coletor sempre <strong>abaixo do nível do tórax</strong> (evitar refluxo)</li><li>Nunca clampear dreno sem indicação médica específica</li><li>Não drenar > 1.500 mL de uma vez (risco de edema de reexpansão)</li></ul>
+<hr>
+<h2 class="section-heading">Fonte</h2>
+<ul><li>Gerado a partir de: <code>conteudo_drenos_e_sondas.md</code> (Aula 9 — Drenos e Sondas — Cirurgia UNISA)</li></ul>
+</main>
+
+<nav class="bottom-nav">
+  <a href="../../osce-plano.html">← Voltar ao plano</a>
+  <span class="bottom-total" id="bottomTotal"></span>
+</nav>
+
+<script>
+(function() {
+  var KEY = 'osce_v1_' + location.pathname;
+  var state = JSON.parse(localStorage.getItem(KEY) || '{}');
+  var boxes = document.querySelectorAll('input[type=checkbox]');
+  var total = boxes.length;
+
+  boxes.forEach(function(cb, idx) {
+    if (state[idx]) cb.checked = true;
+    cb.addEventListener('change', function() {
+      state[idx] = cb.checked;
+      localStorage.setItem(KEY, JSON.stringify(state));
+      updateAll();
+    });
+  });
+
+  function updateAll() {
+    var done = 0;
+    boxes.forEach(function(c){ if (c.checked) done++; });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    var bar = document.getElementById('hdrBar');
+    var fill = document.getElementById('hdrFill');
+    var lbl = document.getElementById('hdrLabel');
+    var bot = document.getElementById('bottomTotal');
+    if (total > 0) {
+      bar.style.display = 'block';
+      fill.style.width = pct + '%';
+      lbl.textContent = done + '/' + total + ' itens marcados (' + pct + '%)';
+      bot.textContent = done + '/' + total + ' checados';
+    }
+    document.querySelectorAll('.checklist').forEach(function(cl) {
+      var cbs = cl.querySelectorAll('input[type=checkbox]');
+      var cd = 0;
+      cbs.forEach(function(c){ if (c.checked) cd++; });
+      var prog = cl.querySelector('.prog-text');
+      if (prog) prog.textContent = cd + '/' + cbs.length + ' marcados';
+    });
+  }
+
+  updateAll();
+})();
+</script>
+</body>
+</html>

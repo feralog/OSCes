@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anemias Hemolíticas · OSCE</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e3da;
+    --text: #1a1a1a;
+    --muted: #666;
+    --accent: #1a1a1a;
+    --green: #2d6a4f;
+    --green-bg: #e8f5ee;
+    --blue: #0d47a1;
+    --blue-bg: #e3f2fd;
+    --r: 8px;
+    --font-body: Georgia, 'Times New Roman', serif;
+    --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.75;
+    min-height: 100vh;
+    padding-bottom: 70px;
+  }
+
+  .site-header {
+    background: var(--accent);
+    color: #f5f0e8;
+    padding: 16px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+  .header-inner { max-width: 780px; margin: 0 auto; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--font-ui); font-size: 11px; letter-spacing: .4px;
+    color: #a89f8c; text-decoration: none; margin-bottom: 8px;
+    border: 1px solid #444; border-radius: 20px; padding: 2px 10px;
+    transition: color .15s, border-color .15s;
+  }
+  .back-btn:hover { color: #f5f0e8; border-color: #888; }
+  .header-eyebrow {
+    font-family: var(--font-ui); font-size: 10px; letter-spacing: 2.5px;
+    color: #a89f8c; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .header-title {
+    font-size: 19px; font-weight: normal; letter-spacing: -.3px; line-height: 1.3;
+  }
+  .check-progress-bar {
+    height: 3px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 10px;
+  }
+  .check-progress-fill {
+    height: 100%; background: linear-gradient(90deg,#f4c842,#7ecf8a);
+    border-radius: 2px; transition: width .4s ease;
+  }
+  .check-total-label {
+    font-family: var(--font-ui); font-size: 10px; color: #a89f8c; margin-top: 3px;
+  }
+
+  .main { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
+
+  .page-h1 { display: none; }
+  h2.section-heading {
+    font-family: var(--font-ui); font-size: 11px; font-weight: bold;
+    letter-spacing: 1.8px; text-transform: uppercase; color: #777;
+    margin: 30px 0 10px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--border);
+  }
+  h3.section-heading {
+    font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+    margin: 22px 0 8px; color: var(--text);
+  }
+  h4.section-heading, h5.section-heading {
+    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+    margin: 16px 0 6px; color: var(--muted);
+  }
+  p { margin: 10px 0; font-size: 15px; }
+  p.eyebrow-meta {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted);
+    font-style: italic; margin: 4px 0 20px;
+    border-left: 3px solid var(--border); padding-left: 10px;
+  }
+  code {
+    background: #f0ede8; border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; font-size: 13px;
+    font-family: 'Consolas', 'Monaco', monospace;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  ul, ol { padding-left: 22px; margin: 10px 0; }
+  li { margin: 5px 0; font-size: 15px; }
+
+  .table-wrap {
+    overflow-x: auto; margin: 16px 0;
+    border-radius: var(--r); border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  table { width: 100%; border-collapse: collapse; font-family: var(--font-ui); font-size: 13px; }
+  th {
+    background: #1a1a1a; color: #f5f0e8;
+    padding: 9px 12px; text-align: left; font-weight: 600;
+    font-size: 11px; letter-spacing: .5px;
+  }
+  td { padding: 8px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f5f2ee; }
+  tr:hover td { background: #ede8e2; }
+
+  .checklist {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 12px 14px 10px; margin: 16px 0;
+    display: flex; flex-direction: column; gap: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    cursor: pointer; padding: 6px 4px;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 14px; line-height: 1.5; transition: background .1s;
+    border-radius: 4px;
+  }
+  .check-item:last-of-type { border-bottom: none; }
+  .check-item:hover { background: #f8f5f0; }
+  .check-item input[type=checkbox] {
+    width: 18px; height: 18px; min-width: 18px;
+    margin-top: 2px; accent-color: var(--green); cursor: pointer;
+  }
+  .check-item input[type=checkbox]:checked + span {
+    color: var(--muted); text-decoration: line-through;
+  }
+  .check-item span { flex: 1; }
+  .check-sub { margin: 6px 0 2px 4px; padding-left: 18px; }
+  .check-sub li { font-size: 13px; color: var(--muted); margin: 3px 0; }
+  .check-note { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .check-progress {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);
+  }
+  .prog-text {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted); font-weight: 600;
+  }
+
+  .professor-block {
+    background: var(--blue-bg); border-left: 4px solid #1976d2;
+    border-radius: 0 var(--r) var(--r) 0; padding: 14px 16px; margin: 20px 0 8px;
+    font-size: 14px; line-height: 1.65; color: #0a2e6e;
+  }
+  .question-label {
+    font-family: var(--font-ui); font-weight: 700; font-size: 14px;
+    margin: 20px 0 6px; color: var(--text); padding-left: 2px;
+  }
+  .answer-block {
+    background: var(--green-bg); border-left: 4px solid var(--green);
+    border-radius: 0 var(--r) var(--r) 0; padding: 12px 16px; margin: 6px 0 20px;
+    font-size: 14px; line-height: 1.65; color: #1b4332;
+  }
+  blockquote {
+    border-left: 3px solid var(--border); padding: 8px 14px;
+    margin: 12px 0; color: var(--muted); font-style: italic; font-size: 14px;
+  }
+
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1a1a1a; padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 200; border-top: 1px solid #333;
+  }
+  .bottom-nav a {
+    color: #a89f8c; text-decoration: none; font-family: var(--font-ui);
+    font-size: 12px; padding: 5px 14px; border: 1px solid #444;
+    border-radius: 20px; transition: color .15s, border-color .15s;
+  }
+  .bottom-nav a:hover { color: #f5f0e8; border-color: #888; }
+  .bottom-total { font-family: var(--font-ui); font-size: 12px; color: #a89f8c; }
+
+  @media (max-width: 600px) {
+    .header-title { font-size: 16px; }
+    td, th { padding: 6px 8px; font-size: 12px; }
+    .check-item { font-size: 13px; }
+    p, li { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../../../osce-plano.html" class="back-btn">← Plano de estudos</a>
+    <div class="header-eyebrow">Clínica Médica · Hematologia</div>
+    <div class="header-title">Anemias Hemolíticas</div>
+    <div class="check-progress-bar" id="hdrBar" style="display:none">
+      <div class="check-progress-fill" id="hdrFill" style="width:0%"></div>
+    </div>
+    <div class="check-total-label" id="hdrLabel"></div>
+  </div>
+</header>
+
+<main class="main">
+<h1 class="page-h1">Anemias Hemolíticas</h1>
+<p class="eyebrow-meta">Clínica Médica · Hematologia | Método: Simulação OSCE</p>
+<hr>
+<h2 class="section-heading">TABELA-MESTRE — Diagnóstico Diferencial</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Doença</th><th>Mecanismo</th><th>Morfologia</th><th>Coombs</th><th>Achados chave</th></tr></thead><tbody>
+<tr><td><strong>AHAI quente</strong></td><td>IgG, 37°C, extravascular</td><td>Esferócitos, policromasia</td><td><strong>Direto +</strong></td><td>LES, linfoma, fármacos</td></tr>
+<tr><td><strong>AHAI fria</strong></td><td>IgM, < 37°C, extravascular/intravascular</td><td>Aglutinação, acrocianose</td><td>Direto + (anti-C3)</td><td>Mycoplasma, linfoma</td></tr>
+<tr><td><strong>Anemia Falciforme</strong></td><td>HbSS, falcização, vaso-oclusão</td><td>Drepanócitos (foice)</td><td>-</td><td>Crises vaso-oclusivas, STA</td></tr>
+<tr><td><strong>Esferocitose hereditária</strong></td><td>Espectrina defeituosa</td><td><strong>Esferócitos</strong></td><td><strong>-</strong></td><td>AD 75%; fragilidade osmótica ↑</td></tr>
+<tr><td><strong>G6PD</strong></td><td>Déficit enzimático, dano oxidativo</td><td><strong>Corpúsculos de Heinz</strong>, hemácias mordidas</td><td>-</td><td>Ligado ao X; precipitado por agentes oxidantes</td></tr>
+<tr><td><strong>Talassemia β maior</strong></td><td>Déficit produção cadeia β</td><td>Hipocromia, microcitose, alvos</td><td>-</td><td>HbF ↑↑; hemossiderose</td></tr>
+<tr><td><strong>SHU</strong> (microangiopática)</td><td>MAHA; dano mecânico</td><td>Esquizócitos</td><td>-</td><td>EHEC O157:H7; trombocitopenia + IRA</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Marcadores Gerais de Hemólise</h2>
+<ul><li>↓ Hb + ↓ haptoglobina + ↑ DHL + ↑ BI (não conjugada) + ↑ reticulócitos</li><li><strong>Extravascular</strong> (SRE/baço — mais frequente): não há hemoglobinúria</li><li><strong>Intravascular</strong> (vascular — rara, grave): hemoglobinúria (urina escura) + LRA + CIVD</li></ul>
+<hr>
+<h2 class="section-heading">ESTAÇÃO 1 — Caso: Anemia Falciforme</h2>
+<p><strong>[CASO]:</strong> Homem negro, 22 anos, com HbSS conhecida desde a infância. Chega à UPA com dor intensa em membros inferiores e coluna lombar há 12 horas. Febre (38°C). Hb 7,2 g/dL. Reticulócitos 6%.</p>
+<div class="question-label"><strong>Pergunta 1:</strong> Qual o tipo de crise e como manejar?</div>
+<blockquote><strong>Crise vaso-oclusiva</strong> (mais frequente, 70%). Tratamento:</blockquote>
+<blockquote>- Hidratação EV abundante (2–3 L/dia)</blockquote>
+<blockquote>- Analgesia escalonada: AINEs + dipirona → morfina (NÃO usar meperidina — metabólito neuro tóxico)</blockquote>
+<blockquote>- Oxigênio se SatO2 < 95%</blockquote>
+<blockquote>- Não transfundir rotineiramente (manter Hb ≥ 6 g/dL ou conforme sintomas)</blockquote>
+<div class="question-label"><strong>Pergunta 2:</strong> Quais os tipos de crise da anemia falciforme?</div>
+<blockquote>1. <strong>Vaso-oclusiva</strong> (+ frequente): dor ossos longos, abdome, coluna; opioides para dor</blockquote>
+<blockquote>2. <strong>Aplástica</strong> (parvovírus B19): ↓↓ reticulócitos < 1%, ↓ Hb aguda; suporte transfusional</blockquote>
+<blockquote>3. <strong>Sequestro visceral</strong> (esplênico em crianças < 5 anos; pulmonar = STA em adultos): ↓ Hb + ↓ contagem elementos + órgão aumentado</blockquote>
+<blockquote>4. <strong>Hemólise aguda:</strong> ↑↑ DHL, ↑ reticulócitos</blockquote>
+<div class="question-label"><strong>Pergunta 3:</strong> O que é STA e qual a conduta?</div>
+<blockquote><strong>Síndrome Torácica Aguda (STA):</strong> causa de óbito + frequente na AF</blockquote>
+<blockquote>Critério diagnóstico: <strong>infiltrado pulmonar novo</strong> + (febre ≥ 38,5°C OU ↓ SatO2 ≥ 3% OU ↑ FR)</blockquote>
+<blockquote>Conduta: O2, hidratação controlada, ATB (ceftriaxona + azitromicina), transfusão simples ou exsanguíneo-transfusão, suporte respiratório</blockquote>
+<div class="question-label"><strong>Pergunta 4:</strong> Qual o tratamento crônico preventivo?</div>
+<blockquote>- <strong>Hidroxiureia:</strong> ↑ HbF → reduz frequência de crises, STA, hospitalização; 15–35 mg/kg/dia</blockquote>
+<blockquote>- Ácido fólico 5 mg/dia (eritropoese acelerada)</blockquote>
+<blockquote>- Profilaxia com penicilina V (0–5 anos)</blockquote>
+<blockquote>- Vacinação: pneumococo, meningococo, HIB (asplenia funcional)</blockquote>
+<blockquote>- Cura: transplante de medula; terapia gênica (Casgevy, Lyfgenia) — ainda não aprovadas ANVISA</blockquote>
+<hr>
+<h2 class="section-heading">ESTAÇÃO 2 — Caso: AHAI</h2>
+<p><strong>[CASO]:</strong> Mulher, 45 anos, com LES em uso de azatioprina. Icterícia, urina escura, fraqueza intensa há 5 dias. Hb 6,8 g/dL. Reticulócitos 11%. BI 3,2 mg/dL. DHL 680 U/L. Haptoglobina indetectável. <strong>Coombs direto POSITIVO.</strong></p>
+<div class="question-label"><strong>Pergunta 1:</strong> Qual o diagnóstico e etiologia?</div>
+<blockquote><strong>Anemia hemolítica autoimune (AHAI) por anticorpo quente (IgG)</strong>, secundária a LES. Coombs direto + confirma anticorpo ligado à hemácia.</blockquote>
+<div class="question-label"><strong>Pergunta 2:</strong> Qual o tratamento?</div>
+<blockquote>1. <strong>Prednisona 1–2 mg/kg/dia</strong> — 1ª linha; resposta em 2–3 semanas</blockquote>
+<blockquote>2. Se refratário: <strong>rituximabe</strong> (anti-CD20) ou imunossupressores</blockquote>
+<blockquote>3. <strong>Esplenectomia</strong>: 3ª linha; remissão em ~70% das AHAI refratárias</blockquote>
+<blockquote>4. Tratar causa base (LES)</blockquote>
+<blockquote>5. Folato; avaliar necessidade de transfusão (sangue compatível pode ser difícil)</blockquote>
+<hr>
+<h2 class="section-heading">ESTAÇÃO 3 — Caso: Esferocitose Hereditária</h2>
+<p><strong>[CASO]:</strong> Homem, 28 anos, com anemia crônica desde infância. Esplenomegalia. Pai com mesmo quadro. Hb 8,5 g/dL. MCV 72 fL. <strong>Esferócitos no esfregaço.</strong> Coombs direto NEGATIVO. Fragilidade osmótica aumentada.</p>
+<div class="question-label"><strong>Pergunta 1:</strong> Qual o diagnóstico, herança e confirmar como?</div>
+<blockquote><strong>Esferocitose hereditária</strong> — defeito de espectrina ou ancorina; herança <strong>AD em 75%</strong> dos casos.</blockquote>
+<blockquote>Confirmação: fragilidade osmótica ↑ (esfregaço + osmofragi lidade) ou citometria de fluxo (EMA-binding test).</blockquote>
+<blockquote>Diferenciar de AHAI: Coombs direto <strong>negativo</strong> na esferocitose.</blockquote>
+<div class="question-label"><strong>Pergunta 2:</strong> Qual o tratamento?</div>
+<blockquote>- Sintomático e ácido fólico</blockquote>
+<blockquote>- <strong>Esplenectomia:</strong> indicada em casos graves (anemia significativa); aguardar ≥ 7 anos (pela asplenia) + vacinação prévia</blockquote>
+<blockquote>- Vigiar: crise aplástica (parvovírus B19) e crise de sequestro</blockquote>
+<hr>
+<h2 class="section-heading">Pontos que o Professor Vai Checar</h2>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span>Distingue Coombs + (AHAI) de Coombs − (esferocitose, G6PD, hemoglobinopatias)</span></label><label class="check-item"><input type="checkbox"><span>Sabe que haptoglobina ↓ é marcador de hemólise (mais sensível)</span></label><label class="check-item"><input type="checkbox"><span>Identifica STA na AF como causa de óbito mais frequente</span></label><label class="check-item"><input type="checkbox"><span>Indica hidroxiureia para prevenção de crises na AF</span></label><label class="check-item"><input type="checkbox"><span>NÃO usa meperidina em crise falciforme (neurotóxico)</span></label><label class="check-item"><input type="checkbox"><span>Esplenectomia = asplenia → vacinação obrigatória antes</span></label><div class="check-progress"><span class="prog-text">0/6 marcados</span></div></div>
+<h2 class="section-heading">Alertas OSCE ⚠️</h2>
+<ul><li>MAHA (microangiopática) = esquizócitos + Coombs − + trombocitopenia → SHU, PTT, CIVD</li><li>Crise aplástica na AF = parvovírus B19 = ↓↓ reticulócitos (< 1%) — NÃO confundir com hemólise</li><li>G6PD: corpos de Heinz visíveis na crise; evitar agentes oxidantes (salicilatos, dapsona, fava)</li><li>Talassemia β maior: hemossiderose (↑ ferritina) → quelação com desferoxamina/deferiprona</li></ul>
+<hr>
+<h2 class="section-heading">Fonte</h2>
+<ul><li>Gerado a partir de: <code>conteudo_anemias_hemoliticas.md</code> (Aula Anemias Hemolíticas — Hematologia CM)</li></ul>
+</main>
+
+<nav class="bottom-nav">
+  <a href="../../../osce-plano.html">← Voltar ao plano</a>
+  <span class="bottom-total" id="bottomTotal"></span>
+</nav>
+
+<script>
+(function() {
+  var KEY = 'osce_v1_' + location.pathname;
+  var state = JSON.parse(localStorage.getItem(KEY) || '{}');
+  var boxes = document.querySelectorAll('input[type=checkbox]');
+  var total = boxes.length;
+
+  boxes.forEach(function(cb, idx) {
+    if (state[idx]) cb.checked = true;
+    cb.addEventListener('change', function() {
+      state[idx] = cb.checked;
+      localStorage.setItem(KEY, JSON.stringify(state));
+      updateAll();
+    });
+  });
+
+  function updateAll() {
+    var done = 0;
+    boxes.forEach(function(c){ if (c.checked) done++; });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    var bar = document.getElementById('hdrBar');
+    var fill = document.getElementById('hdrFill');
+    var lbl = document.getElementById('hdrLabel');
+    var bot = document.getElementById('bottomTotal');
+    if (total > 0) {
+      bar.style.display = 'block';
+      fill.style.width = pct + '%';
+      lbl.textContent = done + '/' + total + ' itens marcados (' + pct + '%)';
+      bot.textContent = done + '/' + total + ' checados';
+    }
+    document.querySelectorAll('.checklist').forEach(function(cl) {
+      var cbs = cl.querySelectorAll('input[type=checkbox]');
+      var cd = 0;
+      cbs.forEach(function(c){ if (c.checked) cd++; });
+      var prog = cl.querySelector('.prog-text');
+      if (prog) prog.textContent = cd + '/' + cbs.length + ' marcados';
+    });
+  }
+
+  updateAll();
+})();
+</script>
+</body>
+</html>

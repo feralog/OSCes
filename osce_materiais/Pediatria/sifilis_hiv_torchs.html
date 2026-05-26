@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TORCHS · OSCE</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e3da;
+    --text: #1a1a1a;
+    --muted: #666;
+    --accent: #1a1a1a;
+    --green: #2d6a4f;
+    --green-bg: #e8f5ee;
+    --blue: #0d47a1;
+    --blue-bg: #e3f2fd;
+    --r: 8px;
+    --font-body: Georgia, 'Times New Roman', serif;
+    --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.75;
+    min-height: 100vh;
+    padding-bottom: 70px;
+  }
+
+  .site-header {
+    background: var(--accent);
+    color: #f5f0e8;
+    padding: 16px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+  .header-inner { max-width: 780px; margin: 0 auto; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--font-ui); font-size: 11px; letter-spacing: .4px;
+    color: #a89f8c; text-decoration: none; margin-bottom: 8px;
+    border: 1px solid #444; border-radius: 20px; padding: 2px 10px;
+    transition: color .15s, border-color .15s;
+  }
+  .back-btn:hover { color: #f5f0e8; border-color: #888; }
+  .header-eyebrow {
+    font-family: var(--font-ui); font-size: 10px; letter-spacing: 2.5px;
+    color: #a89f8c; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .header-title {
+    font-size: 19px; font-weight: normal; letter-spacing: -.3px; line-height: 1.3;
+  }
+  .check-progress-bar {
+    height: 3px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 10px;
+  }
+  .check-progress-fill {
+    height: 100%; background: linear-gradient(90deg,#f4c842,#7ecf8a);
+    border-radius: 2px; transition: width .4s ease;
+  }
+  .check-total-label {
+    font-family: var(--font-ui); font-size: 10px; color: #a89f8c; margin-top: 3px;
+  }
+
+  .main { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
+
+  .page-h1 { display: none; }
+  h2.section-heading {
+    font-family: var(--font-ui); font-size: 11px; font-weight: bold;
+    letter-spacing: 1.8px; text-transform: uppercase; color: #777;
+    margin: 30px 0 10px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--border);
+  }
+  h3.section-heading {
+    font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+    margin: 22px 0 8px; color: var(--text);
+  }
+  h4.section-heading, h5.section-heading {
+    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+    margin: 16px 0 6px; color: var(--muted);
+  }
+  p { margin: 10px 0; font-size: 15px; }
+  p.eyebrow-meta {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted);
+    font-style: italic; margin: 4px 0 20px;
+    border-left: 3px solid var(--border); padding-left: 10px;
+  }
+  code {
+    background: #f0ede8; border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; font-size: 13px;
+    font-family: 'Consolas', 'Monaco', monospace;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  ul, ol { padding-left: 22px; margin: 10px 0; }
+  li { margin: 5px 0; font-size: 15px; }
+
+  .table-wrap {
+    overflow-x: auto; margin: 16px 0;
+    border-radius: var(--r); border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  table { width: 100%; border-collapse: collapse; font-family: var(--font-ui); font-size: 13px; }
+  th {
+    background: #1a1a1a; color: #f5f0e8;
+    padding: 9px 12px; text-align: left; font-weight: 600;
+    font-size: 11px; letter-spacing: .5px;
+  }
+  td { padding: 8px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f5f2ee; }
+  tr:hover td { background: #ede8e2; }
+
+  .checklist {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 12px 14px 10px; margin: 16px 0;
+    display: flex; flex-direction: column; gap: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    cursor: pointer; padding: 6px 4px;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 14px; line-height: 1.5; transition: background .1s;
+    border-radius: 4px;
+  }
+  .check-item:last-of-type { border-bottom: none; }
+  .check-item:hover { background: #f8f5f0; }
+  .check-item input[type=checkbox] {
+    width: 18px; height: 18px; min-width: 18px;
+    margin-top: 2px; accent-color: var(--green); cursor: pointer;
+  }
+  .check-item input[type=checkbox]:checked + span {
+    color: var(--muted); text-decoration: line-through;
+  }
+  .check-item span { flex: 1; }
+  .check-sub { margin: 6px 0 2px 4px; padding-left: 18px; }
+  .check-sub li { font-size: 13px; color: var(--muted); margin: 3px 0; }
+  .check-note { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .check-progress {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);
+  }
+  .prog-text {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted); font-weight: 600;
+  }
+
+  .professor-block {
+    background: var(--blue-bg); border-left: 4px solid #1976d2;
+    border-radius: 0 var(--r) var(--r) 0; padding: 14px 16px; margin: 20px 0 8px;
+    font-size: 14px; line-height: 1.65; color: #0a2e6e;
+  }
+  .question-label {
+    font-family: var(--font-ui); font-weight: 700; font-size: 14px;
+    margin: 20px 0 6px; color: var(--text); padding-left: 2px;
+  }
+  .answer-block {
+    background: var(--green-bg); border-left: 4px solid var(--green);
+    border-radius: 0 var(--r) var(--r) 0; padding: 12px 16px; margin: 6px 0 20px;
+    font-size: 14px; line-height: 1.65; color: #1b4332;
+  }
+  blockquote {
+    border-left: 3px solid var(--border); padding: 8px 14px;
+    margin: 12px 0; color: var(--muted); font-style: italic; font-size: 14px;
+  }
+
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1a1a1a; padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 200; border-top: 1px solid #333;
+  }
+  .bottom-nav a {
+    color: #a89f8c; text-decoration: none; font-family: var(--font-ui);
+    font-size: 12px; padding: 5px 14px; border: 1px solid #444;
+    border-radius: 20px; transition: color .15s, border-color .15s;
+  }
+  .bottom-nav a:hover { color: #f5f0e8; border-color: #888; }
+  .bottom-total { font-family: var(--font-ui); font-size: 12px; color: #a89f8c; }
+
+  @media (max-width: 600px) {
+    .header-title { font-size: 16px; }
+    td, th { padding: 6px 8px; font-size: 12px; }
+    .check-item { font-size: 13px; }
+    p, li { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../../osce-plano.html" class="back-btn">← Plano de estudos</a>
+    <div class="header-eyebrow">Pediatria · Neonatologia</div>
+    <div class="header-title">TORCHS</div>
+    <div class="check-progress-bar" id="hdrBar" style="display:none">
+      <div class="check-progress-fill" id="hdrFill" style="width:0%"></div>
+    </div>
+    <div class="check-total-label" id="hdrLabel"></div>
+  </div>
+</header>
+
+<main class="main">
+<h1 class="page-h1">TORCHS — Infecções Congênitas</h1>
+<p class="eyebrow-meta">Pediatria · Neonatologia | Método: Resumo Clínico</p>
+<h2 class="section-heading">O Acrônimo TORCHS</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Letra</th><th>Agente</th><th>Destaque Diagnóstico</th></tr></thead><tbody>
+<tr><td><strong>T</strong></td><td>Toxoplasma gondii</td><td>Calcificações cerebrais DIFUSAS + hidrocefalia + coriorretinite</td></tr>
+<tr><td><strong>O</strong></td><td>Outros (sífilis, HIV, HBV, HCV, Zika)</td><td>Ver seções específicas</td></tr>
+<tr><td><strong>R</strong></td><td>Vírus da Rubéola</td><td>Tríade: surdez + cardiopatia + catarata (1º trimestre = mais grave)</td></tr>
+<tr><td><strong>C</strong></td><td>Citomegalovírus (CMV)</td><td>Mais frequente IC; calcificações PERIVENTRICULARES; surdez neurossensorial</td></tr>
+<tr><td><strong>H</strong></td><td>Herpes simples (HSV)</td><td>Vesículas, encefalite, sepse neonatal</td></tr>
+<tr><td><strong>S</strong></td><td>Treponema pallidum (Sífilis)</td><td>Única prevenível com rastreamento + penicilina pré-natal</td></tr>
+</tbody></table></div>
+<blockquote>Transmissão vertical: via transplacentária (maioria) + canal de parto (HSV, HIV, HBV) + amamentação (HIV)</blockquote>
+<hr>
+<h2 class="section-heading">Toxoplasmose Congênita</h2>
+<p><strong>Risco de transmissão</strong>: ~40%, aumenta com o avançar da gestação. Quanto mais precoce, mais grave.</p>
+<p><strong>Clínica (70% assintomáticos ao nascer):</strong></p>
+<ul><li><strong>Tétrade de Sabin</strong>: hidrocefalia + calcificações cerebrais difusas + coriorretinite + estrabismo/nistagmo</li><li>Outros: microcefalia, convulsões, icterícia, hepatoesplenomegalia, anemia, trombocitopenia</li></ul>
+<p><strong>Diagnóstico no RN:</strong></p>
+<ul><li>Sorologia (IgM e IgA sérica) + PCR sangue/LCR + fundoscopia + USG de crânio</li><li>LCR: padrão linfomonocitário</li></ul>
+<p><strong>Tratamento</strong> (até 1 ano de vida):</p>
+<ul><li>Pirimetamina + Sulfadiazina + Ácido Folínico</li><li>Prednisolona adicional se alteração neurológica ou ocular ativa</li></ul>
+<hr>
+<h2 class="section-heading">CMV Congênito</h2>
+<p><strong>Causa mais frequente de infecção congênita</strong> (com transmissão intrauterina)</p>
+<p><strong>Clínica (90% assintomáticos ao nascer):</strong></p>
+<ul><li>Petéquias, hepatoesplenomegalia, icterícia colestática, microcefalia</li><li><strong>Calcificações periventriculares</strong> (diferente da toxo que são difusas)</li><li><strong>Perda auditiva neurossensorial</strong> (sequela mais frequente — 25% dos casos)</li></ul>
+<p><strong>Diagnóstico:</strong></p>
+<ul><li><strong>PCR CMV na urina ou saliva até 21 dias de vida</strong> (padrão ouro para confirmação)</li><li>BERA (potencial auditivo evocado)</li></ul>
+<p><strong>Tratamento:</strong></p>
+<ul><li>Valganciclovir VO 6 meses (cases sintomáticos com acometimento do SNC)</li><li>Ganciclovir EV alternativo</li></ul>
+<hr>
+<h2 class="section-heading">Rubéola Congênita</h2>
+<p><strong>Maior risco: 1º trimestre</strong> (quanto mais precoce, mais malformações)</p>
+<p><strong>Tríade clássica (Síndrome da Rubéola Congênita — SRC):</strong></p>
+<ul><li><strong>Surdez neurossensorial</strong> (sequela mais frequente)</li><li><strong>Cardiopatia</strong>: persistência do canal arterial (PCA) + estenose da artéria pulmonar</li><li><strong>Catarata</strong> (leucocoria) + retinopatia em "sal e pimenta"</li></ul>
+<p><strong>Outros sinais:</strong></p>
+<ul><li>Microcefalia, hepatoesplenomegalia, trombocitopenia, púrpura ("blueberry muffin")</li><li>PIG (pequeno para a idade gestacional)</li></ul>
+<p><strong>Diagnóstico:</strong> IgM reagente para rubéola + PCR positivo no RN</p>
+<p><strong>Prevenção:</strong> Tríplice viral (12 meses) + Tetraviral (15 meses). Contraindicada na gestação (vírus vivo atenuado)</p>
+<hr>
+<h2 class="section-heading">Sífilis Congênita — Visão Neonatal (ver também <code>sifilis.md</code> em GO)</h2>
+<figure style="margin:22px 0;text-align:center"><img src="protocolo_s_filis_e_hiv_neonatal_pg09.png" alt="Fluxograma triagem sifilis congenita" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Triagem: NUNCA usar cordão umbilical (falso-reagente). Mãe tratada + RN assintomático + VDRL RN < materno → ambulatório</figcaption></figure>
+
+<figure style="margin:22px 0;text-align:center"><img src="protocolo_s_filis_e_hiv_neonatal_pg11.png" alt="LCR criterios neurologicos sifilis" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Neurossífilis (até 60% dos casos): VDRL liquórico reagente OU >25 céls OU proteínas >150 mg/dL → internação 10 dias</figcaption></figure>
+
+<p><strong>Transmissão vertical</strong>: 70–100% em gestantes não tratadas</p>
+<p><strong>4 Critérios de Tratamento Materno Adequado</strong> (TODOS precisam ser SIM):</p>
+<ol><li>Medicamento = Benzilpenicilina Benzatina</li><li>Início ≥30 dias antes do parto</li><li>Esquema correto para o estágio</li><li>Intervalo entre doses respeitado</li></ol>
+<p><strong>Conduta no RN:</strong></p>
+<div class="table-wrap"><table>
+<thead><tr><th>Situação</th><th>Conduta</th></tr></thead><tbody>
+<tr><td>Mãe adequadamente tratada + RN assintomático + VDRL RN ≤ materno</td><td>RN exposto — acompanhamento ambulatorial (não é SC)</td></tr>
+<tr><td>Qualquer critério de tratamento = NÃO</td><td>Investigação completa + tratar</td></tr>
+<tr><td>RN sintomático (independente da mãe)</td><td>Investigação completa + tratar</td></tr>
+</tbody></table></div>
+<p><strong>Sinais precoces de SC (<2 anos):</strong> hepatomegalia, icterícia, rinite muco-sanguinolenta ("coriza sifilítica"), rash maculopapular em palmas e plantas, petéquias, periostite, sinal de Wimberger</p>
+<p><strong>Sinais tardios de SC (>2 anos):</strong> tríade de Hutchinson (dentes, ceratite intersticial, surdez), nariz em sela, fronte olímpica, tíbia em sabre</p>
+<p><strong>Tratamento do RN com SC:</strong></p>
+<ul><li>Sem neurossífilis: Benzilpenicilina Cristalina IV <strong>ou</strong> Procaína IM — 10 dias</li><li>Com neurossífilis: Benzilpenicilina Cristalina IV APENAS — 10 dias (única que atravessa BHE)</li></ul>
+<p><strong>Acompanhamento:</strong> VDRL com 1, 3, 6, 12 e 18 meses; 2 negativos consecutivos = encerrar</p>
+<hr>
+<h2 class="section-heading">HIV na Gestação e no RN</h2>
+<figure style="margin:22px 0;text-align:center"><img src="protocolo_s_filis_e_hiv_neonatal_pg04.png" alt="Nascimento biosseguranca HIV" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Parto com HIV: parto empelicado, clampeamento imediato, banho. NUNCA: ordenha do cordão, aspiração de rotina</figcaption></figure>
+
+<figure style="margin:22px 0;text-align:center"><img src="protocolo_s_filis_e_hiv_neonatal_pg05.png" alt="Via de parto carga viral" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Decisão via parto: CV <1.000 cópias/mL → vaginal | CV ≥1.000 ou desconhecida → cesárea ≥38 sem + AZT intraparto</figcaption></figure>
+
+<figure style="margin:22px 0;text-align:center"><img src="protocolo_s_filis_e_hiv_neonatal_pg07.png" alt="Conduta HIV alojamento conjunto" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Alojamento conjunto: AZT neonatal nas primeiras 4h + amamentação CONTRAINDICADA + fórmula até 6 meses</figcaption></figure>
+
+<figure style="margin:22px 0;text-align:center"><img src="protocolo_s_filis_e_hiv_neonatal_pg13.png" alt="Seguimento HIV pos-alta timeline" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Seguimento: nascimento → 2 sem → 4-6 sem → 12 sem. Alta: 18 meses com sorologia negativa ou 2 CV indetectáveis</figcaption></figure>
+
+<p><strong>Rastreamento obrigatório:</strong> Teste rápido HIV na 1ª consulta pré-natal e no momento do parto</p>
+<p><strong>Prevenção da Transmissão Vertical:</strong></p>
+<ul><li>TODAS as gestantes HIV+: TARV (Terapia Antirretroviral) para carga viral indetectável</li><li>Durante o TP/cesárea: AZT EV (desde o início do TP até clampeamento do cordão)</li><li>Pode ser dispensado se CV indetectável + boa adesão durante toda a gestação</li><li><strong>Amamentação é CONTRAINDICADA</strong> — oferecer fórmula até 2 anos</li></ul>
+<p><strong>Via de parto:</strong></p>
+<ul><li>CV detectável (≥ 1.000 cópias/mL) → cesárea eletiva com 38 semanas</li><li>CV indetectável → parto vaginal permitido</li></ul>
+<p><strong>Profilaxia do RN:</strong></p>
+<div class="table-wrap"><table>
+<thead><tr><th>Risco</th><th>Esquema</th><th>Duração</th></tr></thead><tbody>
+<tr><td><strong>Alto risco</strong> (mãe sem TARV, diagnóstico no parto, CV desconhecida ou elevada)</td><td>AZT + 3TC + RAL¹</td><td>28 dias</td></tr>
+<tr><td><strong>Baixo risco</strong> (mãe com TARV, CV indetectável)</td><td>AZT apenas</td><td>28 dias</td></tr>
+<tr><td><strong>Pré-termo <34 semanas</strong></td><td>AZT apenas</td><td>28 dias</td></tr>
+</tbody></table></div>
+<p>¹ RAL contraindicado em RN com IG <37 semanas → substituir por AZT + 3TC + NVP (14 dias)</p>
+<p><strong>Diagnóstico no RN:</strong> PCR para HIV ao nascimento, 1 mês (após término da profilaxia) e 4 meses</p>
+<hr>
+<h2 class="section-heading">Hepatite B na Gestação e no RN</h2>
+<p><strong>Rastreamento:</strong> HBsAg obrigatório no pré-natal (1º trimestre)</p>
+<p><strong>Prevenção no RN (mãe HBsAg +):</strong></p>
+<ul><li>Vacinação hepatite B nas <strong>primeiras 12–24h</strong> de vida</li><li><strong>Imunoglobulina HBV (IGHB)</strong> nas <strong>primeiras 12–24h</strong> de vida</li><li>Amamentação permitida (exceto fissuras no bico do peito)</li></ul>
+<p><strong>Prevenção no RN (mãe HBsAg desconhecida):</strong></p>
+<ul><li>Vacinar nas primeiras 24h; rastrear a mãe urgente</li></ul>
+<hr>
+<h2 class="section-heading">Tabela Comparativa TORCHS — Calcificações e Achados Chave</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Infecção</th><th>Calcificações</th><th>Surdez</th><th>Cardiopatia</th><th>Ocular</th><th>Diferencial</th></tr></thead><tbody>
+<tr><td>Toxoplasmose</td><td>Difusas (gânglios da base + córtex)</td><td>Rara</td><td>Não</td><td>Coriorretinite</td><td>Hidrocefalia + calcificações difusas</td></tr>
+<tr><td>CMV</td><td><strong>Periventriculares</strong></td><td>Sim (frequente)</td><td>Não</td><td>Normal ou coriorretinite</td><td>PCR urina/saliva <21 dias</td></tr>
+<tr><td>Rubéola</td><td>Vasos cerebrais</td><td>Sim (profunda)</td><td>Sim (PCA, estenose AP)</td><td>Catarata + retinopatia</td><td>"Sal e pimenta" no fundo de olho</td></tr>
+<tr><td>Sífilis</td><td>Não</td><td>Sim (tardia)</td><td>Não</td><td>Coriorretinite</td><td>Wimberger, nariz em sela</td></tr>
+<tr><td>HSV</td><td>Não</td><td>Não</td><td>Não</td><td>Ceratoconjuntivite</td><td>Vesículas, encefalite</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Perguntas que o Professor Provavelmente Vai Fazer</h2>
+<ol><li>Qual infecção congênita é a mais frequente? → CMV</li><li>Qual tem maior risco de transmissão no 1º trimestre? → Rubéola (tríade clássica)</li><li>Diferença entre calcificações da toxoplasmose e do CMV? → Toxo = difusas; CMV = periventriculares</li><li>O que justifica a proibição da amamentação no HIV? → Transmissão pelo leite materno (25% dos casos de TV)</li><li>Qual o único tratamento aceito para sífilis gestacional? → Penicilina G (nenhuma outra protege o feto)</li><li>Critério mais frequentemente não cumprido que torna mãe "inadequadamente tratada"? → Diagnóstico e tratamento no parto (<30 dias)</li></ol>
+<h2 class="section-heading">Alertas OSCE ⚠️</h2>
+<ul><li>CMV: PCR na urina/saliva <strong>até 21 dias</strong> de vida — depois disso não confirma IC (pode ser infecção pós-natal)</li><li>Toxoplasmose: calcificações DIFUSAS (não confundir com CMV periventriculares)</li><li>Rubéola = surdez + <strong>PCA</strong> (não CIV como 1ª cardiopatia)</li><li>HIV: amamentação contraindicada NO BRASIL — mesmo com carga viral indetectável (diferente da OMS para países de baixa renda)</li><li>Diagnóstico de SC só no parto → critério 2 não cumprido → mãe sempre inadequadamente tratada</li></ul>
+<hr>
+<h2 class="section-heading">Fonte</h2>
+<ul><li>Gerado a partir de: <code>conteudo_torchs.md</code> (Aulas 02 Teórica + Prática Infecções Congênitas + Casos TORCH)</li><li>Complementado com: <code>Protocolo_Sífilis_e_HIV_Neonatal.pdf</code> (lido visualmente — via de parto por carga viral, esquemas profiláticos RN)</li><li>Seções consultadas: toxoplasmose, CMV, rubéola, sífilis congênita, HIV, hepatite B</li></ul>
+</main>
+
+<nav class="bottom-nav">
+  <a href="../../osce-plano.html">← Voltar ao plano</a>
+  <span class="bottom-total" id="bottomTotal"></span>
+</nav>
+
+<script>
+(function() {
+  var KEY = 'osce_v1_' + location.pathname;
+  var state = JSON.parse(localStorage.getItem(KEY) || '{}');
+  var boxes = document.querySelectorAll('input[type=checkbox]');
+  var total = boxes.length;
+
+  boxes.forEach(function(cb, idx) {
+    if (state[idx]) cb.checked = true;
+    cb.addEventListener('change', function() {
+      state[idx] = cb.checked;
+      localStorage.setItem(KEY, JSON.stringify(state));
+      updateAll();
+    });
+  });
+
+  function updateAll() {
+    var done = 0;
+    boxes.forEach(function(c){ if (c.checked) done++; });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    var bar = document.getElementById('hdrBar');
+    var fill = document.getElementById('hdrFill');
+    var lbl = document.getElementById('hdrLabel');
+    var bot = document.getElementById('bottomTotal');
+    if (total > 0) {
+      bar.style.display = 'block';
+      fill.style.width = pct + '%';
+      lbl.textContent = done + '/' + total + ' itens marcados (' + pct + '%)';
+      bot.textContent = done + '/' + total + ' checados';
+    }
+    document.querySelectorAll('.checklist').forEach(function(cl) {
+      var cbs = cl.querySelectorAll('input[type=checkbox]');
+      var cd = 0;
+      cbs.forEach(function(c){ if (c.checked) cd++; });
+      var prog = cl.querySelector('.prog-text');
+      if (prog) prog.textContent = cd + '/' + cbs.length + ' marcados';
+    });
+  }
+
+  updateAll();
+})();
+</script>
+</body>
+</html>

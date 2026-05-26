@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OSCE 2026 — Plano de Estudos</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background: #fafaf8;
+    min-height: 100vh;
+    padding-bottom: 60px;
+    color: #1a1a1a;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: #1a1a1a;
+    color: #f5f0e8;
+    padding: 24px 20px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,.3);
+  }
+  .site-header .inner { max-width: 740px; margin: 0 auto; }
+  .eyebrow { font-size: 10px; letter-spacing: 3px; color: #a89f8c; text-transform: uppercase; margin-bottom: 4px; font-family: system-ui, sans-serif; }
+  .header-row { display: flex; justify-content: space-between; align-items: flex-end; }
+  .header-title { font-size: 21px; font-weight: normal; letter-spacing: -.5px; }
+  .header-sub { font-size: 11px; color: #a89f8c; margin-top: 2px; font-family: system-ui, sans-serif; }
+  .header-pct { text-align: right; }
+  .pct-num { font-size: 26px; font-weight: bold; font-family: system-ui, sans-serif; }
+  .pct-sub { font-size: 10px; color: #a89f8c; font-family: system-ui, sans-serif; }
+  .prog-bar { height: 3px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 14px; }
+  .prog-fill { height: 100%; background: linear-gradient(90deg,#f4c842,#7ecf8a); border-radius: 2px; transition: width .4s ease; }
+
+  /* ── MAIN ── */
+  .main { max-width: 740px; margin: 0 auto; padding: 0 16px; }
+
+  /* ── DAY TABS ── */
+  .day-tabs { display: flex; gap: 8px; margin: 18px 0 6px; overflow-x: auto; padding-bottom: 4px; }
+  .day-tab {
+    border: 2px solid #ddd; background: #fff; color: #555; border-radius: 8px;
+    padding: 8px 14px; cursor: pointer; white-space: nowrap; font-size: 12px;
+    font-family: system-ui, sans-serif; transition: all .2s; flex-shrink: 0;
+  }
+  .day-tab.active { color: #fff; }
+  .day-tab-date { font-weight: bold; font-size: 13px; }
+  .day-tab-count { font-size: 10px; opacity: .85; margin-top: 2px; }
+
+  /* ── DAY HEADER ── */
+  .day-header {
+    background: #fff; border: 1px solid #e8e3da;
+    border-left-width: 4px; border-radius: 0 8px 8px 0;
+    padding: 14px 18px; margin-bottom: 14px; margin-top: 8px;
+  }
+  .day-header-row { display: flex; justify-content: space-between; align-items: center; }
+  .day-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; font-weight: bold; font-family: system-ui, sans-serif; }
+  .day-name { font-size: 16px; margin-top: 2px; font-style: italic; }
+  .day-badge { border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: bold; color: #fff; font-family: system-ui, sans-serif; }
+  .day-provas { margin-top: 6px; font-size: 12px; color: #444; font-family: system-ui, sans-serif; line-height: 1.8; }
+
+  /* ── BLOCK ── */
+  .block { margin-bottom: 20px; }
+  .block-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+  .spec-badge {
+    border-radius: 6px; padding: 3px 10px; font-size: 10px; font-weight: bold;
+    letter-spacing: 1px; text-transform: uppercase; font-family: system-ui, sans-serif;
+    border: 1px solid;
+  }
+  .block-hora { font-size: 11px; color: #888; font-style: italic; font-family: system-ui, sans-serif; }
+  .block-count { margin-left: auto; font-size: 10px; color: #aaa; font-family: system-ui, sans-serif; }
+  .flashcard-link {
+    font-size: 10px; padding: 3px 9px; border-radius: 12px; border: 1px solid;
+    text-decoration: none; font-family: system-ui, sans-serif; cursor: pointer;
+    transition: opacity .15s; font-weight: 600;
+  }
+  .flashcard-link:hover { opacity: .75; }
+
+  /* ── TEMA ROW ── */
+  .temas { display: flex; flex-direction: column; gap: 6px; }
+  .tema-row {
+    display: flex; align-items: center; gap: 10px;
+    background: #fff; border: 1px solid #e8e3da; border-radius: 8px;
+    padding: 10px 12px; transition: all .15s;
+  }
+  .tema-row.done { background: #f0faf1; border-color: #b7dfbb; opacity: .7; }
+  .tema-row:hover { border-color: #ccc; box-shadow: 0 1px 6px rgba(0,0,0,.07); }
+  .tema-check {
+    width: 20px; height: 20px; border-radius: 4px; border: 2px solid #ccc;
+    background: transparent; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; cursor: pointer; transition: all .15s;
+  }
+  .tema-check.checked { background: #4caf50; border-color: #4caf50; }
+  .tema-check.checked::after { content: '✓'; color: #fff; font-size: 12px; line-height: 1; font-family: system-ui; }
+  .tema-prio { font-size: 14px; flex-shrink: 0; }
+  .tema-info { flex: 1; min-width: 0; }
+  .tema-nome { font-size: 13px; color: #1a1a1a; transition: color .15s; }
+  .tema-row.done .tema-nome { color: #888; text-decoration: line-through; }
+  .tema-actions { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
+  .open-btn {
+    font-size: 11px; padding: 4px 10px; border-radius: 6px; border: 1px solid #e0dbd3;
+    background: #f5f2ee; color: #555; text-decoration: none; font-family: system-ui, sans-serif;
+    cursor: pointer; white-space: nowrap; transition: background .15s;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .open-btn:hover { background: #ebe6e0; }
+  .metodo-badge {
+    font-size: 10px; padding: 3px 9px; border-radius: 20px; border: 1px solid;
+    font-family: system-ui, sans-serif; white-space: nowrap; flex-shrink: 0;
+  }
+
+  /* ── LEGEND / FOOTER ── */
+  .legend {
+    background: #fff; border: 1px solid #e8e3da; border-radius: 8px;
+    padding: 14px 16px; margin-top: 8px;
+  }
+  .legend-title { font-size: 10px; color: #aaa; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; font-family: system-ui, sans-serif; }
+  .legend-items { display: flex; gap: 20px; font-size: 12px; color: #555; font-family: system-ui, sans-serif; flex-wrap: wrap; }
+  .how-to {
+    background: #1a1a1a; color: #f5f0e8; border-radius: 10px;
+    padding: 14px 18px; margin-top: 14px; font-size: 12px; line-height: 1.7;
+    font-family: system-ui, sans-serif;
+  }
+  .how-to strong { color: #f4c842; }
+
+  .ref-imgs { display: flex; gap: 10px; flex-wrap: wrap; margin: 16px 0; }
+  .ref-imgs img { border-radius: 6px; border: 1px solid #ddd; object-fit: cover;
+                  flex: 1 1 140px; max-height: 110px; box-shadow: 0 1px 6px rgba(0,0,0,.08); }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="inner">
+    <div class="eyebrow">OSCE 2026</div>
+    <div class="header-row">
+      <div>
+        <div class="header-title">Plano de Estudos</div>
+        <div class="header-sub">26–28 de maio · 4 provas práticas</div>
+      </div>
+      <div class="header-pct">
+        <div class="pct-num" id="pctNum">0%</div>
+        <div class="pct-sub" id="pctSub">0/44 temas</div>
+      </div>
+    </div>
+    <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+  </div>
+</header>
+
+<div class="main">
+  
+<div style="max-width:740px;margin:14px auto 0;padding:0 16px">
+  <p style="font-family:system-ui,sans-serif;font-size:10px;letter-spacing:2px;
+     text-transform:uppercase;color:#999;margin-bottom:8px">Material de referência</p>
+  <div class="ref-imgs">
+    <img src="atendimento_ao_rece_m_nascido_2026_1_pg13.png" alt="Algoritmo SBP Reanimação">
+    <img src="playbook_cl_nico_de_exantemas_pg11.png" alt="Mapeamento Exantemas">
+    <img src="protocolo_s_filis_e_hiv_neonatal_pg05.png" alt="Via de Parto HIV">
+    <img src="bronquiolite_x_lactente_sibilnate_x_asma_pg11.png" alt="BVA vs Lactente Sibilante">
+    <img src="aula_pratica_pneumonia_pg06.png" alt="Exame Fisico Toracico">
+  </div>
+</div>
+<div class="day-tabs" id="dayTabs"></div>
+  <div id="dayView"></div>
+
+  <div class="legend">
+    <div class="legend-title">Legenda de Prioridade</div>
+    <div class="legend-items">
+      <span>🔴 Alta — maior chance de cair</span>
+      <span>🟡 Média — provável</span>
+      <span>🟢 Baixa — bom ter</span>
+    </div>
+  </div>
+
+  <div class="how-to">
+    <strong>Como usar:</strong> clique em <em>Abrir</em> para ir direto ao material de estudo.
+    Marque ✓ quando terminar — o progresso fica salvo no navegador.
+    Use os botões 🃏 para abrir o deck de flashcards da especialidade.
+  </div>
+</div>
+
+<script>
+// ── Mapeamento de IDs → arquivos ──────────────────────────────────────────
+const FILES = {
+  // GO
+  'go-partograma':  'osce_materiais/GO/partograma.html',
+  'go-sifilis':     'osce_materiais/GO/sifilis.html',
+  'go-papanicolau': 'osce_materiais/GO/papanicolau.html',
+  'go-larcs':       'osce_materiais/GO/larcs_planejamento_familiar.html',
+  'go-mama':        'osce_materiais/GO/imagem_mama.html',
+  // Pediatria
+  'ped-rn':          'osce_materiais/Pediatria/atendimento_rn_normal.html',
+  'ped-reanimacao':  'osce_materiais/Pediatria/reanimacao_neonatal.html',
+  'ped-sifilis':     'osce_materiais/Pediatria/sifilis_hiv_torchs.html',
+  'ped-ictero':      'osce_materiais/Pediatria/ictericia_neonatal.html',
+  'ped-bronquiolite':'osce_materiais/Pediatria/bronquiolite_asma_lactente_sibilante.html',
+  'ped-pneumonia':   'osce_materiais/Pediatria/pneumonia.html',
+  'ped-meningite':   'osce_materiais/Pediatria/meningite.html',
+  'ped-itu':         'osce_materiais/Pediatria/itu.html',
+  'ped-diarreia':    'osce_materiais/Pediatria/diarreia_aguda.html',
+  'ped-exantema':    'osce_materiais/Pediatria/doencas_exantematicas.html',
+  // Clínica Médica
+  'cm-drc':        'osce_materiais/Clinica_Medica/Nefro/drc.html',
+  'cm-nefrolit':   'osce_materiais/Clinica_Medica/Nefro/nefrolitiase.html',
+  'cm-nefrotica':  'osce_materiais/Clinica_Medica/Nefro/sindrome_nefrotica.html',
+  'cm-cushing':    'osce_materiais/Clinica_Medica/Endocrino/sindrome_cushing.html',
+  'cm-hiper':      'osce_materiais/Clinica_Medica/Endocrino/hipertireoidismo.html',
+  'cm-drge':       'osce_materiais/Clinica_Medica/Gastro/drge.html',
+  'cm-diarreia-a': 'osce_materiais/Clinica_Medica/Gastro/diarreia_aguda.html',
+  'cm-diarreia-c': 'osce_materiais/Clinica_Medica/Gastro/diarreia_cronica.html',
+  'cm-ict':        'osce_materiais/Clinica_Medica/Gastro/ictericia_colestase.html',
+  'cm-colestase':  'osce_materiais/Clinica_Medica/Gastro/ictericia_colestase.html',
+  'cm-obstip':     'osce_materiais/Clinica_Medica/Gastro/obstipacao.html',
+  'cm-hemol':      'osce_materiais/Clinica_Medica/Hemato/anemias_hemoliticas.html',
+  'cm-microcit':   'osce_materiais/Clinica_Medica/Hemato/anemias_microciticas.html',
+  'cm-macrocit':   'osce_materiais/Clinica_Medica/Hemato/anemias_macrociticas.html',
+  'cm-lepto':      'osce_materiais/Clinica_Medica/Infecto/leptospirose.html',
+  'cm-mening':     'osce_materiais/Clinica_Medica/Infecto/meningites.html',
+  'cm-mono':       'osce_materiais/Clinica_Medica/Infecto/sindrome_mononucleose.html',
+  // Revisão CM (abre o deck interativo)
+  'cm-rev1': 'osce_materiais/flashcards/Clinica_Medica.html',
+  'cm-rev2': 'osce_materiais/flashcards/Clinica_Medica.html',
+  'cm-rev3': 'osce_materiais/flashcards/Clinica_Medica.html',
+  'cm-rev4': 'osce_materiais/flashcards/Clinica_Medica.html',
+  // Cirurgia
+  'cir-sonda':  'osce_materiais/Cirurgia/sonda_vesical.html',
+  'cir-dreno':  'osce_materiais/Cirurgia/dreno_torax.html',
+  'cir-sng':    'osce_materiais/Cirurgia/sonda_nasogastrica.html',
+  'cir-sutura': 'osce_materiais/Cirurgia/suturas.html',
+  // Revisão Cirurgia
+  'cir-rev1': 'osce_materiais/Cirurgia/sonda_vesical.html',
+  'cir-rev2': 'osce_materiais/Cirurgia/dreno_torax.html',
+  'cir-rev3': 'osce_materiais/Cirurgia/sonda_nasogastrica.html',
+  'cir-rev4': 'osce_materiais/Cirurgia/suturas.html',
+};
+
+// Flashcard decks por especialidade
+const FLASHCARDS = {
+  'GO':            'osce_materiais/flashcards/GO.html',
+  'Pediatria':     'osce_materiais/flashcards/Pediatria.html',
+  'Clínica Médica':'osce_materiais/flashcards/Clinica_Medica.html',
+  'Cirurgia':      'osce_materiais/flashcards/Cirurgia.html',
+};
+
+// ── Dados do plano ────────────────────────────────────────────────────────
+const plan = [
+  {
+    day: '25/05 — Domingo', label: 'HOJE', color: '#e63946',
+    provas: ['GO (amanhã)', 'Pediatria (amanhã)'],
+    blocos: [
+      { hora: 'Agora', specialty: 'GO', temas: [
+        { id: 'go-partograma',  nome: 'Partograma',                    metodo: 'Simulação OSCE', prio: '🔴' },
+        { id: 'go-sifilis',     nome: 'Sífilis',                        metodo: 'Resumo',         prio: '🔴' },
+        { id: 'go-papanicolau', nome: 'Papanicolau',                    metodo: 'Flashcards',     prio: '🟡' },
+        { id: 'go-larcs',       nome: 'LARCs + Planejamento Familiar',  metodo: 'Resumo',         prio: '🟡' },
+        { id: 'go-mama',        nome: 'Imagem de Mama',                 metodo: 'Flashcards',     prio: '🟡' },
+      ]},
+      { hora: 'Noite', specialty: 'Pediatria', temas: [
+        { id: 'ped-rn',        nome: 'Atendimento ao RN Normal',              metodo: 'Checklist',            prio: '🔴' },
+        { id: 'ped-reanimacao',nome: 'Reanimação Neonatal — Minuto de Ouro', metodo: 'Checklist + Simulação', prio: '🔴' },
+        { id: 'ped-sifilis',   nome: 'Sífilis e HIV (TORCHS)',               metodo: 'Resumo',               prio: '🔴' },
+        { id: 'ped-ictero',    nome: 'Icterícia Neonatal',                   metodo: 'Resumo + Flashcards',  prio: '🟡' },
+      ]},
+    ],
+  },
+  {
+    day: '26/05 — Segunda', label: 'PROVA GO + PEDS', color: '#e63946',
+    provas: ['🏥 OSCE Ginecologia e Obstetrícia', '🏥 OSCE Pediatria'],
+    blocos: [
+      { hora: 'Manhã cedo — Revisão', specialty: 'Pediatria', temas: [
+        { id: 'ped-bronquiolite', nome: 'Bronquiolite × Asma × Lactente Sibilante', metodo: 'Resumo DDx',   prio: '🔴' },
+        { id: 'ped-pneumonia',    nome: 'Pneumonia',                                metodo: 'Flashcards',   prio: '🟡' },
+        { id: 'ped-meningite',    nome: 'Meningite',                               metodo: 'Flashcards',   prio: '🟡' },
+        { id: 'ped-itu',          nome: 'ITU',                                     metodo: 'Resumo',       prio: '🟡' },
+        { id: 'ped-diarreia',     nome: 'Diarreia Aguda',                          metodo: 'Flashcards',   prio: '🟡' },
+        { id: 'ped-exantema',     nome: 'Doenças Exantemáticas',                   metodo: 'Tabela rápida',prio: '🟢' },
+      ]},
+      { hora: 'À noite — Preparo Clínica Médica', specialty: 'Clínica Médica', temas: [
+        { id: 'cm-drc',        nome: 'DRC',                                  metodo: 'Resumo',      prio: '🟡' },
+        { id: 'cm-nefrolit',   nome: 'Nefrolitíase',                         metodo: 'Flashcards',  prio: '🟡' },
+        { id: 'cm-nefrotica',  nome: 'Síndrome Nefrótica',                   metodo: 'Resumo',      prio: '🟡' },
+        { id: 'cm-cushing',    nome: 'Síndrome de Cushing',                  metodo: 'Flashcards',  prio: '🟡' },
+        { id: 'cm-hiper',      nome: 'Hipertireoidismo',                     metodo: 'Flashcards',  prio: '🟡' },
+        { id: 'cm-drge',       nome: 'DRGE',                                 metodo: 'Resumo',      prio: '🟢' },
+        { id: 'cm-diarreia-a', nome: 'Diarreia Aguda',                       metodo: 'Resumo',      prio: '🟢' },
+        { id: 'cm-diarreia-c', nome: 'Diarreia Crônica',                     metodo: 'Resumo',      prio: '🟢' },
+        { id: 'cm-ict',        nome: 'Icterícia / Colestase',                metodo: 'Resumo DDx',  prio: '🟡' },
+        { id: 'cm-obstip',     nome: 'Obstipação',                           metodo: 'Flashcards',  prio: '🟢' },
+        { id: 'cm-hemol',      nome: 'Anemias Hemolíticas',                  metodo: 'Tabela',      prio: '🟡' },
+        { id: 'cm-microcit',   nome: 'Anemias Microcíticas',                 metodo: 'Tabela',      prio: '🟡' },
+        { id: 'cm-macrocit',   nome: 'Anemias Macrocíticas',                 metodo: 'Flashcards',  prio: '🟡' },
+        { id: 'cm-lepto',      nome: 'Leptospirose',                         metodo: 'Resumo',      prio: '🟡' },
+        { id: 'cm-mening',     nome: 'Meningites',                           metodo: 'Resumo DDx',  prio: '🔴' },
+        { id: 'cm-mono',       nome: 'Síndrome da Mononucleose',             metodo: 'Flashcards',  prio: '🟢' },
+      ]},
+    ],
+  },
+  {
+    day: '27/05 — Terça', label: 'PROVA CLÍNICA MÉDICA', color: '#457b9d',
+    provas: ['🏥 OSCE Clínica Médica'],
+    blocos: [
+      { hora: 'Manhã cedo — Revisão rápida', specialty: 'Clínica Médica', temas: [
+        { id: 'cm-rev1', nome: 'Revisão Nefro (DRC + Nefrótica + Nefrolitíase)',     metodo: 'Simulação OSCE', prio: '🔴' },
+        { id: 'cm-rev2', nome: 'Revisão Gastro (Icterícia + Colestase + DRGE)',      metodo: 'Simulação OSCE', prio: '🔴' },
+        { id: 'cm-rev3', nome: 'Revisão Anemias (tabela DDx)',                       metodo: 'Flashcards',     prio: '🟡' },
+        { id: 'cm-rev4', nome: 'Revisão Infecto (Meningites + Lepto + Mono)',        metodo: 'Flashcards',     prio: '🟡' },
+      ]},
+      { hora: 'À noite — Preparo Cirurgia', specialty: 'Cirurgia', temas: [
+        { id: 'cir-sonda',  nome: 'Sonda Vesical — Checklist completo',      metodo: 'Checklist',             prio: '🔴' },
+        { id: 'cir-dreno',  nome: 'Dreno de Tórax — Checklist completo',     metodo: 'Checklist',             prio: '🔴' },
+        { id: 'cir-sng',    nome: 'SNG — o que está errado?',                metodo: 'Checklist + Erros',     prio: '🔴' },
+        { id: 'cir-sutura', nome: 'Sutura — indicações + execução',          metodo: 'Checklist + Simulação', prio: '🔴' },
+      ]},
+    ],
+  },
+  {
+    day: '28/05 — Quarta', label: 'PROVA CIRURGIA', color: '#2d6a4f',
+    provas: ['🏥 OSCE Técnicas Cirúrgicas'],
+    blocos: [
+      { hora: 'Manhã cedo — Revisão final', specialty: 'Cirurgia', temas: [
+        { id: 'cir-rev1', nome: 'Revisão sonda vesical — mental walkthrough', metodo: 'Checklist', prio: '🔴' },
+        { id: 'cir-rev2', nome: 'Revisão dreno de tórax — indicações + passos',metodo: 'Checklist', prio: '🔴' },
+        { id: 'cir-rev3', nome: 'Revisão SNG — erros clássicos',              metodo: 'Checklist', prio: '🔴' },
+        { id: 'cir-rev4', nome: 'Revisão suturas — pontos simples, colchoeiro',metodo: 'Checklist', prio: '🔴' },
+      ]},
+    ],
+  },
+];
+
+const SPEC_COLORS = {
+  'GO':            { bg: '#fce4ec', text: '#880e4f', border: '#f48fb1' },
+  'Pediatria':     { bg: '#e8f5e9', text: '#1b5e20', border: '#a5d6a7' },
+  'Clínica Médica':{ bg: '#e3f2fd', text: '#0d47a1', border: '#90caf9' },
+  'Cirurgia':      { bg: '#fff8e1', text: '#e65100', border: '#ffcc02' },
+};
+
+const METHOD_ICON = {
+  'Simulação OSCE':'🎭', 'Resumo':'📋', 'Flashcards':'🃏', 'Checklist':'✅',
+  'Resumo DDx':'🔍', 'Tabela':'📊', 'Tabela rápida':'📊',
+  'Checklist + Simulação':'✅', 'Checklist + Erros':'✅', 'Resumo + Flashcards':'📋',
+};
+
+// ── Estado ────────────────────────────────────────────────────────────────
+const STORE_KEY = 'osce2026_checked';
+let checked = {};
+try { checked = JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch(e){}
+
+let activeDay = 0;
+
+const TOTAL = plan.flatMap(d => d.blocos.flatMap(b => b.temas)).length;
+
+function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify(checked)); } catch(e){} }
+
+function countDone(temas) { return temas.filter(t => checked[t.id]).length; }
+
+// ── Render header progress ────────────────────────────────────────────────
+function updateProgress() {
+  const done = Object.values(checked).filter(Boolean).length;
+  const pct = Math.round((done / TOTAL) * 100);
+  document.getElementById('pctNum').textContent = pct + '%';
+  document.getElementById('pctNum').style.color = pct > 60 ? '#7ecf8a' : '#f4c842';
+  document.getElementById('pctSub').textContent = done + '/' + TOTAL + ' temas';
+  document.getElementById('progFill').style.width = pct + '%';
+}
+
+// ── Build day tabs ────────────────────────────────────────────────────────
+function buildTabs() {
+  const container = document.getElementById('dayTabs');
+  container.innerHTML = '';
+  plan.forEach((d, i) => {
+    const allTemas = d.blocos.flatMap(b => b.temas);
+    const done = countDone(allTemas);
+    const btn = document.createElement('button');
+    btn.className = 'day-tab' + (i === activeDay ? ' active' : '');
+    btn.style.borderColor = i === activeDay ? d.color : '#ddd';
+    btn.style.background  = i === activeDay ? d.color : '#fff';
+    btn.innerHTML = `<div class="day-tab-date">${d.day.split(' — ')[0]}</div><div class="day-tab-count">${done}/${allTemas.length}</div>`;
+    btn.onclick = () => { activeDay = i; render(); };
+    container.appendChild(btn);
+  });
+}
+
+// ── Build day view ────────────────────────────────────────────────────────
+function buildDayView() {
+  const d = plan[activeDay];
+  const allTemas = d.blocos.flatMap(b => b.temas);
+  const dayDone = countDone(allTemas);
+
+  let html = `
+    <div class="day-header" style="border-left-color:${d.color}">
+      <div class="day-header-row">
+        <div>
+          <div class="day-label" style="color:${d.color}">${d.label}</div>
+          <div class="day-name">${d.day}</div>
+        </div>
+        <div class="day-badge" style="background:${d.color}">${dayDone}/${allTemas.length}</div>
+      </div>
+      <div class="day-provas">${d.provas.map(p => `<span>${p}</span>`).join('<br>')}</div>
+    </div>`;
+
+  d.blocos.forEach(bloco => {
+    const sc = SPEC_COLORS[bloco.specialty] || { bg:'#f5f5f5', text:'#333', border:'#ccc' };
+    const bDone = countDone(bloco.temas);
+    const fcLink = FLASHCARDS[bloco.specialty]
+      ? `<a class="flashcard-link" href="${FLASHCARDS[bloco.specialty]}" target="_blank"
+            style="background:${sc.bg};color:${sc.text};border-color:${sc.border}">🃏 Flashcards</a>`
+      : '';
+
+    html += `<div class="block">
+      <div class="block-header">
+        <span class="spec-badge" style="background:${sc.bg};color:${sc.text};border-color:${sc.border}">${bloco.specialty}</span>
+        <span class="block-hora">${bloco.hora}</span>
+        ${fcLink}
+        <span class="block-count">${bDone}/${bloco.temas.length}</span>
+      </div>
+      <div class="temas">`;
+
+    bloco.temas.forEach(tema => {
+      const done = !!checked[tema.id];
+      const file = FILES[tema.id];
+      const icon = METHOD_ICON[tema.metodo] || '📚';
+      const ext = file && file.endsWith('.html') ? '🃏' : '📄';
+
+      html += `<div class="tema-row${done ? ' done' : ''}" data-id="${tema.id}">
+        <div class="tema-check${done ? ' checked' : ''}" onclick="toggle('${tema.id}')"></div>
+        <span class="tema-prio">${tema.prio}</span>
+        <div class="tema-info">
+          <div class="tema-nome">${tema.nome}</div>
+        </div>
+        <div class="tema-actions">
+          ${file ? `<a class="open-btn" href="${file}" target="_blank">${ext} Abrir</a>` : ''}
+          <span class="metodo-badge" style="background:${sc.bg};color:${sc.text};border-color:${sc.border}">${icon} ${tema.metodo}</span>
+        </div>
+      </div>`;
+    });
+
+    html += `</div></div>`;
+  });
+
+  document.getElementById('dayView').innerHTML = html;
+}
+
+// ── Toggle ────────────────────────────────────────────────────────────────
+function toggle(id) {
+  checked[id] = !checked[id];
+  save();
+  render();
+}
+
+// ── Main render ───────────────────────────────────────────────────────────
+function render() {
+  buildTabs();
+  buildDayView();
+  updateProgress();
+}
+
+render();
+</script>
+</body>
+</html>

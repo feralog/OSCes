@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Icterícia Neonatal · OSCE</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e3da;
+    --text: #1a1a1a;
+    --muted: #666;
+    --accent: #1a1a1a;
+    --green: #2d6a4f;
+    --green-bg: #e8f5ee;
+    --blue: #0d47a1;
+    --blue-bg: #e3f2fd;
+    --r: 8px;
+    --font-body: Georgia, 'Times New Roman', serif;
+    --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.75;
+    min-height: 100vh;
+    padding-bottom: 70px;
+  }
+
+  .site-header {
+    background: var(--accent);
+    color: #f5f0e8;
+    padding: 16px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+  .header-inner { max-width: 780px; margin: 0 auto; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--font-ui); font-size: 11px; letter-spacing: .4px;
+    color: #a89f8c; text-decoration: none; margin-bottom: 8px;
+    border: 1px solid #444; border-radius: 20px; padding: 2px 10px;
+    transition: color .15s, border-color .15s;
+  }
+  .back-btn:hover { color: #f5f0e8; border-color: #888; }
+  .header-eyebrow {
+    font-family: var(--font-ui); font-size: 10px; letter-spacing: 2.5px;
+    color: #a89f8c; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .header-title {
+    font-size: 19px; font-weight: normal; letter-spacing: -.3px; line-height: 1.3;
+  }
+  .check-progress-bar {
+    height: 3px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 10px;
+  }
+  .check-progress-fill {
+    height: 100%; background: linear-gradient(90deg,#f4c842,#7ecf8a);
+    border-radius: 2px; transition: width .4s ease;
+  }
+  .check-total-label {
+    font-family: var(--font-ui); font-size: 10px; color: #a89f8c; margin-top: 3px;
+  }
+
+  .main { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
+
+  .page-h1 { display: none; }
+  h2.section-heading {
+    font-family: var(--font-ui); font-size: 11px; font-weight: bold;
+    letter-spacing: 1.8px; text-transform: uppercase; color: #777;
+    margin: 30px 0 10px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--border);
+  }
+  h3.section-heading {
+    font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+    margin: 22px 0 8px; color: var(--text);
+  }
+  h4.section-heading, h5.section-heading {
+    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+    margin: 16px 0 6px; color: var(--muted);
+  }
+  p { margin: 10px 0; font-size: 15px; }
+  p.eyebrow-meta {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted);
+    font-style: italic; margin: 4px 0 20px;
+    border-left: 3px solid var(--border); padding-left: 10px;
+  }
+  code {
+    background: #f0ede8; border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; font-size: 13px;
+    font-family: 'Consolas', 'Monaco', monospace;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  ul, ol { padding-left: 22px; margin: 10px 0; }
+  li { margin: 5px 0; font-size: 15px; }
+
+  .table-wrap {
+    overflow-x: auto; margin: 16px 0;
+    border-radius: var(--r); border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  table { width: 100%; border-collapse: collapse; font-family: var(--font-ui); font-size: 13px; }
+  th {
+    background: #1a1a1a; color: #f5f0e8;
+    padding: 9px 12px; text-align: left; font-weight: 600;
+    font-size: 11px; letter-spacing: .5px;
+  }
+  td { padding: 8px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f5f2ee; }
+  tr:hover td { background: #ede8e2; }
+
+  .checklist {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 12px 14px 10px; margin: 16px 0;
+    display: flex; flex-direction: column; gap: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    cursor: pointer; padding: 6px 4px;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 14px; line-height: 1.5; transition: background .1s;
+    border-radius: 4px;
+  }
+  .check-item:last-of-type { border-bottom: none; }
+  .check-item:hover { background: #f8f5f0; }
+  .check-item input[type=checkbox] {
+    width: 18px; height: 18px; min-width: 18px;
+    margin-top: 2px; accent-color: var(--green); cursor: pointer;
+  }
+  .check-item input[type=checkbox]:checked + span {
+    color: var(--muted); text-decoration: line-through;
+  }
+  .check-item span { flex: 1; }
+  .check-sub { margin: 6px 0 2px 4px; padding-left: 18px; }
+  .check-sub li { font-size: 13px; color: var(--muted); margin: 3px 0; }
+  .check-note { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .check-progress {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);
+  }
+  .prog-text {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted); font-weight: 600;
+  }
+
+  .professor-block {
+    background: var(--blue-bg); border-left: 4px solid #1976d2;
+    border-radius: 0 var(--r) var(--r) 0; padding: 14px 16px; margin: 20px 0 8px;
+    font-size: 14px; line-height: 1.65; color: #0a2e6e;
+  }
+  .question-label {
+    font-family: var(--font-ui); font-weight: 700; font-size: 14px;
+    margin: 20px 0 6px; color: var(--text); padding-left: 2px;
+  }
+  .answer-block {
+    background: var(--green-bg); border-left: 4px solid var(--green);
+    border-radius: 0 var(--r) var(--r) 0; padding: 12px 16px; margin: 6px 0 20px;
+    font-size: 14px; line-height: 1.65; color: #1b4332;
+  }
+  blockquote {
+    border-left: 3px solid var(--border); padding: 8px 14px;
+    margin: 12px 0; color: var(--muted); font-style: italic; font-size: 14px;
+  }
+
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1a1a1a; padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 200; border-top: 1px solid #333;
+  }
+  .bottom-nav a {
+    color: #a89f8c; text-decoration: none; font-family: var(--font-ui);
+    font-size: 12px; padding: 5px 14px; border: 1px solid #444;
+    border-radius: 20px; transition: color .15s, border-color .15s;
+  }
+  .bottom-nav a:hover { color: #f5f0e8; border-color: #888; }
+  .bottom-total { font-family: var(--font-ui); font-size: 12px; color: #a89f8c; }
+
+  @media (max-width: 600px) {
+    .header-title { font-size: 16px; }
+    td, th { padding: 6px 8px; font-size: 12px; }
+    .check-item { font-size: 13px; }
+    p, li { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../../osce-plano.html" class="back-btn">← Plano de estudos</a>
+    <div class="header-eyebrow">Pediatria · Neonatologia</div>
+    <div class="header-title">Icterícia Neonatal</div>
+    <div class="check-progress-bar" id="hdrBar" style="display:none">
+      <div class="check-progress-fill" id="hdrFill" style="width:0%"></div>
+    </div>
+    <div class="check-total-label" id="hdrLabel"></div>
+  </div>
+</header>
+
+<main class="main">
+<h1 class="page-h1">Icterícia Neonatal</h1>
+<p class="eyebrow-meta">Pediatria · Neonatologia | Método: Resumo Clínico</p>
+<h2 class="section-heading">Definição</h2>
+<p>Coloração amarelada da pele, escleras e mucosas por depósito de bilirrubina quando BI ≥ 5 mg/dL. Ocorre em 60% dos RN a termo e 80% dos pré-termos na 1ª semana de vida.</p>
+<p><strong>Objetivo</strong>: detectar precocemente quem corre risco de <strong>kernicterus</strong> (impregnação de BI nos núcleos da base = encefalopatia bilirrubínica aguda)</p>
+<hr>
+<h2 class="section-heading">Fisiológica × Patológica — Critérios Diagnósticos</h2>
+<div class="table-wrap"><table>
+<thead><tr><th></th><th>Fisiológica</th><th>Patológica</th></tr></thead><tbody>
+<tr><td><strong>Aparecimento</strong></td><td>Após 24 horas de vida</td><td><strong>Antes de 24 horas</strong> de vida (SEMPRE patológica)</td></tr>
+<tr><td><strong>BT pico</strong></td><td>~12 mg/dL entre 3–4 dias</td><td>BT >12 mg/dL qualquer momento</td></tr>
+<tr><td><strong>Duração</strong></td><td><7 dias (RNT) / <14 dias (RNPT)</td><td>>7 dias (RNT) ou >14 dias (RNPT) → colestase?</td></tr>
+<tr><td><strong>Progressão</strong></td><td>Crânio → caudal (zonas de Kramer)</td><td>Rápida, com zonas de Kramer ≥4</td></tr>
+<tr><td><strong>BD</strong></td><td>BD ≤1 mg/dL</td><td>BD >1 mg/dL = sempre patológico</td></tr>
+</tbody></table></div>
+<blockquote>⚠️ Icterícia antes de 24h = PATOLÓGICA. Ponto final. Investigar causa.</blockquote>
+<hr>
+<h2 class="section-heading">Zonas de Kramer — Estimativa Clínica da BT</h2>
+<figure style="margin:22px 0;text-align:center"><img src="ictericia_neo_pdf_aula_12_icteri_cia_neonatal_pg4_img1.png" alt="Zonas de Kramer progressao cefalocaudal bilirrubina" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Zonas de Kramer: Zona 1 (cabeça) BT 4–8 | Zona 2 (tronco até umbigo) 5–12 | Zona 3 (umbigo–joelhos) 8–16 | Zona 4 (extremidades) 11–18 | Zona 5 (palmas/plantas) ≥15 mg/dL</figcaption></figure>
+
+<div class="table-wrap"><table>
+<thead><tr><th>Zona</th><th>Região Corporal</th><th>BT Estimada</th></tr></thead><tbody>
+<tr><td>1</td><td>Face e pescoço</td><td>~5 mg/dL</td></tr>
+<tr><td>2</td><td>Tronco até o umbigo</td><td>~9 mg/dL</td></tr>
+<tr><td>3</td><td>Umbigo até os joelhos</td><td>~11–12 mg/dL</td></tr>
+<tr><td>4</td><td>Joelhos até tornozelos</td><td>~15 mg/dL</td></tr>
+<tr><td>5</td><td>Palmas e plantas</td><td>>15 mg/dL</td></tr>
+</tbody></table></div>
+<blockquote>Kramer é triagem clínica — sempre confirmar com bilirrubina sérica ou transcutânea</blockquote>
+<hr>
+<h2 class="section-heading">Metabolismo da Bilirrubina — Resumo</h2>
+<ol><li>Hemólise das hemácias → bilirrubina indireta (BI) não conjugada</li><li>Transporte pelo plasma ligada à albumina</li><li>Captação pelo hepatócito → conjugação pela glucuronil transferase → bilirrubina direta (BD)</li><li>Excreção biliar → intestino → eliminação nas fezes e urina</li></ol>
+<p><strong>O RN produz 2–3× mais bilirrubina que o adulto</strong> (mais Hb, menor vida média das hemácias 70–90 dias, imaturidade enzimática)</p>
+<hr>
+<h2 class="section-heading">Fatores de Risco para Hiperbilirrubinemia Significante (>17 mg/dL)</h2>
+<ul><li>Icterícia nas primeiras 24–36h de vida</li><li>Incompatibilidade RH, ABO ou antígenos irregulares</li><li>IG 35–37 semanas (pré-termo tardio)</li><li>Clampeamento do cordão >60 seg (policitemia)</li><li>Aleitamento com dificuldade ou perda de peso >7%</li><li>Irmão que precisou de fototerapia</li><li>Cefalohematoma ou equimoses</li><li>Descendência asiática</li><li>Sexo masculino</li><li>BT na zona alta antes da alta hospitalar</li></ul>
+<hr>
+<h2 class="section-heading">Causas de Hiperbilirrubinemia Indireta</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Mecanismo</th><th>Exemplos</th></tr></thead><tbody>
+<tr><td>Hemólise imune</td><td>Incompatibilidade ABO (mais comum) / RH (mais grave)</td></tr>
+<tr><td>Hemólise hereditária</td><td>Esferocitose, G6PD, alfa-talassemia</td></tr>
+<tr><td>Coleções sanguíneas extravasculares</td><td>Cefalohematoma, equimoses, hemorragia intracraniana</td></tr>
+<tr><td>Policitemia</td><td>PIG, filho de mãe diabética, clampeamento tardio</td></tr>
+<tr><td>Deficiência de conjugação</td><td>Síndrome de Crigler-Najjar, síndrome de Gilbert</td></tr>
+<tr><td>Aumento da circulação êntero-hepática</td><td>Aleitamento insuficiente, jejum, obstrução GI</td></tr>
+<tr><td>Icterícia por leite materno</td><td>Diagnóstico de exclusão (ver abaixo)</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Incompatibilidade ABO vs RH</h2>
+<div class="table-wrap"><table>
+<thead><tr><th></th><th>ABO</th><th>RH</th></tr></thead><tbody>
+<tr><td><strong>Mecanismo</strong></td><td>Mãe tipo O + RN tipo A ou B</td><td>Mãe RH− + RN RH+</td></tr>
+<tr><td><strong>Frequência</strong></td><td>Mais comum</td><td>Menos comum, mais grave</td></tr>
+<tr><td><strong>Coombs direto</strong></td><td>+/− (20–40%)</td><td>Geralmente positivo</td></tr>
+<tr><td><strong>Hemólise</strong></td><td>Moderada</td><td>Intensa (anemia fetal, hidropsia)</td></tr>
+<tr><td><strong>Ocorrência</strong></td><td>Qualquer gestação</td><td>Gestações subsequentes (sensibilização)</td></tr>
+<tr><td><strong>Prevenção</strong></td><td>—</td><td>Imunoglobulina anti-D (RhIG) na mãe</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Icterícia por Leite Materno × Icterícia do Aleitamento</h2>
+<div class="table-wrap"><table>
+<thead><tr><th></th><th>Icterícia por Leite Materno</th><th>Icterícia do Aleitamento</th></tr></thead><tbody>
+<tr><td><strong>Causa</strong></td><td>Substâncias no leite inibem conjugação</td><td>Baixa oferta láctea → aumento circulação êntero-hepática</td></tr>
+<tr><td><strong>Ganho de peso</strong></td><td>Normal</td><td>Baixo / perda >10%</td></tr>
+<tr><td><strong>Início</strong></td><td>1ª semana, pode persistir até 3 meses</td><td>3–5 dias de vida</td></tr>
+<tr><td><strong>Diagnóstico</strong></td><td>Exclusão</td><td>Clínico + peso</td></tr>
+<tr><td><strong>Conduta</strong></td><td><strong>NÃO interromper o AME</strong></td><td>Rever técnica da amamentação, aumentar oferta</td></tr>
+</tbody></table></div>
+<blockquote>⚠️ NUNCA suspender o aleitamento materno por suspeita de icterícia por leite materno</blockquote>
+<hr>
+<h2 class="section-heading">Nomograma de Bhutani — Quando Fototerapia?</h2>
+<figure style="margin:22px 0;text-align:center"><img src="ictericia_neo_pdf_aula_12_icteri_cia_neonatal_pg5_img1.png" alt="Fluxograma decisao fototerapia 72 horas" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Fluxo ≥35 sem: icterícia <24–36h → dosar BT + etiologia | BT >P95 → fototerapia imediata | BT P75–95 → considerar conforme IG | BT <P75 → reavaliar fatores de risco</figcaption></figure>
+
+<figure style="margin:22px 0;text-align:center"><img src="ictericia_neo_pdf_aula_12_icteri_cia_neonatal_pg5_img2.png" alt="Grafico nomograma Bhutani zonas risco bilirrubina" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Nomograma de Bhutani: zona alto risco (>P95), risco intermediário alto (P75–95), baixo risco (<P40) — indicação de fototerapia baseada na zona e idade gestacional</figcaption></figure>
+
+<div class="table-wrap"><table>
+<thead><tr><th>BT</th><th>Zona Bhutani</th><th>Risco de BT >17,5</th><th>Conduta</th></tr></thead><tbody>
+<tr><td>>P95</td><td>Alta</td><td>40%</td><td>Fototerapia independente dos fatores de risco</td></tr>
+<tr><td>P75–95</td><td>Intermediária alta</td><td>13%</td><td>Fototerapia se fatores de risco presentes</td></tr>
+<tr><td>P40–75</td><td>Intermediária baixa</td><td>2%</td><td>Alta com retorno <1 semana</td></tr>
+<tr><td><P40</td><td>Baixa</td><td>Mínimo</td><td>Alta</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Tratamento</h2>
+<h3 class="section-heading">Fototerapia</h3>
+<ul><li><strong>Mecanismo</strong>: luz azul (comprimento de onda 430–490 nm) → fotoisomerização da BI → excreção pela bile e urina sem conjugação</li><li><strong>Técnica</strong>: RN somente com fralda + óculos de proteção; maximizar exposição da superfície corpórea</li><li>Suspender quando BT cair para zona abaixo do P75</li></ul>
+<h3 class="section-heading">Exsanguineotransfusão (EST)</h3>
+<ul><li>Indicada quando fototerapia intensiva falha ou BT em zona de risco de kernicterus</li><li>Procedimento invasivo com alta morbidade; realizar em UTI neonatal</li></ul>
+<hr>
+<h2 class="section-heading">Hiperbilirrubinemia Direta (BD >1 mg/dL)</h2>
+<p><strong>SEMPRE patológica</strong> — indica doença hepática ou biliar</p>
+<p><strong>Sinais clínicos:</strong> icterícia com tom esverdeado/amarelo-acastanhado, colúria, acolia/hipocolia fecal, prurido</p>
+<p><strong>Principal causa: Atresia Biliar</strong></p>
+<ul><li>Ausência/obliteração dos ductos biliares extra-hepáticos</li><li>25% das colestases neonatais</li><li>Principal indicação de transplante hepático em crianças</li><li>Manifestação: icterícia progressiva + fezes claras nas primeiras 8 semanas</li><li>Tratamento: <strong>Cirurgia de Kasai antes dos 30 dias de vida</strong> (portoenterostomia)</li><li>Icterícia >14 dias → investigar colestase neonatal (BD + GGT)</li></ul>
+<hr>
+<h2 class="section-heading">Perguntas que o Professor Provavelmente Vai Fazer</h2>
+<ol><li>Icterícia nas primeiras 24h — o que fazer? → Sempre patológica; dosar BT urgente; investigar hemólise (Coombs, incompatibilidade ABO/RH)</li><li>Quando NÃO interromper o aleitamento materno? → Icterícia por leite materno (diagnóstico de exclusão)</li><li>Diferença entre icterícia por leite materno e do aleitamento? → Leite materno: boa oferta, peso normal; Aleitamento: baixa oferta, perda de peso</li><li>Quando indicar fototerapia? → Bhutani >P95 sempre; >P75 se fatores de risco</li><li>O que é atresia biliar e como tratar? → Cirurgia de Kasai antes dos 30 dias; principal indicação de TX hepático em crianças</li></ol>
+<h2 class="section-heading">Alertas OSCE ⚠️</h2>
+<ul><li>Icterícia <strong>antes de 24h = SEMPRE patológica</strong></li><li>BD >1 mg/dL = SEMPRE patológico (colestase) — investigar imediatamente</li><li>Icterícia prolongada >14 dias → dosar BD para afastar colestase</li><li>Kramer é clínica — sempre confirmar com BT sérica antes de decisão terapêutica</li><li>Zonas 1–2 de Kramer podem ser fisiológicas; zonas 4–5 = urgência</li><li>Icterícia por leite materno: <strong>nunca suspender amamentação</strong></li></ul>
+<hr>
+<h2 class="section-heading">Fonte</h2>
+<ul><li>Gerado a partir de: <code>conteudo_ictericia.md</code> (Aula 12 + Caso Prático Icterícia)</li><li>Seções consultadas: fisiológica vs patológica, metabolismo, zonas de Kramer, ABO vs RH, nomograma Bhutani, fototerapia, atresia biliar, colestase</li><li>Gaps identificados: nomograma de Bhutani só com percentis, sem curva visual — complementado com limiares de decisão baseados no Bhutani original (SBP/AAP)</li></ul>
+</main>
+
+<nav class="bottom-nav">
+  <a href="../../osce-plano.html">← Voltar ao plano</a>
+  <span class="bottom-total" id="bottomTotal"></span>
+</nav>
+
+<script>
+(function() {
+  var KEY = 'osce_v1_' + location.pathname;
+  var state = JSON.parse(localStorage.getItem(KEY) || '{}');
+  var boxes = document.querySelectorAll('input[type=checkbox]');
+  var total = boxes.length;
+
+  boxes.forEach(function(cb, idx) {
+    if (state[idx]) cb.checked = true;
+    cb.addEventListener('change', function() {
+      state[idx] = cb.checked;
+      localStorage.setItem(KEY, JSON.stringify(state));
+      updateAll();
+    });
+  });
+
+  function updateAll() {
+    var done = 0;
+    boxes.forEach(function(c){ if (c.checked) done++; });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    var bar = document.getElementById('hdrBar');
+    var fill = document.getElementById('hdrFill');
+    var lbl = document.getElementById('hdrLabel');
+    var bot = document.getElementById('bottomTotal');
+    if (total > 0) {
+      bar.style.display = 'block';
+      fill.style.width = pct + '%';
+      lbl.textContent = done + '/' + total + ' itens marcados (' + pct + '%)';
+      bot.textContent = done + '/' + total + ' checados';
+    }
+    document.querySelectorAll('.checklist').forEach(function(cl) {
+      var cbs = cl.querySelectorAll('input[type=checkbox]');
+      var cd = 0;
+      cbs.forEach(function(c){ if (c.checked) cd++; });
+      var prog = cl.querySelector('.prog-text');
+      if (prog) prog.textContent = cd + '/' + cbs.length + ' marcados';
+    });
+  }
+
+  updateAll();
+})();
+</script>
+</body>
+</html>

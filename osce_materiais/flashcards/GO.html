@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcards GO · OSCE</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d2e;
+    --card-front: #1e2235;
+    --card-back: #162033;
+    --accent: #7c6af7;
+    --accent2: #4fc3f7;
+    --text: #e8eaf6;
+    --muted: #9aa0bc;
+    --green: #4caf82;
+    --red: #e05c7b;
+    --yellow: #f9c846;
+    --border: #2d3154;
+    --r: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px 40px;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  header .eyebrow {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .controls button {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .controls button:hover { background: var(--border); }
+  .controls button.active { background: var(--accent); border-color: var(--accent); }
+  .progress {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 20px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+  .progress-bar {
+    width: 180px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.3s;
+  }
+  .scene {
+    width: 100%;
+    max-width: 640px;
+    height: 360px;
+    perspective: 1200px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  .card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .card.flipped { transform: rotateY(180deg); }
+  .face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    border-radius: var(--r);
+    padding: 32px 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+  .face.front {
+    background: var(--card-front);
+  }
+  .face.back {
+    background: var(--card-back);
+    transform: rotateY(180deg);
+    border-color: var(--accent);
+  }
+  .card-tag {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .card-q {
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--text);
+  }
+  .card-hint {
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .card-a {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text);
+  }
+  .card-a strong { color: var(--accent2); }
+  .card-a .alert { color: var(--red); font-weight: 600; }
+  .card-a .ok { color: var(--green); font-weight: 600; }
+  .card-a .warn { color: var(--yellow); font-weight: 600; }
+  .nav {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .nav button {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav button:hover { background: var(--border); }
+  .nav button:disabled { opacity: 0.3; cursor: not-allowed; }
+  .card-number {
+    font-size: 14px;
+    color: var(--muted);
+    min-width: 60px;
+    text-align: center;
+  }
+  .result-btns {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .result-btns button {
+    padding: 9px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: opacity 0.2s;
+  }
+  .result-btns button:hover { opacity: 0.85; }
+  .btn-know { background: var(--green); color: #fff; }
+  .btn-dontknow { background: var(--red); color: #fff; }
+  .stats {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    gap: 16px;
+  }
+  .stat-know { color: var(--green); }
+  .stat-dk { color: var(--red); }
+  .flip-hint {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  .card-img { max-width: 100%; max-height: 200px; border-radius: 6px; margin-bottom: 10px; object-fit: contain; }
+  @media (max-width: 480px) {
+    .scene { height: 300px; }
+    .face { padding: 24px 20px; }
+    .card-q { font-size: 16px; }
+    .card-a { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Flashcards · GO</div>
+  <h1>Ginecologia & Obstetrícia</h1>
+</header>
+
+<div class="controls">
+  <button id="btnAll" class="active" onclick="filterCards('all')">Todos</button>
+  <button id="btnRev" onclick="filterCards('review')">Revisar</button>
+  <button onclick="shuffle()">🔀 Embaralhar</button>
+  <button onclick="resetAll()">↺ Reiniciar</button>
+</div>
+
+<div class="progress">
+  <span id="progText">0 / 22</span>
+  <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+</div>
+
+<div class="flip-hint">Clique no card para revelar a resposta</div>
+<div class="scene" onclick="flipCard()">
+  <div class="card" id="cardEl">
+    <div class="face front">
+      <div class="card-tag" id="cardTag"></div>
+      <div class="card-q" id="cardQ"></div>
+      <div class="card-hint">👆 clique para ver a resposta</div>
+    </div>
+    <div class="face back">
+      <div class="card-tag" id="cardTagB"></div>
+      <div class="card-a" id="cardA"></div>
+    </div>
+  </div>
+</div>
+
+<div class="nav">
+  <button id="btnPrev" onclick="prevCard()">◀</button>
+  <span class="card-number" id="cardNum">1 / 22</span>
+  <button id="btnNext" onclick="nextCard()">▶</button>
+</div>
+
+<div class="result-btns" id="resultBtns" style="display:none">
+  <button class="btn-dontknow" onclick="markCard(false)">✗ Não sei</button>
+  <button class="btn-know" onclick="markCard(true)">✓ Sei</button>
+</div>
+
+<div class="stats">
+  <span>Sei: <span class="stat-know" id="statKnow">0</span></span>
+  <span>Revisar: <span class="stat-dk" id="statDk">0</span></span>
+</div>
+
+<script>
+const ALL_CARDS = [
+  // ── Cards Visuais — Partograma ──
+  { tag: "Partograma", img: "parto_pdf_aula_04_partograma_pg3_img1.png", q: "O que é o Plano de De Lee e qual é o plano 0?", a: "Escala de descida da apresentação fetal.<br><strong>Plano 0</strong> = nível das espinhas isquiáticas.<br>Acima: −1, −2, −3 (apresentação móvel).<br>Abaixo: +1, +2, +3 (encravada). <span class='ok'>+4 = na vulva.</span>" },
+  { tag: "Partograma", img: "parto_pdf_aula_04_partograma_pg3_img2.png", q: "Identifique as variedades de posição cefálica neste esquema", a: "<strong>OA</strong>: occipito-anterior (mais favorável) | <strong>OT</strong>: transversa | <strong>OP</strong>: posterior (mais prolongado).<br>Variantes: D = direita, E = esquerda (ex: OEA = occipito-esquerda-anterior)." },
+  { tag: "Partograma", img: "parto_pdf_aula_04_partograma_pg5_img1.png", q: "Descreva as fases do trabalho de parto pela curva de Friedman", a: "<strong>Fase de latência:</strong> até 4 cm, progressão lenta.<br><strong>Fase ativa:</strong> aceleração → dilatação máxima → desaceleração.<br><span class='alert'>Normalidade: fase ativa progride ≥1 cm/h na primigesta.</span>" },
+  { tag: "Partograma", img: "parto_pdf_aula_04_partograma_pg4_img1.png", q: "O que são a Linha de Alerta e a Linha de Ação no partograma?", a: "<strong>Linha de Alerta:</strong> dilatação cruzando os quadrados na diagonal — sinaliza desvio do esperado.<br><strong>Linha de Ação:</strong> 4 horas à direita da linha de alerta — indica necessidade de conduta ativa (amniotomia, ocitocina ou cesárea)." },
+  { tag: "Partograma", img: "parto_pdf_aula_04_partograma_pg6_img1.png", q: "Leia este partograma: qual é o diagnóstico e a conduta?", a: "Dilatação que <strong>cruza a linha de alerta e atinge a linha de ação</strong> → <span class='alert'>Parada Secundária de Dilatação</span>.<br>Causas: DPC, variedade desfavorável, hipodinia.<br>Conduta: amniotomia → ocitocina → reavaliação → cesárea se sem progressão." },
+
+  { tag: "BI-RADS", q: "Qual o risco de malignidade e a conduta no BI-RADS 3?", a: "Risco ≤2%. Conduta: <strong>controle em 6 meses</strong> → 12 meses → 24 meses. Se estável em 24 meses → pode reclassificar para BI-RADS 2. Se mudar em qualquer controle → reclassificar para 4 → biópsia." },
+  { tag: "BI-RADS", q: "Qual a diferença entre BI-RADS 0 e BI-RADS 1?", a: "<strong>BI-RADS 0</strong> = exame INCOMPLETO — precisa de imagem complementar (não é negativo). <strong class='ok'>BI-RADS 1</strong> = Normal, risco 0%, rastreamento de rotina." },
+  { tag: "BI-RADS", q: "BI-RADS 4 — quais subdivisões e quando biopsar?", a: "<strong>4A</strong>: baixa suspeição 3–10%. <strong>4B</strong>: moderada 11–50%. <strong>4C</strong>: alta 51–94%. Todos os BI-RADS 4 (A, B ou C) → <strong class='alert'>biópsia obrigatória</strong>." },
+  { tag: "BI-RADS", q: "O que é BI-RADS 5 e BI-RADS 6? Qual a diferença?", a: "<strong>BI-RADS 5</strong>: altamente sugestivo de malignidade (>95%), mas <em>sem</em> confirmação histológica → biópsia obrigatória. <strong>BI-RADS 6</strong>: malignidade <em>já confirmada</em> por biópsia prévia → tratamento oncológico." },
+  { tag: "Mamografia", q: "Por que o USG não substitui a mamografia no rastreamento?", a: "O USG <strong class='alert'>não detecta microcalcificações</strong>, que são o sinal mais precoce de câncer de mama e só são visíveis na mamografia." },
+  { tag: "Mamografia", q: "Quais as duas incidências padrão da mamografia e o que cada uma mostra?", a: "<strong>CC (crânio-caudal)</strong>: feixe superior→inferior; mostra quadrantes medial e lateral; <em>sem</em> músculo peitoral. <strong>MLO (médio-lateral oblíqua)</strong>: feixe medial→lateral oblíquo; mostra quadrantes superiores e inferiores; músculo peitoral visível." },
+  { tag: "Mamografia", q: "Qual a manobra de Eklund e quando usar?", a: "Empurrar a prótese para posterior + comprimir o tecido glandular para anterior. Realizada em TODAS as incidências em pacientes com prótese de silicone. Sem a manobra: imagem incompleta (prótese encobre a glândula)." },
+  { tag: "Rastreamento", q: "A partir de qual idade e com qual frequência a SBM/FEBRASGO recomendam rastreamento mamográfico?", a: "<strong>40 anos</strong>, frequência <strong>anual</strong>. O Ministério da Saúde recomenda 50 anos bienal. Alto risco (BRCA1/2, TP53, radioterapia torácica <30 anos): iniciar 30–35 anos anual + RM mamária." },
+  { tag: "Calcificações", q: "Calcificações pleomórficas, lineares, ramificadas e agrupadas — o que significam?", a: "São <strong class='alert'>suspeitas de malignidade</strong> → BI-RADS ≥ 4 → biópsia. Calcificações grosseiras ('pipoca'), vasculares e esféricas são benignas → BI-RADS 2." },
+  { tag: "Partograma", q: "Qual é a linha de alerta e a linha de ação no partograma?", a: "<strong>Linha de alerta</strong>: traçada 1 hora após a abertura (dilatação que abre o partograma). <strong>Linha de ação</strong>: 4 horas após a linha de alerta. Cruzar a linha de ação = intervenção obrigatória." },
+  { tag: "Partograma", q: "O que é taquissistolia e qual a conduta?", a: "Taquissistolia = <strong>>5 contrações/10 min</strong>. Causa hiperestimulação uterina → reduz perfusão placentária → hipóxia fetal. Conduta: <strong class='alert'>suspender ocitocina imediatamente</strong> + decúbito lateral esquerdo + O₂." },
+  { tag: "Partograma", q: "Qual o diagnóstico de parada secundária de dilatação e como conduzir?", a: "Ausência de progressão em <strong>2 toques consecutivos ≥ 2 horas</strong> com contrações eficazes. Causa mais provável: DPC. Conduta: posição vertical, analgesia, amniotomia, ocitocina se DU inadequada; fórcipe (DPC relativa) ou cesárea (DPC absoluta)." },
+  { tag: "Partograma", q: "BCF 98 bpm + líquido amniótico com mecônio — qual a urgência?", a: "<strong class='alert'>Sofrimento fetal agudo</strong>. BCF <110 = bradicardia fetal grave. Mecônio confirma hipóxia. Conduta imediata: suspender ocitocina, decúbito lateral esq., O₂, toques a cada 15 min; fórcipe se plano ≥+2 ou cesárea de urgência." },
+  { tag: "Sífilis", q: "Quais são os 4 critérios de tratamento materno adequado da sífilis?", a: "1. Medicamento = Benzilpenicilina Benzatina. 2. Início <strong>≥ 30 dias antes do parto</strong>. 3. Esquema e dose corretos para o estágio. 4. Intervalo entre doses respeitado. <span class='alert'>Diagnóstico só no parto → critério 2 = NÃO → sempre inadequada.</span>" },
+  { tag: "Sífilis", q: "Qual o esquema de tratamento da sífilis primária/secundária/latente precoce na gestante?", a: "<strong>Benzilpenicilina Benzatina 2,4 milhões UI IM dose única</strong> (1,2 M em cada glúteo). Latente tardia/terciária: 3 doses semanais. Neurossífilis: Benzilpenicilina Cristalina EV 10–14 dias. <span class='alert'>Alergia: dessensibilizar — não usar doxiciclina.</span>" },
+  { tag: "Papanicolau", q: "Qual a sequência correta de coleta do Papanicolau?", a: "Primeiro <strong>ectocérvice</strong> (espátula de Ayre, 360°, metade superior da lâmina) → depois <strong>endocérvice</strong> (escovinha, 90–180°, metade inferior). Fixar em <strong class='alert'>&lt;10 segundos</strong>. Identificar a lâmina com lápis (não caneta)." },
+  { tag: "Papanicolau", q: "O que é a JEC e por que é fundamental coletar dela?", a: "Junção Escamo-Colunar: limite entre epitélio escamoso e colunar do colo uterino. É onde ocorrem <strong>~90% dos cânceres do colo</strong>. Coleta sem incluir a JEC = resultado insatisfatório." },
+  { tag: "Papanicolau", q: "ASC-H × ASC-US — qual a diferença na conduta?", a: "<strong>ASC-US</strong>: células atípicas de baixo risco → repetir em 6 meses ou HPV-teste. <strong class='alert'>ASC-H</strong>: atípicas não exclui HSIL (alto grau) → <strong>colposcopia imediata</strong>. São condutas completamente diferentes." },
+  { tag: "LARCs", q: "Qual LARC é terapêutico para SUA, dismenorreia e adenomiose?", a: "<strong>SIU-LNG Mirena</strong> (DIU hormonal). Libera 20 µg/dia de levonorgestrel localmente → reduz fluxo (amenorreia em ~20%) e dismenorreia. O DIU de cobre pioraria o quadro." },
+  { tag: "LARCs", q: "Quais métodos são contraindicados em gestante 6 semanas pós-parto, amamentando?", a: "Todos os métodos com <strong>estrogênio</strong>: ACO combinado, anel vaginal, adesivo, injetável mensal. Amamentação <6 semanas contraindica estrogênio (inibe prolactina + risco tromboembólico). Usar: minipílula, Depo-Provera, implante, DIU." },
+  { tag: "LARCs", q: "Por que ser nulípara ou adolescente NÃO é contraindicação ao DIU?", a: "SBP e FEBRASGO recomendam LARCs (incluindo DIU) como <strong>primeira escolha</strong> para adolescentes. Não há contraindicação por nulíparidade. A contraindicação absoluta real é cavidade distorcida, DIP ativa ou sangramento anormal não investigado." },
+  { tag: "LARCs", q: "Qual a diferença entre DIU de cobre e DIU hormonal no efeito sobre o fluxo?", a: "<strong class='alert'>DIU de cobre</strong> (TCu 380A): pode <em>aumentar</em> o fluxo menstrual; dura 10 anos; não hormonal; pode ser usado como contracepção de emergência até 5 dias. <strong class='ok'>DIU hormonal</strong> (SIU-LNG): <em>reduz</em> o fluxo; dura 5–8 anos; terapêutico no SUA." },
+];
+
+let deck = [...ALL_CARDS];
+let current = 0;
+let isFlipped = false;
+let statusMap = {};
+let filterMode = 'all';
+
+function render() {
+  const c = deck[current];
+  document.getElementById('cardTag').textContent = c.tag;
+  document.getElementById('cardTagB').textContent = c.tag;
+  document.getElementById('cardQ').textContent = c.q;
+  document.getElementById('cardA').innerHTML = c.a;
+  document.getElementById('cardNum').textContent = `${current + 1} / ${deck.length}`;
+  document.getElementById('cardEl').classList.remove('flipped');
+  isFlipped = false;
+  document.getElementById('resultBtns').style.display = 'none';
+  updateProgress();
+  document.getElementById('btnPrev').disabled = current === 0;
+  document.getElementById('btnNext').disabled = current === deck.length - 1;
+}
+
+function flipCard() {
+  isFlipped = !isFlipped;
+  document.getElementById('cardEl').classList.toggle('flipped', isFlipped);
+  document.getElementById('resultBtns').style.display = isFlipped ? 'flex' : 'none';
+}
+
+function nextCard() {
+  if (current < deck.length - 1) { current++; render(); }
+}
+function prevCard() {
+  if (current > 0) { current--; render(); }
+}
+
+function markCard(know) {
+  const c = deck[current];
+  statusMap[c.q] = know;
+  updateStats();
+  if (current < deck.length - 1) { current++; render(); }
+}
+
+function updateProgress() {
+  const done = Object.keys(statusMap).length;
+  const total = ALL_CARDS.length;
+  document.getElementById('progText').textContent = `${done} / ${total}`;
+  document.getElementById('progFill').style.width = `${(done / total) * 100}%`;
+}
+
+function updateStats() {
+  const vals = Object.values(statusMap);
+  document.getElementById('statKnow').textContent = vals.filter(v => v).length;
+  document.getElementById('statDk').textContent = vals.filter(v => !v).length;
+}
+
+function shuffle() {
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  current = 0;
+  render();
+}
+
+function filterCards(mode) {
+  filterMode = mode;
+  document.getElementById('btnAll').classList.toggle('active', mode === 'all');
+  document.getElementById('btnRev').classList.toggle('active', mode === 'review');
+  if (mode === 'all') {
+    deck = [...ALL_CARDS];
+  } else {
+    deck = ALL_CARDS.filter(c => statusMap[c.q] === false || statusMap[c.q] === undefined);
+    if (deck.length === 0) deck = [...ALL_CARDS];
+  }
+  current = 0;
+  render();
+}
+
+function resetAll() {
+  statusMap = {};
+  deck = [...ALL_CARDS];
+  current = 0;
+  filterMode = 'all';
+  document.getElementById('btnAll').classList.add('active');
+  document.getElementById('btnRev').classList.remove('active');
+  document.getElementById('statKnow').textContent = '0';
+  document.getElementById('statDk').textContent = '0';
+  render();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') nextCard();
+  else if (e.key === 'ArrowLeft') prevCard();
+  else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+  else if (e.key === '1' && isFlipped) markCard(false);
+  else if (e.key === '2' && isFlipped) markCard(true);
+});
+
+render();
+</script>
+</body>
+</html>

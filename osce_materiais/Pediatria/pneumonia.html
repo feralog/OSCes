@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pneumonia em Pediatria (PAC) · OSCE</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e3da;
+    --text: #1a1a1a;
+    --muted: #666;
+    --accent: #1a1a1a;
+    --green: #2d6a4f;
+    --green-bg: #e8f5ee;
+    --blue: #0d47a1;
+    --blue-bg: #e3f2fd;
+    --r: 8px;
+    --font-body: Georgia, 'Times New Roman', serif;
+    --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.75;
+    min-height: 100vh;
+    padding-bottom: 70px;
+  }
+
+  .site-header {
+    background: var(--accent);
+    color: #f5f0e8;
+    padding: 16px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+  .header-inner { max-width: 780px; margin: 0 auto; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--font-ui); font-size: 11px; letter-spacing: .4px;
+    color: #a89f8c; text-decoration: none; margin-bottom: 8px;
+    border: 1px solid #444; border-radius: 20px; padding: 2px 10px;
+    transition: color .15s, border-color .15s;
+  }
+  .back-btn:hover { color: #f5f0e8; border-color: #888; }
+  .header-eyebrow {
+    font-family: var(--font-ui); font-size: 10px; letter-spacing: 2.5px;
+    color: #a89f8c; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .header-title {
+    font-size: 19px; font-weight: normal; letter-spacing: -.3px; line-height: 1.3;
+  }
+  .check-progress-bar {
+    height: 3px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 10px;
+  }
+  .check-progress-fill {
+    height: 100%; background: linear-gradient(90deg,#f4c842,#7ecf8a);
+    border-radius: 2px; transition: width .4s ease;
+  }
+  .check-total-label {
+    font-family: var(--font-ui); font-size: 10px; color: #a89f8c; margin-top: 3px;
+  }
+
+  .main { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
+
+  .page-h1 { display: none; }
+  h2.section-heading {
+    font-family: var(--font-ui); font-size: 11px; font-weight: bold;
+    letter-spacing: 1.8px; text-transform: uppercase; color: #777;
+    margin: 30px 0 10px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--border);
+  }
+  h3.section-heading {
+    font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+    margin: 22px 0 8px; color: var(--text);
+  }
+  h4.section-heading, h5.section-heading {
+    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+    margin: 16px 0 6px; color: var(--muted);
+  }
+  p { margin: 10px 0; font-size: 15px; }
+  p.eyebrow-meta {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted);
+    font-style: italic; margin: 4px 0 20px;
+    border-left: 3px solid var(--border); padding-left: 10px;
+  }
+  code {
+    background: #f0ede8; border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; font-size: 13px;
+    font-family: 'Consolas', 'Monaco', monospace;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  ul, ol { padding-left: 22px; margin: 10px 0; }
+  li { margin: 5px 0; font-size: 15px; }
+
+  .table-wrap {
+    overflow-x: auto; margin: 16px 0;
+    border-radius: var(--r); border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  table { width: 100%; border-collapse: collapse; font-family: var(--font-ui); font-size: 13px; }
+  th {
+    background: #1a1a1a; color: #f5f0e8;
+    padding: 9px 12px; text-align: left; font-weight: 600;
+    font-size: 11px; letter-spacing: .5px;
+  }
+  td { padding: 8px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f5f2ee; }
+  tr:hover td { background: #ede8e2; }
+
+  .checklist {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 12px 14px 10px; margin: 16px 0;
+    display: flex; flex-direction: column; gap: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    cursor: pointer; padding: 6px 4px;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 14px; line-height: 1.5; transition: background .1s;
+    border-radius: 4px;
+  }
+  .check-item:last-of-type { border-bottom: none; }
+  .check-item:hover { background: #f8f5f0; }
+  .check-item input[type=checkbox] {
+    width: 18px; height: 18px; min-width: 18px;
+    margin-top: 2px; accent-color: var(--green); cursor: pointer;
+  }
+  .check-item input[type=checkbox]:checked + span {
+    color: var(--muted); text-decoration: line-through;
+  }
+  .check-item span { flex: 1; }
+  .check-sub { margin: 6px 0 2px 4px; padding-left: 18px; }
+  .check-sub li { font-size: 13px; color: var(--muted); margin: 3px 0; }
+  .check-note { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .check-progress {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);
+  }
+  .prog-text {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted); font-weight: 600;
+  }
+
+  .professor-block {
+    background: var(--blue-bg); border-left: 4px solid #1976d2;
+    border-radius: 0 var(--r) var(--r) 0; padding: 14px 16px; margin: 20px 0 8px;
+    font-size: 14px; line-height: 1.65; color: #0a2e6e;
+  }
+  .question-label {
+    font-family: var(--font-ui); font-weight: 700; font-size: 14px;
+    margin: 20px 0 6px; color: var(--text); padding-left: 2px;
+  }
+  .answer-block {
+    background: var(--green-bg); border-left: 4px solid var(--green);
+    border-radius: 0 var(--r) var(--r) 0; padding: 12px 16px; margin: 6px 0 20px;
+    font-size: 14px; line-height: 1.65; color: #1b4332;
+  }
+  blockquote {
+    border-left: 3px solid var(--border); padding: 8px 14px;
+    margin: 12px 0; color: var(--muted); font-style: italic; font-size: 14px;
+  }
+
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1a1a1a; padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 200; border-top: 1px solid #333;
+  }
+  .bottom-nav a {
+    color: #a89f8c; text-decoration: none; font-family: var(--font-ui);
+    font-size: 12px; padding: 5px 14px; border: 1px solid #444;
+    border-radius: 20px; transition: color .15s, border-color .15s;
+  }
+  .bottom-nav a:hover { color: #f5f0e8; border-color: #888; }
+  .bottom-total { font-family: var(--font-ui); font-size: 12px; color: #a89f8c; }
+
+  @media (max-width: 600px) {
+    .header-title { font-size: 16px; }
+    td, th { padding: 6px 8px; font-size: 12px; }
+    .check-item { font-size: 13px; }
+    p, li { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../../osce-plano.html" class="back-btn">← Plano de estudos</a>
+    <div class="header-eyebrow">Pediatria · Infectologia Pediátrica</div>
+    <div class="header-title">Pneumonia em Pediatria (PAC)</div>
+    <div class="check-progress-bar" id="hdrBar" style="display:none">
+      <div class="check-progress-fill" id="hdrFill" style="width:0%"></div>
+    </div>
+    <div class="check-total-label" id="hdrLabel"></div>
+  </div>
+</header>
+
+<main class="main">
+<h1 class="page-h1">Pneumonia em Pediatria (PAC)</h1>
+<p class="eyebrow-meta">Pediatria · Infectologia Pediátrica | Método: Resumo Clínico</p>
+<h2 class="section-heading">Definição</h2>
+<p>Pneumonia Adquirida na Comunidade (PAC): inflamação do parênquima pulmonar em criança que não esteve hospitalizada nos últimos 30 dias.</p>
+<hr>
+<h2 class="section-heading">Diagnóstico Clínico — Tríade Principal</h2>
+<figure style="margin:22px 0;text-align:center"><img src="aula_pratica_pneumonia_pg06.png" alt="Mapeamento exame fisico toracico pneumonia" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Exame torácico na pneumonia: Inspeção (tiragem) → Palpação (FTV↓) → Percussão (macicez) → Ausculta (MV↓, broncofonia↓)</figcaption></figure>
+
+<p><strong>Febre + Tosse + Taquipneia (sem sibilância)</strong> = pneumonia até prova em contrário</p>
+<blockquote>⚠️ A taquipneia é o sinal mais sensível de pneumonia em crianças</blockquote>
+<h3 class="section-heading">Pontos de Corte de Taquipneia (OMS)</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Faixa Etária</th><th>Taquipneia (irpm)</th></tr></thead><tbody>
+<tr><td><2 meses</td><td>≥ 60</td></tr>
+<tr><td>2–11 meses</td><td>≥ 50</td></tr>
+<tr><td>1–5 anos</td><td>≥ 40</td></tr>
+<tr><td>≥ 5 anos</td><td>≥ 30</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Etiologia por Faixa Etária</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Faixa Etária</th><th>Agentes Principais</th><th>Observação</th></tr></thead><tbody>
+<tr><td><2 meses</td><td>S. agalactiae (GBS), gram-negativos, Listeria, Chlamydia trachomatis</td><td>Chlamydia: afebril, tosse coqueluchóide, conjuntivite</td></tr>
+<tr><td>2 meses – 5 anos</td><td>S. pneumoniae (principal), viral (VSR, influenza, rinovírus)</td><td>Pneumococo = mais comum bacteriano</td></tr>
+<tr><td>≥ 5 anos (escolar)</td><td>S. pneumoniae + <strong>Mycoplasma pneumoniae</strong></td><td>Mycoplasma: evolução arrastada, sibilância, dor torácica</td></tr>
+</tbody></table></div>
+<h3 class="section-heading">Pneumonias Atípicas</h3>
+<figure style="margin:22px 0;text-align:center"><img src="aula_pratica_pneumonia_pg18.png" alt="Pneumonia necrosante MRSA PVL" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Pneumonia Necrosante: consolidação → liquefação → pneumatocele. S. aureus PVL+ (MRSA): fístula 17-67%, empiema 63-100%</figcaption></figure>
+
+<div class="table-wrap"><table>
+<thead><tr><th>Agente</th><th>Faixa Etária</th><th>Características</th></tr></thead><tbody>
+<tr><td>Mycoplasma pneumoniae</td><td>>5 anos</td><td>Tosse persistente, sibilância, mal-estar, cefaleia, artralgia, evolução arrastada</td></tr>
+<tr><td>Chlamydia trachomatis</td><td>Lactentes 4–12 semanas</td><td><strong>AFEBRIL</strong>, tosse paroxística tipo coqueluche, conjuntivite prévia (50%)</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Classificação e Conduta — OMS Simplificada</h2>
+<figure style="margin:22px 0;text-align:center"><img src="aula_pratica_pneumonia_pg22.png" alt="Guia dosagens IV antibioticos pneumonia pediatrica" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Dosagens IV: Ampicilina 150-200 mg/kg/dia | Pen. Cristalina 200-250 mil U/kg/dia | Ceftriaxona 50-100 mg/kg/dia</figcaption></figure>
+
+<div class="table-wrap"><table>
+<thead><tr><th>Classificação</th><th>Critérios</th><th>Conduta</th></tr></thead><tbody>
+<tr><td><strong>Pneumonia</strong></td><td>Taquipneia (sem tiragem) > 2 meses</td><td>Ambulatorial</td></tr>
+<tr><td><strong>Pneumonia Grave</strong></td><td>Tiragem subcostal + taquipneia</td><td>Internação + ATB parenteral</td></tr>
+<tr><td><strong>Pneumonia Muito Grave</strong></td><td><2 meses: qualquer tosse + dificuldade respiratória</td><td>Internação obrigatória</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Indicações de Internação</h2>
+<ul><li>Lactente <2 meses com tosse + FR ≥ 60 irpm</li><li>SatO₂ <92% em ar ambiente</li><li>Abolição do murmúrio vesicular (derrame pleural/empiema)</li><li>Desnutrição grave</li><li>Sonolência ou rebaixamento do nível de consciência</li><li>Recusa alimentar</li><li>Prostração — comprometimento do estado geral</li><li>Falha terapêutica ambulatorial</li></ul>
+<hr>
+<h2 class="section-heading">Exames Complementares</h2>
+<ul><li><strong>Diagnóstico é clínico</strong> — dispensar RX de rotina em PAC ambulatorial</li><li><strong>RX de tórax</strong>: somente nos casos graves que demandem internação</li><li>Achado: consolidação lobar ou segmentar (pneumococo) / vidro fosco bilateral (viral, atípica)</li><li><strong>Hemograma + PCR</strong>: não distinguem viral de bacteriano com segurança; úteis na avaliação de gravidade</li><li><strong>Hemocultura</strong>: nos internados (positividade baixa ~10%)</li></ul>
+<hr>
+<h2 class="section-heading">Tratamento</h2>
+<h3 class="section-heading">Ambulatorial (>2 meses, sem sinais de gravidade)</h3>
+<p><strong>Amoxicilina 50 mg/kg/dia</strong> dividida de 8/8h ou 12/12h (máximo 4 g/dia), por <strong>7 dias</strong> (até 10 dias)</p>
+<ul><li>Alérgico à penicilina não mediada por IgE: cefalosporina de 2ª geração (cefuroxima)</li><li>Alérgico mediado por IgE: azitromicina 10 mg/kg/dia dose única por 5 dias</li></ul>
+<h3 class="section-heading">Atípica (Mycoplasma, Chlamydia) ou Alérgico com IgE</h3>
+<ul><li><strong>Azitromicina</strong> 10 mg/kg/dia dose única por 5 dias</li><li>Claritromicina 15 mg/kg/dia (12/12h) por 10 dias</li><li>Eritromicina 40 mg/kg/dia (6/6h) por 7–10 dias</li></ul>
+<h3 class="section-heading">Internação (pneumonia grave)</h3>
+<p><strong>Ampicilina EV</strong> 200 mg/kg/dia de 6/6h</p>
+<p><strong>ou</strong> Penicilina Cristalina 150.000 UI/kg/dia de 6/6h</p>
+<p>Em lactentes <2 meses: + <strong>Gentamicina</strong> 7,5 mg/kg/dia de 12/12h</p>
+<hr>
+<h2 class="section-heading">Caso Clínico — João Pedro, 3 Anos</h2>
+<p><strong>Queixa:</strong> febre (39°C) + tosse + "respiração mais rápida" há 2 dias. Irmão com "gripe" na semana anterior. Vacinado (pneumocócica 10v e Hib).</p>
+<p><strong>Exame físico:</strong> FR 45 irpm | SatO₂ 92% em ar ambiente | Tiragem intercostal leve | MV diminuído em base direita | Estertores crepitantes em base direita</p>
+<p><strong>Diagnóstico:</strong> Pneumonia grave → internação (SatO₂ 92% + tiragem intercostal)</p>
+<p><strong>Agente mais provável:</strong> S. pneumoniae (pré-escolar, consolidação focal)</p>
+<p><strong>Conduta:</strong> Ampicilina EV 200 mg/kg/dia 6/6h + O₂ cateter nasal + monitoração SatO₂</p>
+<p><strong>Evolução:</strong> sem melhora após 4 dias de ampicilina → hipótese: derrame pleural/empiema ou pneumonia atípica — solicitar RX + USG pleural; considerar trocar para atípica</p>
+<hr>
+<h2 class="section-heading">Complicações da PAC</h2>
+<ul><li><strong>Derrame pleural parapneumônico</strong> (mais comum)</li><li><strong>Empiema pleural</strong> (derrame com pus) → drenagem cirúrgica</li><li><strong>Pneumonia necrosante</strong></li><li><strong>Abscesso pulmonar</strong></li></ul>
+<hr>
+<h2 class="section-heading">Perguntas que o Professor Provavelmente Vai Fazer</h2>
+<ol><li>Qual a tríade clínica da pneumonia? → Febre + tosse + taquipneia (sem sibilância)</li><li>Por que não pedir RX de rotina? → Diagnóstico é clínico; RX somente nos casos graves</li><li>Qual o corte de taquipneia em 3 anos? → ≥40 irpm (faixa 1–5 anos)</li><li>Criança de 3 anos com PAC sem internação — qual antibiótico? → Amoxicilina 50 mg/kg/dia 7 dias</li><li>Quando suspeitar de Mycoplasma? → Criança >5 anos, tosse arrastada, sibilância, evolução lenta, cefaleia, artralgia</li></ol>
+<h2 class="section-heading">Alertas OSCE ⚠️</h2>
+<ul><li>Sibilância NÃO faz parte da tríade da pneumonia — se presente, pensar mais em bronquiolite/asma</li><li>SatO₂ <92% = internação imediata (não importa a faixa etária)</li><li>Amoxicilina = primeira escolha para PAC ambulatorial em QUALQUER faixa etária >2 meses</li><li>Chlamydia trachomatis = AFEBRIL (ponto de diferenciação no OSCE)</li><li>Mycoplasma = atípica em >5 anos — tratar com macrolídeo (azitromicina)</li></ul>
+<hr>
+<h2 class="section-heading">Fonte</h2>
+<ul><li>Gerado a partir de: <code>conteudo_pneumonias.md</code> (Aula 13 — Pneumonia) + <code>conteudo_aula_pratica_pneumonia.md</code> (Caso João Pedro 3 anos)</li><li>Seções consultadas: etiologia por faixa etária, critérios OMS, indicações de internação, tratamento, complicações</li><li>Gaps identificados: RX característico de cada agente complementado com conhecimento geral</li></ul>
+</main>
+
+<nav class="bottom-nav">
+  <a href="../../osce-plano.html">← Voltar ao plano</a>
+  <span class="bottom-total" id="bottomTotal"></span>
+</nav>
+
+<script>
+(function() {
+  var KEY = 'osce_v1_' + location.pathname;
+  var state = JSON.parse(localStorage.getItem(KEY) || '{}');
+  var boxes = document.querySelectorAll('input[type=checkbox]');
+  var total = boxes.length;
+
+  boxes.forEach(function(cb, idx) {
+    if (state[idx]) cb.checked = true;
+    cb.addEventListener('change', function() {
+      state[idx] = cb.checked;
+      localStorage.setItem(KEY, JSON.stringify(state));
+      updateAll();
+    });
+  });
+
+  function updateAll() {
+    var done = 0;
+    boxes.forEach(function(c){ if (c.checked) done++; });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    var bar = document.getElementById('hdrBar');
+    var fill = document.getElementById('hdrFill');
+    var lbl = document.getElementById('hdrLabel');
+    var bot = document.getElementById('bottomTotal');
+    if (total > 0) {
+      bar.style.display = 'block';
+      fill.style.width = pct + '%';
+      lbl.textContent = done + '/' + total + ' itens marcados (' + pct + '%)';
+      bot.textContent = done + '/' + total + ' checados';
+    }
+    document.querySelectorAll('.checklist').forEach(function(cl) {
+      var cbs = cl.querySelectorAll('input[type=checkbox]');
+      var cd = 0;
+      cbs.forEach(function(c){ if (c.checked) cd++; });
+      var prog = cl.querySelector('.prog-text');
+      if (prog) prog.textContent = cd + '/' + cbs.length + ' marcados';
+    });
+  }
+
+  updateAll();
+})();
+</script>
+</body>
+</html>

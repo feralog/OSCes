@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leptospirose · OSCE</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e3da;
+    --text: #1a1a1a;
+    --muted: #666;
+    --accent: #1a1a1a;
+    --green: #2d6a4f;
+    --green-bg: #e8f5ee;
+    --blue: #0d47a1;
+    --blue-bg: #e3f2fd;
+    --r: 8px;
+    --font-body: Georgia, 'Times New Roman', serif;
+    --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.75;
+    min-height: 100vh;
+    padding-bottom: 70px;
+  }
+
+  .site-header {
+    background: var(--accent);
+    color: #f5f0e8;
+    padding: 16px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+  .header-inner { max-width: 780px; margin: 0 auto; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--font-ui); font-size: 11px; letter-spacing: .4px;
+    color: #a89f8c; text-decoration: none; margin-bottom: 8px;
+    border: 1px solid #444; border-radius: 20px; padding: 2px 10px;
+    transition: color .15s, border-color .15s;
+  }
+  .back-btn:hover { color: #f5f0e8; border-color: #888; }
+  .header-eyebrow {
+    font-family: var(--font-ui); font-size: 10px; letter-spacing: 2.5px;
+    color: #a89f8c; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .header-title {
+    font-size: 19px; font-weight: normal; letter-spacing: -.3px; line-height: 1.3;
+  }
+  .check-progress-bar {
+    height: 3px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 10px;
+  }
+  .check-progress-fill {
+    height: 100%; background: linear-gradient(90deg,#f4c842,#7ecf8a);
+    border-radius: 2px; transition: width .4s ease;
+  }
+  .check-total-label {
+    font-family: var(--font-ui); font-size: 10px; color: #a89f8c; margin-top: 3px;
+  }
+
+  .main { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
+
+  .page-h1 { display: none; }
+  h2.section-heading {
+    font-family: var(--font-ui); font-size: 11px; font-weight: bold;
+    letter-spacing: 1.8px; text-transform: uppercase; color: #777;
+    margin: 30px 0 10px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--border);
+  }
+  h3.section-heading {
+    font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+    margin: 22px 0 8px; color: var(--text);
+  }
+  h4.section-heading, h5.section-heading {
+    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+    margin: 16px 0 6px; color: var(--muted);
+  }
+  p { margin: 10px 0; font-size: 15px; }
+  p.eyebrow-meta {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted);
+    font-style: italic; margin: 4px 0 20px;
+    border-left: 3px solid var(--border); padding-left: 10px;
+  }
+  code {
+    background: #f0ede8; border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; font-size: 13px;
+    font-family: 'Consolas', 'Monaco', monospace;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  ul, ol { padding-left: 22px; margin: 10px 0; }
+  li { margin: 5px 0; font-size: 15px; }
+
+  .table-wrap {
+    overflow-x: auto; margin: 16px 0;
+    border-radius: var(--r); border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  table { width: 100%; border-collapse: collapse; font-family: var(--font-ui); font-size: 13px; }
+  th {
+    background: #1a1a1a; color: #f5f0e8;
+    padding: 9px 12px; text-align: left; font-weight: 600;
+    font-size: 11px; letter-spacing: .5px;
+  }
+  td { padding: 8px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f5f2ee; }
+  tr:hover td { background: #ede8e2; }
+
+  .checklist {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 12px 14px 10px; margin: 16px 0;
+    display: flex; flex-direction: column; gap: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    cursor: pointer; padding: 6px 4px;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 14px; line-height: 1.5; transition: background .1s;
+    border-radius: 4px;
+  }
+  .check-item:last-of-type { border-bottom: none; }
+  .check-item:hover { background: #f8f5f0; }
+  .check-item input[type=checkbox] {
+    width: 18px; height: 18px; min-width: 18px;
+    margin-top: 2px; accent-color: var(--green); cursor: pointer;
+  }
+  .check-item input[type=checkbox]:checked + span {
+    color: var(--muted); text-decoration: line-through;
+  }
+  .check-item span { flex: 1; }
+  .check-sub { margin: 6px 0 2px 4px; padding-left: 18px; }
+  .check-sub li { font-size: 13px; color: var(--muted); margin: 3px 0; }
+  .check-note { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .check-progress {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);
+  }
+  .prog-text {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted); font-weight: 600;
+  }
+
+  .professor-block {
+    background: var(--blue-bg); border-left: 4px solid #1976d2;
+    border-radius: 0 var(--r) var(--r) 0; padding: 14px 16px; margin: 20px 0 8px;
+    font-size: 14px; line-height: 1.65; color: #0a2e6e;
+  }
+  .question-label {
+    font-family: var(--font-ui); font-weight: 700; font-size: 14px;
+    margin: 20px 0 6px; color: var(--text); padding-left: 2px;
+  }
+  .answer-block {
+    background: var(--green-bg); border-left: 4px solid var(--green);
+    border-radius: 0 var(--r) var(--r) 0; padding: 12px 16px; margin: 6px 0 20px;
+    font-size: 14px; line-height: 1.65; color: #1b4332;
+  }
+  blockquote {
+    border-left: 3px solid var(--border); padding: 8px 14px;
+    margin: 12px 0; color: var(--muted); font-style: italic; font-size: 14px;
+  }
+
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1a1a1a; padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 200; border-top: 1px solid #333;
+  }
+  .bottom-nav a {
+    color: #a89f8c; text-decoration: none; font-family: var(--font-ui);
+    font-size: 12px; padding: 5px 14px; border: 1px solid #444;
+    border-radius: 20px; transition: color .15s, border-color .15s;
+  }
+  .bottom-nav a:hover { color: #f5f0e8; border-color: #888; }
+  .bottom-total { font-family: var(--font-ui); font-size: 12px; color: #a89f8c; }
+
+  @media (max-width: 600px) {
+    .header-title { font-size: 16px; }
+    td, th { padding: 6px 8px; font-size: 12px; }
+    .check-item { font-size: 13px; }
+    p, li { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../../../osce-plano.html" class="back-btn">← Plano de estudos</a>
+    <div class="header-eyebrow">Clínica Médica · Infectologia</div>
+    <div class="header-title">Leptospirose</div>
+    <div class="check-progress-bar" id="hdrBar" style="display:none">
+      <div class="check-progress-fill" id="hdrFill" style="width:0%"></div>
+    </div>
+    <div class="check-total-label" id="hdrLabel"></div>
+  </div>
+</header>
+
+<main class="main">
+<h1 class="page-h1">Leptospirose</h1>
+<p class="eyebrow-meta">Clínica Médica · Infectologia | Método: Resumo Clínico</p>
+<hr>
+<h2 class="section-heading">Definição e Epidemiologia</h2>
+<p><strong>Zoonose</strong> de distribuição mundial causada por <em>Leptospira</em> spp. (espiroqueta gram-negativa)</p>
+<ul><li><strong>Reservatório principal:</strong> ratos (<em>Rattus norvegicus</em>, <em>R. rattus</em>) — não adoecem, eliminam pela urina</li><li><strong>Sorovar mais frequente em cidades brasileiras:</strong> Copenhageni (sorogrupo Icterohaemorrhagiae)</li><li><strong>Período de incubação:</strong> 2–20 dias (média 10 dias)</li><li><strong>Bactéria sobrevive</strong> no meio externo até 180 dias (água doce, solo úmido)</li><li><strong>Doença de notificação compulsória</strong></li></ul>
+<h3 class="section-heading">Transmissão</h3>
+<ul><li>Contato de <strong>mucosas</strong> ou <strong>pele com abrasões</strong> com urina contaminada, água ou solo</li><li>Ingestão de água/alimentos contaminados</li><li>Pele íntegra após imersão prolongada</li><li>Grupos de risco: trabalhadores de esgoto, catadores, agricultores, militares, bombeiros, veterinários; eventos de inundação/enchente</li></ul>
+<hr>
+<h2 class="section-heading">Fases Clínicas</h2>
+<h3 class="section-heading">Fase Precoce — Leptospirêmica (1ª semana)</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Sintoma</th><th>Frequência</th></tr></thead><tbody>
+<tr><td>Febre alta com início abrupto</td><td>75–100%</td></tr>
+<tr><td>Cefaleia intensa</td><td>75–100%</td></tr>
+<tr><td>Mialgia intensa (<strong>panturrilha</strong> — muito característico)</td><td>75–100%</td></tr>
+<tr><td>Calafrios, prostração, náuseas, vômitos</td><td>Frequentes</td></tr>
+<tr><td><strong>Hiperemia/sufusão conjuntival</strong> (sem secreção)</td><td>Até 55% — sinal importante, incomum em outras infecções</td></tr>
+<tr><td>Hemorragia subconjuntival</td><td>Possível</td></tr>
+<tr><td>Exantema (macular, papular ou purpúrico no tronco/pré-tibial)</td><td>10–20%</td></tr>
+<tr><td>Hepatomegalia, esplenomegalia</td><td>< 20%</td></tr>
+</tbody></table></div>
+<blockquote>90% dos casos = forma autolimitada que melhora após 5–7 dias</blockquote>
+<h3 class="section-heading">Fase Tardia — Imune (≥ 1ª semana, em 10–15%)</h3>
+<p><strong>Síndrome de Weil (leptospirose grave):</strong></p>
+<div class="table-wrap"><table>
+<thead><tr><th>Componente</th><th>Frequência</th></tr></thead><tbody>
+<tr><td><strong>Icterícia</strong> (bilirrubina > 30–40 mg/dL) — "icterícia rubínica" (avermelhada)</td><td>5–10%</td></tr>
+<tr><td><strong>Insuficiência renal aguda</strong> (inicialmente não oligúrica + hipocalemia)</td><td>15–40%</td></tr>
+<tr><td><strong>Hemorragia pulmonar</strong> (SHPS — Síndrome de Hemorragia Pulmonar Grave)</td><td>20–70% nos graves</td></tr>
+<tr><td>Plaquetopenia (> 50%)</td><td>Frequente nos graves</td></tr>
+</tbody></table></div>
+<blockquote><strong>SHPS:</strong> alveolite hemorrágica grave → hemoptise, insuficiência respiratória; causa de óbito</blockquote>
+<h3 class="section-heading">Fase de Convalescença</h3>
+<ul><li>Icterícia regride lentamente (semanas)</li><li>Astenia persistente</li><li>Leptospirúria pode continuar por meses</li></ul>
+<hr>
+<h2 class="section-heading">Diagnóstico</h2>
+<h3 class="section-heading">Critério de Suspeita</h3>
+<p>Febre + cefaleia + mialgia + (exposição epidemiológica OU sufusão conjuntival OU IRA OU icterícia OU fenômeno hemorrágico)</p>
+<h3 class="section-heading">Exames Laboratoriais Inespecíficos</h3>
+<ul><li>Hemograma: leucocitose com desvio à esquerda (67%), plaquetopenia (38%), anemia</li><li>Bilirrubinas: BD elevada nos casos graves</li><li>Transaminases: normais ou moderadamente elevadas (ALT/AST ~ 100 U/L) — diferencial de hepatite viral</li><li>CPK: elevada (rabdomiólise)</li><li>Creatinina e ureia: elevadas em 50% dos casos</li><li>Urina: leucocitúria, proteinúria, cilindrúria</li><li>Hipocalemia (fase inicial da IRA) → hipercalemia (fase tardia, oligúrica)</li></ul>
+<h3 class="section-heading">Diagnóstico Específico</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Exame</th><th>Quando usar</th><th>Observação</th></tr></thead><tbody>
+<tr><td><strong>ELISA-IgM</strong></td><td>Antes do 7º dia (fase aguda)</td><td>Resultado negativo → repetir após 7 dias</td></tr>
+<tr><td><strong>Microaglutinação (MAT)</strong> — padrão ouro</td><td>Fase convalescente (amostras pareadas)</td><td>Soroconversão ou título ≥ 1:800</td></tr>
+<tr><td><strong>PCR</strong> (molecular)</td><td>Fase aguda (1–10 dias)</td><td>Alta sensibilidade (100%) e especificidade (93%); sangue/plasma</td></tr>
+<tr><td>Hemocultura</td><td>Fase aguda (antes do ATB); ideal < 7º dia</td><td>Baixa sensibilidade; lento</td></tr>
+<tr><td>Urocultura</td><td>2ª–3ª semana</td><td>Leptospirúria</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Sinais de Alerta → Internação Imediata</h2>
+<ul><li>Dispneia, tosse, taquipneia, hemoptise</li><li>Oligúria / alterações urinárias</li><li>Hipotensão</li><li>Fenômenos hemorrágicos</li><li>Alteração do nível de consciência</li><li>Vômitos frequentes</li><li>Icterícia</li><li>Arritmias</li></ul>
+<hr>
+<h2 class="section-heading">Tratamento</h2>
+<h3 class="section-heading">Fase Precoce (Ambulatorial — sem sinais de alerta)</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Paciente</th><th>Antibiótico</th><th>Dose</th></tr></thead><tbody>
+<tr><td>Adulto</td><td>Amoxicilina</td><td>500 mg VO 8/8h × 5–7 dias</td></tr>
+<tr><td>Adulto</td><td>Doxiciclina</td><td>100 mg VO 12/12h × 5–7 dias</td></tr>
+<tr><td>Criança</td><td>Amoxicilina</td><td>50 mg/kg/dia VO 8/8h × 5–7 dias</td></tr>
+</tbody></table></div>
+<h3 class="section-heading">Fase Tardia (Internação — sinais de alerta)</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Paciente</th><th>Antibiótico</th><th>Dose</th></tr></thead><tbody>
+<tr><td>Adulto</td><td><strong>Penicilina G cristalina</strong></td><td>1,5 milhões UI EV 6/6h</td></tr>
+<tr><td>Adulto (alternativa)</td><td>Ceftriaxona</td><td>1–2 g EV 1x/dia</td></tr>
+<tr><td>Adulto (alternativa)</td><td>Azitromicina</td><td>500 mg EV 24/24h</td></tr>
+<tr><td>Criança</td><td>Penicilina cristalina</td><td>50.000–100.000 U/kg/dia EV em 4–6 doses</td></tr>
+</tbody></table></div>
+<p><strong>Duração EV:</strong> mínimo 7 dias</p>
+<h3 class="section-heading">Terapia de Suporte</h3>
+<ul><li><strong>Hidratação EV vigorosa</strong> — fundamental (previne NTA)</li><li>Manejo renal: diálise se IRA oligúrica grave</li><li>Manejo respiratório: O2, VM em SHPS</li><li>Manejo cardíaco: vasopressores, antiarrítmicos</li><li>Evitar AAS (risco hemorrágico)</li></ul>
+<h3 class="section-heading">Reação de Jarisch-Herxheimer</h3>
+<ul><li>Ocorre em 9–21% após início do ATB</li><li>Resposta inflamatória à lise das espiroquetas: febre, calafrios, hipotensão</li><li>Manejo: suporte (fluidos, vasopressores, corticosteroide)</li></ul>
+<hr>
+<h2 class="section-heading">Profilaxia Pós-Exposição</h2>
+<ul><li>Doxiciclina 200 mg VO 1x/semana — alto risco (enchentes, militares, bombeiros)</li></ul>
+<hr>
+<h2 class="section-heading">Alertas OSCE ⚠️</h2>
+<ul><li><strong>"Icterícia rubínica"</strong> + mialgia em panturrilha + exposição a enchente = leptospirose</li><li>Hiperemia conjuntival SEM secreção = sugere leptospirose (incomum em outras infecções)</li><li>IRA da leptospirose: inicialmente NÃO oligúrica + hipocalemia → depois oligúrica + hipercalemia</li><li>SHPS = emergência = causa de óbito na leptospirose</li><li>MAT (padrão ouro) só na convalescença — não serve para diagnóstico agudo</li><li>Penicilina G cristalina = tratamento da fase grave</li></ul>
+<hr>
+<h2 class="section-heading">Fonte</h2>
+<ul><li>Gerado a partir de: <code>conteudo_leptospirose.md</code> (Aulas 1 e 2 — Leptospirose — Infectologia CM)</li></ul>
+</main>
+
+<nav class="bottom-nav">
+  <a href="../../../osce-plano.html">← Voltar ao plano</a>
+  <span class="bottom-total" id="bottomTotal"></span>
+</nav>
+
+<script>
+(function() {
+  var KEY = 'osce_v1_' + location.pathname;
+  var state = JSON.parse(localStorage.getItem(KEY) || '{}');
+  var boxes = document.querySelectorAll('input[type=checkbox]');
+  var total = boxes.length;
+
+  boxes.forEach(function(cb, idx) {
+    if (state[idx]) cb.checked = true;
+    cb.addEventListener('change', function() {
+      state[idx] = cb.checked;
+      localStorage.setItem(KEY, JSON.stringify(state));
+      updateAll();
+    });
+  });
+
+  function updateAll() {
+    var done = 0;
+    boxes.forEach(function(c){ if (c.checked) done++; });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    var bar = document.getElementById('hdrBar');
+    var fill = document.getElementById('hdrFill');
+    var lbl = document.getElementById('hdrLabel');
+    var bot = document.getElementById('bottomTotal');
+    if (total > 0) {
+      bar.style.display = 'block';
+      fill.style.width = pct + '%';
+      lbl.textContent = done + '/' + total + ' itens marcados (' + pct + '%)';
+      bot.textContent = done + '/' + total + ' checados';
+    }
+    document.querySelectorAll('.checklist').forEach(function(cl) {
+      var cbs = cl.querySelectorAll('input[type=checkbox]');
+      var cd = 0;
+      cbs.forEach(function(c){ if (c.checked) cd++; });
+      var prog = cl.querySelector('.prog-text');
+      if (prog) prog.textContent = cd + '/' + cbs.length + ' marcados';
+    });
+  }
+
+  updateAll();
+})();
+</script>
+</body>
+</html>

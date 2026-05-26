@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hipertireoidismo e Tireoidites · OSCE</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e3da;
+    --text: #1a1a1a;
+    --muted: #666;
+    --accent: #1a1a1a;
+    --green: #2d6a4f;
+    --green-bg: #e8f5ee;
+    --blue: #0d47a1;
+    --blue-bg: #e3f2fd;
+    --r: 8px;
+    --font-body: Georgia, 'Times New Roman', serif;
+    --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.75;
+    min-height: 100vh;
+    padding-bottom: 70px;
+  }
+
+  .site-header {
+    background: var(--accent);
+    color: #f5f0e8;
+    padding: 16px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+  .header-inner { max-width: 780px; margin: 0 auto; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--font-ui); font-size: 11px; letter-spacing: .4px;
+    color: #a89f8c; text-decoration: none; margin-bottom: 8px;
+    border: 1px solid #444; border-radius: 20px; padding: 2px 10px;
+    transition: color .15s, border-color .15s;
+  }
+  .back-btn:hover { color: #f5f0e8; border-color: #888; }
+  .header-eyebrow {
+    font-family: var(--font-ui); font-size: 10px; letter-spacing: 2.5px;
+    color: #a89f8c; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .header-title {
+    font-size: 19px; font-weight: normal; letter-spacing: -.3px; line-height: 1.3;
+  }
+  .check-progress-bar {
+    height: 3px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 10px;
+  }
+  .check-progress-fill {
+    height: 100%; background: linear-gradient(90deg,#f4c842,#7ecf8a);
+    border-radius: 2px; transition: width .4s ease;
+  }
+  .check-total-label {
+    font-family: var(--font-ui); font-size: 10px; color: #a89f8c; margin-top: 3px;
+  }
+
+  .main { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
+
+  .page-h1 { display: none; }
+  h2.section-heading {
+    font-family: var(--font-ui); font-size: 11px; font-weight: bold;
+    letter-spacing: 1.8px; text-transform: uppercase; color: #777;
+    margin: 30px 0 10px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--border);
+  }
+  h3.section-heading {
+    font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+    margin: 22px 0 8px; color: var(--text);
+  }
+  h4.section-heading, h5.section-heading {
+    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+    margin: 16px 0 6px; color: var(--muted);
+  }
+  p { margin: 10px 0; font-size: 15px; }
+  p.eyebrow-meta {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted);
+    font-style: italic; margin: 4px 0 20px;
+    border-left: 3px solid var(--border); padding-left: 10px;
+  }
+  code {
+    background: #f0ede8; border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; font-size: 13px;
+    font-family: 'Consolas', 'Monaco', monospace;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  ul, ol { padding-left: 22px; margin: 10px 0; }
+  li { margin: 5px 0; font-size: 15px; }
+
+  .table-wrap {
+    overflow-x: auto; margin: 16px 0;
+    border-radius: var(--r); border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  table { width: 100%; border-collapse: collapse; font-family: var(--font-ui); font-size: 13px; }
+  th {
+    background: #1a1a1a; color: #f5f0e8;
+    padding: 9px 12px; text-align: left; font-weight: 600;
+    font-size: 11px; letter-spacing: .5px;
+  }
+  td { padding: 8px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f5f2ee; }
+  tr:hover td { background: #ede8e2; }
+
+  .checklist {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 12px 14px 10px; margin: 16px 0;
+    display: flex; flex-direction: column; gap: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    cursor: pointer; padding: 6px 4px;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 14px; line-height: 1.5; transition: background .1s;
+    border-radius: 4px;
+  }
+  .check-item:last-of-type { border-bottom: none; }
+  .check-item:hover { background: #f8f5f0; }
+  .check-item input[type=checkbox] {
+    width: 18px; height: 18px; min-width: 18px;
+    margin-top: 2px; accent-color: var(--green); cursor: pointer;
+  }
+  .check-item input[type=checkbox]:checked + span {
+    color: var(--muted); text-decoration: line-through;
+  }
+  .check-item span { flex: 1; }
+  .check-sub { margin: 6px 0 2px 4px; padding-left: 18px; }
+  .check-sub li { font-size: 13px; color: var(--muted); margin: 3px 0; }
+  .check-note { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .check-progress {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);
+  }
+  .prog-text {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted); font-weight: 600;
+  }
+
+  .professor-block {
+    background: var(--blue-bg); border-left: 4px solid #1976d2;
+    border-radius: 0 var(--r) var(--r) 0; padding: 14px 16px; margin: 20px 0 8px;
+    font-size: 14px; line-height: 1.65; color: #0a2e6e;
+  }
+  .question-label {
+    font-family: var(--font-ui); font-weight: 700; font-size: 14px;
+    margin: 20px 0 6px; color: var(--text); padding-left: 2px;
+  }
+  .answer-block {
+    background: var(--green-bg); border-left: 4px solid var(--green);
+    border-radius: 0 var(--r) var(--r) 0; padding: 12px 16px; margin: 6px 0 20px;
+    font-size: 14px; line-height: 1.65; color: #1b4332;
+  }
+  blockquote {
+    border-left: 3px solid var(--border); padding: 8px 14px;
+    margin: 12px 0; color: var(--muted); font-style: italic; font-size: 14px;
+  }
+
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1a1a1a; padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 200; border-top: 1px solid #333;
+  }
+  .bottom-nav a {
+    color: #a89f8c; text-decoration: none; font-family: var(--font-ui);
+    font-size: 12px; padding: 5px 14px; border: 1px solid #444;
+    border-radius: 20px; transition: color .15s, border-color .15s;
+  }
+  .bottom-nav a:hover { color: #f5f0e8; border-color: #888; }
+  .bottom-total { font-family: var(--font-ui); font-size: 12px; color: #a89f8c; }
+
+  @media (max-width: 600px) {
+    .header-title { font-size: 16px; }
+    td, th { padding: 6px 8px; font-size: 12px; }
+    .check-item { font-size: 13px; }
+    p, li { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../../../osce-plano.html" class="back-btn">← Plano de estudos</a>
+    <div class="header-eyebrow">Clínica Médica · Endocrinologia</div>
+    <div class="header-title">Hipertireoidismo e Tireoidites</div>
+    <div class="check-progress-bar" id="hdrBar" style="display:none">
+      <div class="check-progress-fill" id="hdrFill" style="width:0%"></div>
+    </div>
+    <div class="check-total-label" id="hdrLabel"></div>
+  </div>
+</header>
+
+<main class="main">
+<h1 class="page-h1">Hipertireoidismo e Tireoidites</h1>
+<p class="eyebrow-meta">Clínica Médica · Endocrinologia | Método: Resumo Clínico</p>
+<hr>
+<h2 class="section-heading">Diagnóstico Bioquímico</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Situação</th><th>TSH</th><th>T4 livre</th><th>T3</th></tr></thead><tbody>
+<tr><td>Hipertireoidismo clínico</td><td>↓↓ (suprimido)</td><td>↑</td><td>↑</td></tr>
+<tr><td>Hipertireoidismo subclínico</td><td>↓ (< 0,5 mU/L)</td><td>Normal</td><td>Normal</td></tr>
+<tr><td>Hipotireoidismo primário</td><td>↑</td><td>↓</td><td>—</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Etiologias do Hipertireoidismo</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Causa</th><th>TRAb</th><th>Cintilografia</th><th>Característica</th></tr></thead><tbody>
+<tr><td><strong>Doença de Graves</strong></td><td>+ (95%)</td><td>Captação difusa e aumentada</td><td>Oftalmopatia, bócio difuso, mixedema pré-tibial (raro)</td></tr>
+<tr><td><strong>Adenoma tóxico</strong></td><td>—</td><td>Nódulo hipercaptante único ("quente"), resto suprimido</td><td>Nódulo isolado > 2,5 cm</td></tr>
+<tr><td><strong>Bócio Multinodular Tóxico</strong></td><td>—</td><td>Múltiplos nódulos hipercaptantes</td><td>Mulheres > 50 anos; evolução longa</td></tr>
+<tr><td><strong>Tireoidite subaguda (Quervain)</strong></td><td>—</td><td>Captação baixa/ausente</td><td>Dor cervical, VSH ↑↑, pós-infecção viral</td></tr>
+<tr><td><strong>Tireoidite indolor (pós-parto)</strong></td><td>—</td><td>Captação baixa</td><td>Puerpério; autolimitada</td></tr>
+<tr><td><strong>Amiodarona, iodo</strong></td><td>—</td><td>—</td><td>Induzido por iodo</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Doença de Graves — Detalhamento</h2>
+<p><strong>Fisiopatologia:</strong> autoanticorpos TRAb estimulam receptor de TSH na tireoide → hiperprodução T3/T4</p>
+<p><strong>Achados clínicos gerais do hipertireoidismo:</strong></p>
+<ul><li>Taquicardia, palpitações, FA (idosos)</li><li>Calor, sudorese, intolerância ao calor</li><li>Tremor fino de extremidades</li><li>Perda de peso com apetite aumentado</li><li>Diarreia, dor abdominal</li><li>Nervosismo, ansiedade, insônia, labilidade</li><li>Fraqueza muscular proximal</li><li>Pele quente e úmida</li></ul>
+<p><strong>Específicos de Graves:</strong></p>
+<ul><li>Oftalmopatia de Graves: exoftalmia (proptose), diplopia, lacrimejamento, fotofobia; classificação NOSPECS</li><li>TRAb positivo em 95%</li><li>Bócio difuso (USG: hipoecogênico, vascularizado ao Doppler)</li></ul>
+<hr>
+<h2 class="section-heading">Tratamento do Hipertireoidismo</h2>
+<h3 class="section-heading">Sintomático (sempre)</h3>
+<ul><li><strong>Betabloqueadores:</strong> propranolol 20–40 mg 3–4x/dia ou atenolol 50 mg/dia — controlam sintomas adrenérgicos enquanto aguarda efeito tireostático</li></ul>
+<h3 class="section-heading">Tireostáticos</h3>
+<ul><li><strong>Metimazol (MMI):</strong> 20–60 mg/dia — 1ª linha (exceto 1º trimestre gestação e crise)</li><li><strong>PTU (propiltiouracil):</strong> 200–600 mg/dia dividido em 3× — preferido no <strong>1º trimestre da gestação</strong> e em <strong>crise tireotóxica</strong> (bloqueia conversão T4→T3)</li><li>Duração: 12–18 meses; recidiva frequente (50%)</li></ul>
+<h3 class="section-heading">Iodoterapia (¹³¹I)</h3>
+<ul><li>Definitiva, custo-efetiva</li><li><strong>Contraindicada:</strong> gestação e lactação (aguardar 6 meses pós-tratamento para engravidar), oftalmopatia grave</li><li>Pode exacerbar oftalmopatia</li></ul>
+<h3 class="section-heading">Cirurgia (Tireoidectomia Total)</h3>
+<p><strong>Indicações:</strong></p>
+<ul><li>Bócio volumoso (> 80 g) com compressão</li><li>Oftalmopatia grave</li><li>Nódulo suspeito de malignidade concomitante</li><li>Criança/adolescente (preferencial sobre iodoterapia)</li><li>Gestante com hipertireoidismo grave refratário (2º trimestre)</li><li>Recusa de iodoterapia</li></ul>
+<p><strong>Complicações cirúrgicas:</strong></p>
+<ul><li>Hipoparatireoidismo pós-operatório (hipocalcemia)</li><li>Paralisia das pregas vocais (lesão do nervo laríngeo recorrente)</li></ul>
+<hr>
+<h2 class="section-heading">Crise Tireotóxica (Tempestade Tireoidiana)</h2>
+<p><strong>Emergência endócrina</strong> — mortalidade 10–30%</p>
+<p><strong>Diagnóstico:</strong> clínico + Score de Burch-Wartofsky > 45</p>
+<p><strong>Precipitantes:</strong> infecção, cirurgia, trauma, iodo excessivo, suspensão abrupta de tireostático, AVC, parto</p>
+<p><strong>Clínica:</strong></p>
+<ul><li>Febre > 40°C (cardinal)</li><li>Taquicardia extrema, FA</li><li>Agitação, delírio, psicose, coma</li><li>Vômitos, diarreia, icterícia</li><li>Choque cardiovascular</li></ul>
+<p><strong>Tratamento (sequência — BITS):</strong></p>
+<ol><li><strong>B</strong>etabloqueador: propranolol 60–80 mg VO 4/4h ou EV</li><li><strong>I</strong>odo (solução de Lugol): iniciar 1h APÓS PTU (bloqueia liberação hormônios)</li><li><strong>T</strong>ireostático: PTU 200–400 mg VO a cada 6h (inibe síntese E conversão periférica)</li><li><strong>S</strong>uporte + corticoide (dexametasona 2 mg 6/6h — inibe conversão T4→T3 e adrenalismo relativo)</li><li>Tratar causa precipitante</li></ol>
+<hr>
+<h2 class="section-heading">Tireoidites</h2>
+<h3 class="section-heading">Tireoidite de Hashimoto (Hipotireoidismo Autoimune)</h3>
+<ul><li>Anti-TPO positivo (> 90%), anti-Tireoglobulina positivo</li><li>TSH ↑, T4 livre ↓ (hipotireoidismo)</li><li>USG: tireoide heterogênea, reduzida, hipoecogênica</li><li>Tratamento: levotiroxina (TSH alvo 0,5–2,5 mU/L)</li></ul>
+<h3 class="section-heading">Tireoidite Subaguda (De Quervain)</h3>
+<ul><li>Pós-viral (caxumba, gripe, EBV)</li><li><strong>Dor cervical intensa, VHS ↑↑</strong>, febre, disfagia</li><li>Cintilografia: captação muito baixa (destruição folicular)</li><li><strong>3 fases:</strong> tireotoxicose (4–6 sem) → hipotireoidismo transitório → eutireoidismo</li><li>Tratamento: AINEs + betabloqueadores (fase tireotóxica); corticoide se dor intensa; levotiroxina (fase hipotireoidiana)</li></ul>
+<h3 class="section-heading">Tireoidite Pós-Parto (Autoimune Silenciosa)</h3>
+<ul><li>Mulheres 1–12 meses após parto, anti-TPO +</li><li>Fases: tireotoxicose → hipotireoidismo → recuperação (60%)</li><li>Tratamento sintomático; beta-bloqueadores na fase tireotóxica</li></ul>
+<hr>
+<h2 class="section-heading">Nódulo Tireoidiano — Avaliação Rápida</h2>
+<ul><li>TSH suprimido → cintilografia (nódulo quente = benigno geralmente; nódulo frio → PAAF)</li><li>PAAF: indicada em nódulos ≥ 1 cm (ou menores com características suspeitas no US)</li><li>TIRADS (1–5): guia indicação de PAAF pela ecografia</li></ul>
+<hr>
+<h2 class="section-heading">Alertas OSCE ⚠️</h2>
+<ul><li><strong>TSH suprimido</strong> com T4 normal = hipertireoidismo subclínico; com T4 alto = clínico</li><li>TRAb positivo = Graves (doença autoimune)</li><li>Iodoterapia contraindicada na gestação — esperar 6 meses pós-tratamento</li><li>PTU no 1º trimestre; metimazol a partir do 2º</li><li>Crise tireotóxica: PTU antes do iodo (1h de intervalo — evitar organificação do iodo)</li><li><strong>Complicação cirúrgica nº1:</strong> hipoparatireoidismo (hipocalcemia pós-tireoidectomia total)</li></ul>
+<hr>
+<h2 class="section-heading">Fonte</h2>
+<ul><li>Gerado a partir de: <code>conteudo_hipertireoidismo.md</code> (Aula Hipertireoidismo + Tireoidites — Endocrino CM)</li></ul>
+</main>
+
+<nav class="bottom-nav">
+  <a href="../../../osce-plano.html">← Voltar ao plano</a>
+  <span class="bottom-total" id="bottomTotal"></span>
+</nav>
+
+<script>
+(function() {
+  var KEY = 'osce_v1_' + location.pathname;
+  var state = JSON.parse(localStorage.getItem(KEY) || '{}');
+  var boxes = document.querySelectorAll('input[type=checkbox]');
+  var total = boxes.length;
+
+  boxes.forEach(function(cb, idx) {
+    if (state[idx]) cb.checked = true;
+    cb.addEventListener('change', function() {
+      state[idx] = cb.checked;
+      localStorage.setItem(KEY, JSON.stringify(state));
+      updateAll();
+    });
+  });
+
+  function updateAll() {
+    var done = 0;
+    boxes.forEach(function(c){ if (c.checked) done++; });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    var bar = document.getElementById('hdrBar');
+    var fill = document.getElementById('hdrFill');
+    var lbl = document.getElementById('hdrLabel');
+    var bot = document.getElementById('bottomTotal');
+    if (total > 0) {
+      bar.style.display = 'block';
+      fill.style.width = pct + '%';
+      lbl.textContent = done + '/' + total + ' itens marcados (' + pct + '%)';
+      bot.textContent = done + '/' + total + ' checados';
+    }
+    document.querySelectorAll('.checklist').forEach(function(cl) {
+      var cbs = cl.querySelectorAll('input[type=checkbox]');
+      var cd = 0;
+      cbs.forEach(function(c){ if (c.checked) cd++; });
+      var prog = cl.querySelector('.prog-text');
+      if (prog) prog.textContent = cd + '/' + cbs.length + ' marcados';
+    });
+  }
+
+  updateAll();
+})();
+</script>
+</body>
+</html>

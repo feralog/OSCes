@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diarreia Aguda e Constipação em Pediatria · OSCE</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e3da;
+    --text: #1a1a1a;
+    --muted: #666;
+    --accent: #1a1a1a;
+    --green: #2d6a4f;
+    --green-bg: #e8f5ee;
+    --blue: #0d47a1;
+    --blue-bg: #e3f2fd;
+    --r: 8px;
+    --font-body: Georgia, 'Times New Roman', serif;
+    --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.75;
+    min-height: 100vh;
+    padding-bottom: 70px;
+  }
+
+  .site-header {
+    background: var(--accent);
+    color: #f5f0e8;
+    padding: 16px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+  .header-inner { max-width: 780px; margin: 0 auto; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--font-ui); font-size: 11px; letter-spacing: .4px;
+    color: #a89f8c; text-decoration: none; margin-bottom: 8px;
+    border: 1px solid #444; border-radius: 20px; padding: 2px 10px;
+    transition: color .15s, border-color .15s;
+  }
+  .back-btn:hover { color: #f5f0e8; border-color: #888; }
+  .header-eyebrow {
+    font-family: var(--font-ui); font-size: 10px; letter-spacing: 2.5px;
+    color: #a89f8c; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .header-title {
+    font-size: 19px; font-weight: normal; letter-spacing: -.3px; line-height: 1.3;
+  }
+  .check-progress-bar {
+    height: 3px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 10px;
+  }
+  .check-progress-fill {
+    height: 100%; background: linear-gradient(90deg,#f4c842,#7ecf8a);
+    border-radius: 2px; transition: width .4s ease;
+  }
+  .check-total-label {
+    font-family: var(--font-ui); font-size: 10px; color: #a89f8c; margin-top: 3px;
+  }
+
+  .main { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
+
+  .page-h1 { display: none; }
+  h2.section-heading {
+    font-family: var(--font-ui); font-size: 11px; font-weight: bold;
+    letter-spacing: 1.8px; text-transform: uppercase; color: #777;
+    margin: 30px 0 10px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--border);
+  }
+  h3.section-heading {
+    font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+    margin: 22px 0 8px; color: var(--text);
+  }
+  h4.section-heading, h5.section-heading {
+    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+    margin: 16px 0 6px; color: var(--muted);
+  }
+  p { margin: 10px 0; font-size: 15px; }
+  p.eyebrow-meta {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted);
+    font-style: italic; margin: 4px 0 20px;
+    border-left: 3px solid var(--border); padding-left: 10px;
+  }
+  code {
+    background: #f0ede8; border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; font-size: 13px;
+    font-family: 'Consolas', 'Monaco', monospace;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  ul, ol { padding-left: 22px; margin: 10px 0; }
+  li { margin: 5px 0; font-size: 15px; }
+
+  .table-wrap {
+    overflow-x: auto; margin: 16px 0;
+    border-radius: var(--r); border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  table { width: 100%; border-collapse: collapse; font-family: var(--font-ui); font-size: 13px; }
+  th {
+    background: #1a1a1a; color: #f5f0e8;
+    padding: 9px 12px; text-align: left; font-weight: 600;
+    font-size: 11px; letter-spacing: .5px;
+  }
+  td { padding: 8px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f5f2ee; }
+  tr:hover td { background: #ede8e2; }
+
+  .checklist {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 12px 14px 10px; margin: 16px 0;
+    display: flex; flex-direction: column; gap: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    cursor: pointer; padding: 6px 4px;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 14px; line-height: 1.5; transition: background .1s;
+    border-radius: 4px;
+  }
+  .check-item:last-of-type { border-bottom: none; }
+  .check-item:hover { background: #f8f5f0; }
+  .check-item input[type=checkbox] {
+    width: 18px; height: 18px; min-width: 18px;
+    margin-top: 2px; accent-color: var(--green); cursor: pointer;
+  }
+  .check-item input[type=checkbox]:checked + span {
+    color: var(--muted); text-decoration: line-through;
+  }
+  .check-item span { flex: 1; }
+  .check-sub { margin: 6px 0 2px 4px; padding-left: 18px; }
+  .check-sub li { font-size: 13px; color: var(--muted); margin: 3px 0; }
+  .check-note { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .check-progress {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);
+  }
+  .prog-text {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted); font-weight: 600;
+  }
+
+  .professor-block {
+    background: var(--blue-bg); border-left: 4px solid #1976d2;
+    border-radius: 0 var(--r) var(--r) 0; padding: 14px 16px; margin: 20px 0 8px;
+    font-size: 14px; line-height: 1.65; color: #0a2e6e;
+  }
+  .question-label {
+    font-family: var(--font-ui); font-weight: 700; font-size: 14px;
+    margin: 20px 0 6px; color: var(--text); padding-left: 2px;
+  }
+  .answer-block {
+    background: var(--green-bg); border-left: 4px solid var(--green);
+    border-radius: 0 var(--r) var(--r) 0; padding: 12px 16px; margin: 6px 0 20px;
+    font-size: 14px; line-height: 1.65; color: #1b4332;
+  }
+  blockquote {
+    border-left: 3px solid var(--border); padding: 8px 14px;
+    margin: 12px 0; color: var(--muted); font-style: italic; font-size: 14px;
+  }
+
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1a1a1a; padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 200; border-top: 1px solid #333;
+  }
+  .bottom-nav a {
+    color: #a89f8c; text-decoration: none; font-family: var(--font-ui);
+    font-size: 12px; padding: 5px 14px; border: 1px solid #444;
+    border-radius: 20px; transition: color .15s, border-color .15s;
+  }
+  .bottom-nav a:hover { color: #f5f0e8; border-color: #888; }
+  .bottom-total { font-family: var(--font-ui); font-size: 12px; color: #a89f8c; }
+
+  @media (max-width: 600px) {
+    .header-title { font-size: 16px; }
+    td, th { padding: 6px 8px; font-size: 12px; }
+    .check-item { font-size: 13px; }
+    p, li { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../../osce-plano.html" class="back-btn">← Plano de estudos</a>
+    <div class="header-eyebrow">Pediatria · Gastropediatria</div>
+    <div class="header-title">Diarreia Aguda e Constipação em Pediatria</div>
+    <div class="check-progress-bar" id="hdrBar" style="display:none">
+      <div class="check-progress-fill" id="hdrFill" style="width:0%"></div>
+    </div>
+    <div class="check-total-label" id="hdrLabel"></div>
+  </div>
+</header>
+
+<main class="main">
+<h1 class="page-h1">Diarreia Aguda e Constipação em Pediatria</h1>
+<p class="eyebrow-meta">Pediatria · Gastropediatria | Método: Resumo Clínico</p>
+<hr>
+<h2 class="section-heading">PARTE 1 — DIARREIA AGUDA</h2>
+<h3 class="section-heading">Definição</h3>
+<p>≥ 3 evacuações líquidas ou amolecidas por dia, OU pelo menos 1 evacuação com sangue ou muco. Duração <14 dias (aguda); 14–30 dias (prolongada); >30 dias (crônica).</p>
+<hr>
+<h3 class="section-heading">Etiologia Mais Frequente</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Agente</th><th>Características</th></tr></thead><tbody>
+<tr><td><strong>Rotavírus</strong> (mais comum <5 anos)</td><td>Fezes aquosas, vômitos, febre; sazonal (inverno); prevenível por vacina (RotaTeq/Rotarix)</td></tr>
+<tr><td><strong>E. coli enterotoxigênica (ETEC)</strong></td><td>Diarreia aquosa, "turista"</td></tr>
+<tr><td><strong>E. coli enteropatogênica (EPEC)</strong></td><td>Principal bacteriana em <2 anos</td></tr>
+<tr><td><strong>E. coli entero-hemorrágica (EHEC)</strong></td><td>Fezes com sangue; risco de SHU (síndrome hemolítico-urêmica)</td></tr>
+<tr><td><strong>Shigella</strong></td><td>Fezes com sangue e muco + febre alta; disenteria; tratar sempre com ATB</td></tr>
+<tr><td><strong>Salmonella</strong></td><td>Febre alta, fezes aquosas ou com sangue; zoonose</td></tr>
+<tr><td><strong>Clostridium difficile</strong></td><td>Pós-ATB; fezes aquosas com odor fétido</td></tr>
+</tbody></table></div>
+<hr>
+<h3 class="section-heading">Avaliação do Grau de Desidratação — OMS/SBP</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Parâmetro</th><th>Sem Desidratação</th><th>Desidratação Leve-Moderada</th><th>Desidratação Grave</th></tr></thead><tbody>
+<tr><td><strong>Perda de peso</strong></td><td><3–5%</td><td>3–9% (2–10%)</td><td>≥10%</td></tr>
+<tr><td><strong>Estado geral</strong></td><td>Bem, alerta</td><td>Irritado</td><td>Letárgico/inconsciente</td></tr>
+<tr><td><strong>Olhos</strong></td><td>Normais</td><td>Fundos</td><td>Muito fundos e secos</td></tr>
+<tr><td><strong>Lágrimas</strong></td><td>Presentes</td><td>Ausentes</td><td>Ausentes</td></tr>
+<tr><td><strong>Boca e língua</strong></td><td>Úmidas</td><td>Secas</td><td>Muito secas</td></tr>
+<tr><td><strong>Sede</strong></td><td>Normal</td><td>Bebe com avidez</td><td>Não consegue beber</td></tr>
+<tr><td><strong>Turgor cutâneo</strong></td><td>Retorna imediatamente</td><td>Retorno lento (<2 seg)</td><td>Retorno muito lento (>2 seg)</td></tr>
+<tr><td><strong>Pulso</strong></td><td>Normal</td><td>Taquicárdico</td><td>Rápido e fraco</td></tr>
+</tbody></table></div>
+<blockquote>Regra prática: 2 ou mais sinais em qualquer coluna = desidratação daquele grau</blockquote>
+<hr>
+<h3 class="section-heading">Planos de Tratamento</h3>
+<h4 class="section-heading">Plano A — Sem Desidratação (domiciliar)</h4>
+<ul><li>Aumentar ingesta de líquidos (SRO, água, sopas)</li><li>Manter alimentação normal (não suspender aleitamento materno)</li><li>SRO: 50–100 mL após cada evacuação diarreica (lactente), 100–200 mL (crianças maiores)</li><li>Retornar ao serviço se: piora, não melhora em 2 dias, sangue nas fezes, recusa de ingestão hídrica</li></ul>
+<h4 class="section-heading">Plano B — Desidratação Leve a Moderada (UPA/ambulatório)</h4>
+<ul><li><strong>TRO (Terapia de Reidratação Oral)</strong></li><li>SRO: <strong>50–100 mL/kg em 4 horas</strong> via oral ou por SNG</li><li>Reavaliar a cada hora</li><li>Após 4h: se mantido grau: repetir; se grave: Plano C; se sem desidratação: Plano A</li></ul>
+<h4 class="section-heading">Plano C — Desidratação Grave (internação)</h4>
+<ul><li><strong>Soro Fisiológico 0,9% EV: 20 mL/kg em 20–30 min</strong> (expansão)</li><li>Repetir até 3× se não houver melhora hemodinâmica</li><li>Após estabilização: SF + SG 5% (manutenção) ou iniciar TRO quando tolerar</li></ul>
+<hr>
+<h3 class="section-heading">Caso Clínico: João, 18 Meses (fonte)</h3>
+<ul><li>Perda de 5,5% do peso → <strong>Desidratação Leve-Moderada</strong></li><li>Mucosas levemente ressecadas + turgor retorna em 1–2 seg + olhos fundos</li><li><strong>Conduta: Plano B</strong> — TRO na UPA, 50 mL/kg em 4 horas</li><li>Agente mais provável: Rotavírus (não recebeu vacina, frequenta creche, irmão afetado 1 semana antes)</li><li>Após 4h: melhora → alta com Plano A</li></ul>
+<hr>
+<h3 class="section-heading">Exames Complementares</h3>
+<ul><li><strong>Não solicitados</strong> na maioria dos casos (diarreia aguda em criança hígida)</li><li>Indicações: fezes com sangue + febre alta (coproculturas), diarreia por >7 dias, lactentes <3 meses, imunossuprimidos</li></ul>
+<h3 class="section-heading">Antibioticoterapia</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Indicação</th><th>Agente</th><th>ATB</th></tr></thead><tbody>
+<tr><td>Shigella (sempre tratar)</td><td>Shigella sp.</td><td>Azitromicina 10 mg/kg/dia 3 dias</td></tr>
+<tr><td>Salmonella (só grave/imunossuprimido/RN)</td><td>Salmonella sp.</td><td>Ceftriaxona ou ampicilina</td></tr>
+<tr><td>C. difficile</td><td>C. difficile</td><td>Metronidazol VO</td></tr>
+<tr><td>EHEC (SHU)</td><td>E. coli O157:H7</td><td><strong>NÃO usar ATB</strong> (aumenta risco de SHU)</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">PARTE 2 — CONSTIPAÇÃO FUNCIONAL</h2>
+<h3 class="section-heading">Definição — Critérios de Roma IV (>4 anos)</h3>
+<p>2 ou mais dos seguintes por ≥1 mês:</p>
+<ol><li>≤ 2 evacuações/semana</li><li>≥ 1 episódio de incontinência fecal/semana (após aquisição do controle)</li><li>Retenção voluntária de fezes</li><li>Evacuações dolorosas ou duras</li><li>Massa fecal palpável no reto ou abdome</li><li>Fezes de grande diâmetro que podem obstruir o vaso sanitário</li></ol>
+<h3 class="section-heading">Caso Clínico: Maria Clara, 3 Anos (fonte)</h3>
+<ul><li>Evacuações 1×/3–4 dias + fezes duras + choro com dor + fissura anal + "escape" de fezes na calcinha (encoprese)</li><li>Exame: massa fecal FIE e hipogástrio + ampola retal repleta de fezes</li><li>Diagnóstico: <strong>Constipação Funcional + Encoprese Secundária</strong></li></ul>
+<h3 class="section-heading">Sinais de Alarme (Causa Orgânica — Encaminhar)</h3>
+<ul><li>Constipação desde os primeiros dias de vida (doença de Hirschsprung)</li><li>Ânus anteriorizado ou malformação anorretal</li><li>Fezes em fita</li><li>Distensão abdominal progressiva</li><li>Alterações neurológicas (mielopatia, hipotonia)</li><li>Falha de crescimento</li><li>Febre + muco + sangue (EII)</li></ul>
+<h3 class="section-heading">Doença de Hirschsprung — Diferencial Importante</h3>
+<ul><li>Ausência de células ganglionares no cólon → megacolo aganglionar</li><li>Apresentação neonatal: não elimina mecônio nas primeiras 24h + distensão abdominal</li><li>Diagnóstico: enema opaco + biópsia retal (ausência de células de Auerbach e Meissner)</li><li>Tratamento: cirurgia (ressecção do segmento aganglionar)</li></ul>
+<h3 class="section-heading">Tratamento da Constipação Funcional</h3>
+<ol><li><strong>Desimpactação</strong> (se fecaloma): polietilenoglicol VO ou enema glicerinado</li><li><strong>Manutenção</strong> (longa duração):</li></ol>
+<ul><li>Polietilenoglicol 3350: 0,4–0,8 g/kg/dia (1ª escolha)</li><li>Lactulose: 1–3 mL/kg/dia (alternativa)</li></ul>
+<ol><li><strong>Orientação dietética</strong>: aumentar fibras, hidratação, evitar excesso de leite</li><li><strong>Treinamento esfincteriano</strong>: assentar por 5–10 min após as refeições</li><li>Não usar enemas cronicamente; não suspender amamentação</li></ol>
+<hr>
+<h2 class="section-heading">Alertas OSCE ⚠️</h2>
+<ul><li><strong>EHEC = NÃO usar ATB</strong> (risco de SHU — aumenta liberação de toxina)</li><li>Turgor cutâneo >2 seg = desidratação grave → Plano C EV imediato</li><li>Perda de peso >10% + letargia = emergência hídrica</li><li>Constipação desde o nascimento + distensão = suspeitar de Hirschsprung → biópsia</li><li>Encoprese em criança com constipação = não é "preguiça" — é distensão crônica com perda do controle esfincteriano</li></ul>
+<hr>
+<h2 class="section-heading">Fonte</h2>
+<ul><li>Gerado a partir de: <code>conteudo_diarreia_constipacao.md</code> (Caso João 18 meses — diarreia aguda + Caso Maria Clara 3 anos — constipação)</li><li>Fonte complementada com: conhecimento geral (OMS/SBP) — o material original é case-based sem didática teórica formal</li><li>Gaps identificados: tabela de desidratação e planos A/B/C complementados com protocolo SBP/OMS; etiologia detalhada por agente baseada em conhecimento geral</li></ul>
+</main>
+
+<nav class="bottom-nav">
+  <a href="../../osce-plano.html">← Voltar ao plano</a>
+  <span class="bottom-total" id="bottomTotal"></span>
+</nav>
+
+<script>
+(function() {
+  var KEY = 'osce_v1_' + location.pathname;
+  var state = JSON.parse(localStorage.getItem(KEY) || '{}');
+  var boxes = document.querySelectorAll('input[type=checkbox]');
+  var total = boxes.length;
+
+  boxes.forEach(function(cb, idx) {
+    if (state[idx]) cb.checked = true;
+    cb.addEventListener('change', function() {
+      state[idx] = cb.checked;
+      localStorage.setItem(KEY, JSON.stringify(state));
+      updateAll();
+    });
+  });
+
+  function updateAll() {
+    var done = 0;
+    boxes.forEach(function(c){ if (c.checked) done++; });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    var bar = document.getElementById('hdrBar');
+    var fill = document.getElementById('hdrFill');
+    var lbl = document.getElementById('hdrLabel');
+    var bot = document.getElementById('bottomTotal');
+    if (total > 0) {
+      bar.style.display = 'block';
+      fill.style.width = pct + '%';
+      lbl.textContent = done + '/' + total + ' itens marcados (' + pct + '%)';
+      bot.textContent = done + '/' + total + ' checados';
+    }
+    document.querySelectorAll('.checklist').forEach(function(cl) {
+      var cbs = cl.querySelectorAll('input[type=checkbox]');
+      var cd = 0;
+      cbs.forEach(function(c){ if (c.checked) cd++; });
+      var prog = cl.querySelector('.prog-text');
+      if (prog) prog.textContent = cd + '/' + cbs.length + ' marcados';
+    });
+  }
+
+  updateAll();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atendimento ao Recém · OSCE</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e3da;
+    --text: #1a1a1a;
+    --muted: #666;
+    --accent: #1a1a1a;
+    --green: #2d6a4f;
+    --green-bg: #e8f5ee;
+    --blue: #0d47a1;
+    --blue-bg: #e3f2fd;
+    --r: 8px;
+    --font-body: Georgia, 'Times New Roman', serif;
+    --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.75;
+    min-height: 100vh;
+    padding-bottom: 70px;
+  }
+
+  .site-header {
+    background: var(--accent);
+    color: #f5f0e8;
+    padding: 16px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+  .header-inner { max-width: 780px; margin: 0 auto; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--font-ui); font-size: 11px; letter-spacing: .4px;
+    color: #a89f8c; text-decoration: none; margin-bottom: 8px;
+    border: 1px solid #444; border-radius: 20px; padding: 2px 10px;
+    transition: color .15s, border-color .15s;
+  }
+  .back-btn:hover { color: #f5f0e8; border-color: #888; }
+  .header-eyebrow {
+    font-family: var(--font-ui); font-size: 10px; letter-spacing: 2.5px;
+    color: #a89f8c; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .header-title {
+    font-size: 19px; font-weight: normal; letter-spacing: -.3px; line-height: 1.3;
+  }
+  .check-progress-bar {
+    height: 3px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 10px;
+  }
+  .check-progress-fill {
+    height: 100%; background: linear-gradient(90deg,#f4c842,#7ecf8a);
+    border-radius: 2px; transition: width .4s ease;
+  }
+  .check-total-label {
+    font-family: var(--font-ui); font-size: 10px; color: #a89f8c; margin-top: 3px;
+  }
+
+  .main { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
+
+  .page-h1 { display: none; }
+  h2.section-heading {
+    font-family: var(--font-ui); font-size: 11px; font-weight: bold;
+    letter-spacing: 1.8px; text-transform: uppercase; color: #777;
+    margin: 30px 0 10px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--border);
+  }
+  h3.section-heading {
+    font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+    margin: 22px 0 8px; color: var(--text);
+  }
+  h4.section-heading, h5.section-heading {
+    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+    margin: 16px 0 6px; color: var(--muted);
+  }
+  p { margin: 10px 0; font-size: 15px; }
+  p.eyebrow-meta {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted);
+    font-style: italic; margin: 4px 0 20px;
+    border-left: 3px solid var(--border); padding-left: 10px;
+  }
+  code {
+    background: #f0ede8; border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; font-size: 13px;
+    font-family: 'Consolas', 'Monaco', monospace;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  ul, ol { padding-left: 22px; margin: 10px 0; }
+  li { margin: 5px 0; font-size: 15px; }
+
+  .table-wrap {
+    overflow-x: auto; margin: 16px 0;
+    border-radius: var(--r); border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  table { width: 100%; border-collapse: collapse; font-family: var(--font-ui); font-size: 13px; }
+  th {
+    background: #1a1a1a; color: #f5f0e8;
+    padding: 9px 12px; text-align: left; font-weight: 600;
+    font-size: 11px; letter-spacing: .5px;
+  }
+  td { padding: 8px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f5f2ee; }
+  tr:hover td { background: #ede8e2; }
+
+  .checklist {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 12px 14px 10px; margin: 16px 0;
+    display: flex; flex-direction: column; gap: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    cursor: pointer; padding: 6px 4px;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 14px; line-height: 1.5; transition: background .1s;
+    border-radius: 4px;
+  }
+  .check-item:last-of-type { border-bottom: none; }
+  .check-item:hover { background: #f8f5f0; }
+  .check-item input[type=checkbox] {
+    width: 18px; height: 18px; min-width: 18px;
+    margin-top: 2px; accent-color: var(--green); cursor: pointer;
+  }
+  .check-item input[type=checkbox]:checked + span {
+    color: var(--muted); text-decoration: line-through;
+  }
+  .check-item span { flex: 1; }
+  .check-sub { margin: 6px 0 2px 4px; padding-left: 18px; }
+  .check-sub li { font-size: 13px; color: var(--muted); margin: 3px 0; }
+  .check-note { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .check-progress {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);
+  }
+  .prog-text {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted); font-weight: 600;
+  }
+
+  .professor-block {
+    background: var(--blue-bg); border-left: 4px solid #1976d2;
+    border-radius: 0 var(--r) var(--r) 0; padding: 14px 16px; margin: 20px 0 8px;
+    font-size: 14px; line-height: 1.65; color: #0a2e6e;
+  }
+  .question-label {
+    font-family: var(--font-ui); font-weight: 700; font-size: 14px;
+    margin: 20px 0 6px; color: var(--text); padding-left: 2px;
+  }
+  .answer-block {
+    background: var(--green-bg); border-left: 4px solid var(--green);
+    border-radius: 0 var(--r) var(--r) 0; padding: 12px 16px; margin: 6px 0 20px;
+    font-size: 14px; line-height: 1.65; color: #1b4332;
+  }
+  blockquote {
+    border-left: 3px solid var(--border); padding: 8px 14px;
+    margin: 12px 0; color: var(--muted); font-style: italic; font-size: 14px;
+  }
+
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1a1a1a; padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 200; border-top: 1px solid #333;
+  }
+  .bottom-nav a {
+    color: #a89f8c; text-decoration: none; font-family: var(--font-ui);
+    font-size: 12px; padding: 5px 14px; border: 1px solid #444;
+    border-radius: 20px; transition: color .15s, border-color .15s;
+  }
+  .bottom-nav a:hover { color: #f5f0e8; border-color: #888; }
+  .bottom-total { font-family: var(--font-ui); font-size: 12px; color: #a89f8c; }
+
+  @media (max-width: 600px) {
+    .header-title { font-size: 16px; }
+    td, th { padding: 6px 8px; font-size: 12px; }
+    .check-item { font-size: 13px; }
+    p, li { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../../osce-plano.html" class="back-btn">← Plano de estudos</a>
+    <div class="header-eyebrow">Pediatria · Neonatologia</div>
+    <div class="header-title">Atendimento ao Recém</div>
+    <div class="check-progress-bar" id="hdrBar" style="display:none">
+      <div class="check-progress-fill" id="hdrFill" style="width:0%"></div>
+    </div>
+    <div class="check-total-label" id="hdrLabel"></div>
+  </div>
+</header>
+
+<main class="main">
+<h1 class="page-h1">Atendimento ao Recém-Nascido Normal na Sala de Parto</h1>
+<p class="eyebrow-meta">Pediatria · Neonatologia | Método: Checklist de Procedimento</p>
+<h2 class="section-heading">Quem Deve Estar na Sala de Parto</h2>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span>Pediatra capacitado em reanimação neonatal SEMPRE presente</span></label><label class="check-item"><input type="checkbox"><span>Equipe treinada com material completo disponível ANTES do parto</span></label><label class="check-item"><input type="checkbox"><span>Anamnese materna realizada previamente (IG, comorbidades, líquido amniótico, gemelaridade)</span></label><div class="check-progress"><span class="prog-text">0/3 marcados</span></div></div>
+<hr>
+<h2 class="section-heading">Checklist — Recepção do RN ≥ 34 Semanas</h2>
+<figure style="margin:22px 0;text-align:center"><img src="atendimento_ao_rece_m_nascido_2026_1_pg06.png" alt="Fluxograma 3 perguntas avaliacao RN" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Avaliação ao nascer: A termo? Respirando/chorando? Tônus? — SIM a todas → pele-a-pele com a mãe</figcaption></figure>
+
+<figure style="margin:22px 0;text-align:center"><img src="atendimento_ao_rece_m_nascido_2026_1_pg08.png" alt="Passos iniciais RN" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Primeiros 30s: aquecer → secar → posicionar → aspirar (condicional). Reavaliação imediata em seguida</figcaption></figure>
+
+<h3 class="section-heading">Avaliação Imediata (antes de cortar o cordão)</h3>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span><strong>A termo?</strong> (≥ 37 semanas)</span></label><label class="check-item"><input type="checkbox"><span><strong>Respirando ou chorando?</strong></span></label><label class="check-item"><input type="checkbox"><span><strong>Tônus muscular em flexão?</strong></span></label><div class="check-progress"><span class="prog-text">0/3 marcados</span></div></div>
+<blockquote>✅ Se SIM às 3 perguntas → <strong>BOA VITALIDADE</strong> → manter com a mãe</blockquote>
+<hr>
+<h3 class="section-heading">RN com Boa Vitalidade — Conduta</h3>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span>Colocar sobre o tórax/abdome da mãe — <strong>contato pele-a-pele</strong></span></label><label class="check-item"><input type="checkbox"><span>Secar o corpo e a cabeça com campos <strong>pré-aquecidos</strong>; desprezar campos úmidos</span></label><label class="check-item"><input type="checkbox"><span>Colocar <strong>touca</strong> para evitar perda de calor pelo segmento cefálico</span></label><label class="check-item"><input type="checkbox"><span>Manter <strong>normotermia</strong>: temperatura corporal do RN 36,5–37,5 °C</span></label><label class="check-item"><input type="checkbox"><span>Manter temperatura da sala de parto: 23–26 °C</span></label><label class="check-item"><input type="checkbox"><span>Assegurar <strong>vias aéreas pérvias</strong> (leve extensão da cabeça)</span></label><label class="check-item"><input type="checkbox"><span>Avaliar vitalidade continuamente: padrão respiratório + tônus + FC</span></label><label class="check-item"><input type="checkbox"><span><strong>Clampeamento tardio do cordão umbilical: ≥ 60 segundos após a extração</strong> (benefício na concentração de hemoglobina e ferritina)</span></label><label class="check-item"><input type="checkbox"><span>Estimular amamentação na <strong>primeira hora de vida</strong></span></label><div class="check-progress"><span class="prog-text">0/9 marcados</span></div></div>
+<hr>
+<h3 class="section-heading">RN sem Boa Vitalidade → Mesa de Reanimação</h3>
+<p>(ver arquivo <code>reanimacao_neonatal.md</code>)</p>
+<hr>
+<h2 class="section-heading">Prescrição Médica Padrão do RN (Alojamento Conjunto)</h2>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span><strong>1. Alojamento conjunto</strong> com a mãe</span></label><label class="check-item"><input type="checkbox"><span><strong>2. Aleitamento materno exclusivo</strong> em livre demanda (sem horário fixo)</span></label><label class="check-item"><input type="checkbox"><span><strong>3. Vitamina K</strong> (fitomenadiona) <strong>1 mg IM</strong> na sala de parto (profilaxia da doença hemorrágica do RN)</span></label><label class="check-item"><input type="checkbox"><span><strong>4. Hepatite B</strong> — vacina 0,5 mL IM nas primeiras 24 horas de vida (independente do peso)</span></label><label class="check-item"><input type="checkbox"><span><strong>5. BCG</strong> — intradérmico antes da alta hospitalar</span></label><label class="check-item"><input type="checkbox"><span><strong>6. Profilaxia oftálmica</strong> (oftalmia neonatal): <strong>Iodopovidona (PVPI) 2,5%</strong> — 1 gota em cada olho; aguardar 1 min e secar</span></label><label class="check-item"><input type="checkbox"><span><strong>7. Higiene do coto umbilical</strong>: álcool 70% ou clorexidina aquosa a cada troca de fralda</span></label><label class="check-item"><input type="checkbox"><span><strong>8. Controles</strong>: peso, temperatura, FC, FR, coloração</span></label><label class="check-item"><input type="checkbox"><span><strong>9. Exames</strong>: TS (tipagem sanguínea) + Coombs direto</span></label><div class="check-progress"><span class="prog-text">0/9 marcados</span></div></div>
+<hr>
+<h2 class="section-heading">Triagem Neonatal Obrigatória (Antes da Alta)</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Teste</th><th>Nome Popular</th><th>Quando</th><th>O que Detecta</th></tr></thead><tbody>
+<tr><td>Teste do Pezinho</td><td>Fenilcetonúria, hipotireoidismo, etc.</td><td>3–5 dias de vida</td><td>6 doenças metabólicas (PKU, hipotireoidismo, hemoglobinopatias, hiperplasia adrenal, biotinidase, fibrose cística)</td></tr>
+<tr><td>Teste da Orelhinha</td><td>OEA (emissão otoacústica)</td><td>Antes da alta</td><td>Perda auditiva neurossensorial</td></tr>
+<tr><td>Teste do Coraçãozinho</td><td>Oximetria de pulso</td><td>Após 24h de vida</td><td>Cardiopatia congênita crítica (SatO₂ <95% ou diferença >3% entre membro superior e inferior)</td></tr>
+<tr><td>Teste do Olhinho</td><td>Reflexo vermelho</td><td>Antes da alta</td><td>Catarata, retinoblastoma, outros</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Parâmetros Normais do RN a Termo</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Parâmetro</th><th>Valor Normal</th></tr></thead><tbody>
+<tr><td>Temperatura corporal</td><td>36,5 – 37,5 °C</td></tr>
+<tr><td>FC</td><td>120 – 160 bpm</td></tr>
+<tr><td>FR</td><td>40 – 60 irpm</td></tr>
+<tr><td>SatO₂ (pré-ductal, após 10 min)</td><td>≥ 95%</td></tr>
+<tr><td>Peso médio</td><td>3.000 – 3.500 g</td></tr>
+<tr><td>Comprimento médio</td><td>48 – 52 cm</td></tr>
+<tr><td>PC médio</td><td>33 – 35 cm</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Perda de Peso Fisiológica</h2>
+<ul><li>Normal: até 7–10% do peso de nascimento na primeira semana</li><li>Deve recuperar o peso de nascimento até o 10º–14º dia de vida</li><li>Perda >10% → investigar oferta de leite, avaliação de lactação</li></ul>
+<hr>
+<h2 class="section-heading">APGAR — Avaliação da Vitalidade</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Critério</th><th>0</th><th>1</th><th>2</th></tr></thead><tbody>
+<tr><td>FC</td><td>Ausente</td><td><100 bpm</td><td>≥100 bpm</td></tr>
+<tr><td>Esforço respiratório</td><td>Ausente</td><td>Irregular, fraco</td><td>Regular, choro</td></tr>
+<tr><td>Tônus muscular</td><td>Flácido</td><td>Semifletido</td><td>Flexão ativa</td></tr>
+<tr><td>Irritabilidade reflexa</td><td>Sem resposta</td><td>Careta</td><td>Choro, tosse</td></tr>
+<tr><td>Cor</td><td>Cianótico/pálido</td><td>Acrocianótico</td><td>Corado</td></tr>
+</tbody></table></div>
+<ul><li><strong>7–10</strong>: normal</li><li><strong>4–6</strong>: asfixia moderada</li><li><strong>0–3</strong>: asfixia grave</li><li>Avaliar com 1 e 5 minutos; se <7, repetir a cada 5 min até 20 min</li></ul>
+<blockquote>⚠️ APGAR <strong>não</strong> determina a conduta de reanimação — quem determina é a avaliação da FC e da respiração nos primeiros 30 segundos</blockquote>
+<hr>
+<h2 class="section-heading">Alertas OSCE ⚠️</h2>
+<ul><li>Clampeamento <strong>tardio</strong> ≥60 seg — não clampar imediatamente</li><li>Hepatite B deve ser dada <strong>dentro das 24 horas</strong> de vida — não aguardar</li><li>Vitamina K é <strong>IM</strong> (não VO — absorção oral inadequada no RN)</li><li>Profilaxia ocular com <strong>PVPI 2,5%</strong> (não nitrato de prata que saiu do mercado)</li><li>Teste do pezinho: <strong>3–5 dias</strong> de vida (não antes — falso-negativo para PKU se coletar antes de 48h de amamentação)</li><li>APGAR <7 com 5 min → continuar avaliação; APGAR <strong>não</strong> orienta reanimação</li></ul>
+<hr>
+<h2 class="section-heading">Fonte</h2>
+<ul><li>Gerado a partir de: <code>conteudo_cuidados_com_o_rn.md</code> (Aulas 01 Teórica + Prática Cuidados com RN)</li><li>Seções consultadas: assistência ao RN a termo com boa vitalidade, clampeamento, prescrição médica padrão, APGAR</li><li>Gaps identificados: Triagem neonatal (testes do pezinho, orelhinha, coraçãozinho, olhinho) complementada com conhecimento geral — não detalhada na aula</li></ul>
+</main>
+
+<nav class="bottom-nav">
+  <a href="../../osce-plano.html">← Voltar ao plano</a>
+  <span class="bottom-total" id="bottomTotal"></span>
+</nav>
+
+<script>
+(function() {
+  var KEY = 'osce_v1_' + location.pathname;
+  var state = JSON.parse(localStorage.getItem(KEY) || '{}');
+  var boxes = document.querySelectorAll('input[type=checkbox]');
+  var total = boxes.length;
+
+  boxes.forEach(function(cb, idx) {
+    if (state[idx]) cb.checked = true;
+    cb.addEventListener('change', function() {
+      state[idx] = cb.checked;
+      localStorage.setItem(KEY, JSON.stringify(state));
+      updateAll();
+    });
+  });
+
+  function updateAll() {
+    var done = 0;
+    boxes.forEach(function(c){ if (c.checked) done++; });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    var bar = document.getElementById('hdrBar');
+    var fill = document.getElementById('hdrFill');
+    var lbl = document.getElementById('hdrLabel');
+    var bot = document.getElementById('bottomTotal');
+    if (total > 0) {
+      bar.style.display = 'block';
+      fill.style.width = pct + '%';
+      lbl.textContent = done + '/' + total + ' itens marcados (' + pct + '%)';
+      bot.textContent = done + '/' + total + ' checados';
+    }
+    document.querySelectorAll('.checklist').forEach(function(cl) {
+      var cbs = cl.querySelectorAll('input[type=checkbox]');
+      var cd = 0;
+      cbs.forEach(function(c){ if (c.checked) cd++; });
+      var prog = cl.querySelector('.prog-text');
+      if (prog) prog.textContent = cd + '/' + cbs.length + ' marcados';
+    });
+  }
+
+  updateAll();
+})();
+</script>
+</body>
+</html>

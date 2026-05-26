@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p \"D:/Arquivos/Documentos/Faculdade/OSEC/Github/OSCes/osce_materiais/GO\")",
+      "Bash(mkdir -p \"D:/Arquivos/Documentos/Faculdade/OSEC/Github/OSCes/osce_materiais/Pediatria\")",
+      "Bash(mkdir -p \"D:/Arquivos/Documentos/Faculdade/OSEC/Github/OSCes/osce_materiais/Clinica_Medica/Nefro\")",
+      "Bash(mkdir -p \"D:/Arquivos/Documentos/Faculdade/OSEC/Github/OSCes/osce_materiais/Clinica_Medica/Endocrino\")",
+      "Bash(mkdir -p \"D:/Arquivos/Documentos/Faculdade/OSEC/Github/OSCes/osce_materiais/Clinica_Medica/Gastro\")",
+      "Bash(python3 *)",
+      "Bash($PYTHON *)",
+      "Bash(C:/Users/Fernando/AppData/Local/Programs/Python/Python314/python.exe -m pip install pdfplumber --quiet)",
+      "Bash(C:/Users/Fernando/AppData/Local/Programs/Python/Python314/python.exe -m pip install pymupdf --quiet)",
+      "Bash(grep -iv \"^.*GO.*$\")",
+      "Bash(python *)",
+      "Bash(C:/Users/Fernando/AppData/Local/Programs/Python/Python314/python.exe *)",
+      "Bash(/c/Users/Fernando/AppData/Local/Programs/Python/Python314/python.exe *)",
+      "Bash(grep -c 'front\\\\|card-front\\\\|\"front\"' D:/Arquivos/Documentos/Faculdade/OSEC/Github/OSCes/osce_materiais/flashcards/__TRACKED_VAR__.html)",
+      "Bash(grep -c '{ tag:' D:/Arquivos/Documentos/Faculdade/OSEC/Github/OSCes/osce_materiais/flashcards/__TRACKED_VAR__.html)",
+      "Bash(Get-ChildItem -Path \"D:\\\\Arquivos\\\\Documentos\\\\Faculdade\\\\OSEC\\\\Github\\\\OSCes\" -Recurse -Force)",
+      "Bash(Select-Object FullName)",
+      "Bash(Sort-Object FullName)",
+      "Bash(PYTHONUTF8=1 C:/Users/Fernando/AppData/Local/Programs/Python/Python314/python.exe *)",
+      "Bash(sed -i 's|../../../Complementos/imagens|../../Complementos/imagens|g' \"D:/Arquivos/Documentos/Faculdade/OSEC/Github/OSCes/osce_materiais/GO/partograma.html\")",
+      "Bash(sed -i 's|../../../Complementos/imagens|../../Complementos/imagens|g' \"D:/Arquivos/Documentos/Faculdade/OSEC/Github/OSCes/osce_materiais/GO/partograma.md\")",
+      "Bash(awk 'NR==5||NR==10||NR==15')",
+      "Bash(awk 'NR==10||NR==20||NR==30')",
+      "Bash(awk 'NR==4||NR==7')",
+      "Bash(awk 'NR==5||NR==15||NR==25')",
+      "Bash(awk 'NR==5||NR==20||NR==40')",
+      "Bash(awk 'NR==5||NR==20||NR==50||NR==80')",
+      "Bash(awk 'NR==5||NR==20||NR==50||NR==70')",
+      "Bash(awk 'NR==5||NR==30||NR==80||NR==150')",
+      "Bash(PYTHONUTF8=1 python -X utf8 _injetar_novos.py)",
+      "Bash(git init *)",
+      "Bash(git branch *)",
+      "Bash(git config *)",
+      "Bash(git add *)"
+    ]
+  }
+}

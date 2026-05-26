@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcards Cirurgia · OSCE</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d2e;
+    --card-front: #1a2230;
+    --card-back: #162033;
+    --accent: #f59e0b;
+    --accent2: #81c784;
+    --text: #e8eaf6;
+    --muted: #9aa0bc;
+    --green: #4caf82;
+    --red: #e05c7b;
+    --yellow: #f9c846;
+    --border: #2d3154;
+    --r: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px 40px;
+  }
+  header { text-align: center; margin-bottom: 28px; }
+  header .eyebrow { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+  header h1 { font-size: 26px; font-weight: 700; }
+  .controls { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; justify-content: center; }
+  .controls button { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 13px; transition: background 0.2s; }
+  .controls button:hover { background: var(--border); }
+  .controls button.active { background: var(--accent); border-color: var(--accent); color: #0f1117; }
+  .filter-tags { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; justify-content: center; }
+  .filter-tags button { font-size: 11px; padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); cursor: pointer; transition: all 0.2s; }
+  .filter-tags button.active { background: var(--accent); border-color: var(--accent); color: #0f1117; font-weight: 600; }
+  .progress { font-size: 13px; color: var(--muted); margin-bottom: 20px; display: flex; gap: 16px; align-items: center; }
+  .progress-bar { width: 180px; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.3s; }
+  .scene { width: 100%; max-width: 640px; height: 380px; perspective: 1200px; cursor: pointer; margin-bottom: 20px; }
+  .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.55s cubic-bezier(0.4,0,0.2,1); }
+  .card.flipped { transform: rotateY(180deg); }
+  .face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: var(--r); padding: 28px 32px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border: 1px solid var(--border); }
+  .face.front { background: var(--card-front); }
+  .face.back { background: var(--card-back); transform: rotateY(180deg); border-color: var(--accent); }
+  .card-tag { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; font-weight: 600; }
+  .card-q { font-size: 17px; font-weight: 600; line-height: 1.5; }
+  .card-hint { margin-top: 12px; font-size: 12px; color: var(--muted); }
+  .card-a { font-size: 14px; line-height: 1.7; }
+  .card-a strong { color: var(--accent); }
+  .card-a .alert { color: var(--red); font-weight: 700; }
+  .card-a .ok { color: var(--green); font-weight: 700; }
+  .card-a .warn { color: var(--yellow); font-weight: 700; }
+  .nav { display: flex; gap: 12px; align-items: center; }
+  .nav button { background: var(--surface); border: 1px solid var(--border); color: var(--text); width: 44px; height: 44px; border-radius: 10px; font-size: 20px; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; justify-content: center; }
+  .nav button:hover { background: var(--border); }
+  .nav button:disabled { opacity: 0.3; cursor: not-allowed; }
+  .card-number { font-size: 14px; color: var(--muted); min-width: 60px; text-align: center; }
+  .result-btns { display: flex; gap: 10px; margin-top: 16px; }
+  .result-btns button { padding: 9px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 600; }
+  .btn-know { background: var(--green); color: #fff; }
+  .btn-dontknow { background: var(--red); color: #fff; }
+  .stats { margin-top: 8px; font-size: 12px; color: var(--muted); display: flex; gap: 16px; }
+  .stat-know { color: var(--green); }
+  .stat-dk { color: var(--red); }
+  .flip-hint { font-size: 11px; color: var(--muted); margin-bottom: 8px; text-align: center; }
+  @media (max-width: 480px) {
+    .scene { height: 320px; }
+    .face { padding: 20px 16px; }
+    .card-q { font-size: 15px; }
+    .card-a { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Flashcards · Cirurgia</div>
+  <h1>Cirurgia — OSCE</h1>
+</header>
+
+<div class="controls">
+  <button id="btnAll" class="active" onclick="filterMode('all')">Todos</button>
+  <button id="btnRev" onclick="filterMode('review')">Revisar</button>
+  <button onclick="shuffle()">🔀 Embaralhar</button>
+  <button onclick="resetAll()">↺ Reiniciar</button>
+</div>
+
+<div class="filter-tags" id="tagFilters"></div>
+
+<div class="progress">
+  <span id="progText">0 / 30</span>
+  <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+</div>
+
+<div class="flip-hint">Clique no card para revelar · Teclas: ← → Espaço · 1=Não sei 2=Sei</div>
+<div class="scene" onclick="flipCard()">
+  <div class="card" id="cardEl">
+    <div class="face front">
+      <div class="card-tag" id="cardTag"></div>
+      <div class="card-q" id="cardQ"></div>
+      <div class="card-hint">👆 clique para ver a resposta</div>
+    </div>
+    <div class="face back">
+      <div class="card-tag" id="cardTagB"></div>
+      <div class="card-a" id="cardA"></div>
+    </div>
+  </div>
+</div>
+
+<div class="nav">
+  <button id="btnPrev" onclick="prevCard()">◀</button>
+  <span class="card-number" id="cardNum">1 / 30</span>
+  <button id="btnNext" onclick="nextCard()">▶</button>
+</div>
+
+<div class="result-btns" id="resultBtns" style="display:none">
+  <button class="btn-dontknow" onclick="markCard(false)">✗ Não sei</button>
+  <button class="btn-know" onclick="markCard(true)">✓ Sei</button>
+</div>
+
+<div class="stats">
+  <span>Sei: <span class="stat-know" id="statKnow">0</span></span>
+  <span>Revisar: <span class="stat-dk" id="statDk">0</span></span>
+</div>
+
+<script>
+const ALL_CARDS = [
+  // ── SONDA VESICAL ──
+  { tag: "Sonda Vesical", q: "Quais as indicações da sondagem vesical de demora?", a: "<strong>Indicações:</strong> (1) Monitorização horária de diurese (UTI, cirurgia, choque); (2) Pós-operatório de cirurgias pélvicas/abdominais; (3) Retenção urinária aguda; (4) Incontinência com proteção de ferida; (5) Procedimentos no trato urinário inferior. <span class='warn'>Diurese normal: 0,5–1 mL/kg/h</span>" },
+  { tag: "Sonda Vesical", q: "Qual o erro MAIS grave na sondagem vesical e sua consequência?", a: "<span class='alert'>Inflar o balonete antes de confirmar posição na bexiga</span> → ruptura uretral ou lesão prostática. Regra: <strong>só inflar após refluxo de urina</strong> pela sonda. Inflar com 10 mL de SF 0,9% (nunca ar)." },
+  { tag: "Sonda Vesical", q: "Qual a complicação se o prepúcio não for reposicionado após a sondagem?", a: "<strong>Parafimose</strong> — o prepúcio retraído constrange a glande e compromete o retorno venoso → edema progressivo → isquemia. <span class='alert'>Sempre reposicionar o prepúcio</span> ao finalizar o procedimento. É uma emergência urológica se estabelecida." },
+  { tag: "Sonda Vesical", q: "Por que segurar o pênis em 90° (perpendicular ao corpo) durante a sondagem masculina?", a: "Retifica a <strong>uretra bulbar</strong>, que tem uma curvatura natural no trajeto. Com o pênis em posição vertical, a uretra fica retilínea → menor resistência à passagem da sonda e menor risco de <strong>falsa via</strong>." },
+  { tag: "Sonda Vesical", q: "Qual a diferença entre sonda de látex e de silicone para sondagem vesical?", a: "<strong>Látex:</strong> macia, flexível, barata; maior risco de reação local e colonização bacteriana. <strong>Silicone:</strong> mínima toxicidade, menor colonização — <span class='ok'>preferível para uso prolongado</span>. <strong>PVC/CVA:</strong> mais rígida à temperatura ambiente, molda-se à uretra pela temperatura corporal — facilita inserção em casos difíceis." },
+  { tag: "Sonda Vesical", q: "O que é a cistostomia suprapúbica e quando está indicada?", a: "Sondagem vesical cruenta por <strong>punção suprapúbica</strong> (acesso percutâneo com cateter ou trocater acima da sínfise púbica). Indicada quando a sondagem uretral é contraindicada: <strong>trauma uretral</strong> (sangue no meato, hematoma perineal, próstata flutuante), estenose uretral grave ou cirurgia uretral recente." },
+
+  // ── DRENO DE TÓRAX ──
+  { tag: "Dreno Tórax", q: "Qual o sítio de inserção do dreno torácico para drenagem de líquido/sangue vs pneumotórax?", a: "<strong>Líquido/sangue:</strong> <span class='alert'>5º EIC, linha axilar média ou anterior</span> (fluido acumula na base — gravidade). <strong>Pneumotórax:</strong> <span class='warn'>2–3º EIC, linha hemiclavicular</span> (ar sobe para o ápice). Em ambos: inserção <strong>acima da borda superior da costela inferior</strong> (feixe vásculo-nervoso está na borda inferior)." },
+  { tag: "Dreno Tórax", q: "Por que inserir o dreno torácico ACIMA da costela inferior? O que acontece se inserir abaixo?", a: "O <strong>feixe vásculo-nervoso intercostal</strong> (artéria, veia e nervo) corre na <strong>borda inferior de cada costela</strong>. Inserir abaixo da costela inferior = <span class='alert'>lesão neurovascular → hemotórax iatrogênico + dor intensa</span>. Regra: dissecção e inserção sempre acima da borda superior da costela inferior." },
+  { tag: "Dreno Tórax", q: "Qual a sequência da técnica de inserção do dreno torácico?", a: "1. Incisão 2–3 cm; 2. Dissecção romba com <strong>pinça Kelly fechada</strong> acima da costela inferior; 3. Punção da pleura com Kelly fechada; 4. Abrir a pinça e introduzir o <strong>dedo indicador</strong> (confirma posição + verifica aderências); 5. Introduzir o dreno guiado pelo dedo; 6. Conectar ao sistema de <strong>selo d'água</strong>; 7. Fixar + RX imediato." },
+  { tag: "Dreno Tórax", q: "Qual a pressão normal do espaço pleural e o que o dreno faz?", a: "Pressão normal: <strong>−12 a −8 cmH₂O</strong> (negativa). O dreno <strong>restabelece a pressão negativa</strong> ao remover ar, sangue ou líquido acumulados → permite expansão pulmonar e manutenção da homeostase cardiorrespiratória." },
+  { tag: "Dreno Tórax", q: "O que indica cada câmara do sistema de drenagem com 3 frascos?", a: "<strong>Câmara 1 (coleta):</strong> acumula o líquido drenado — medir e registrar. <strong>Câmara 2 (selo d'água):</strong> coluna de 2 cm H₂O — <span class='alert'>impede refluxo de ar para o tórax</span>. <strong>Câmara 3 (sucção):</strong> aspiração ativa regulada (−20 cmH₂O). Flutuação da coluna do selo = posição correta do dreno." },
+  { tag: "Dreno Tórax", q: "Pneumotórax hipertensivo: qual a conduta imediata e por quê não esperar o RX?", a: "<strong>Agulha de alívio imediata</strong> (cateter 14G no 2º EIC linha hemiclavicular ipsilateral) → converte em pneumotórax simples. <span class='alert'>Não esperar RX</span> — é emergência com alto risco de parada cardíaca (desvio mediastinal + compressão cardíaca). O RX pode ser feito depois, após estabilização." },
+
+  // ── SONDA NASOGÁSTRICA ──
+  { tag: "SNG", q: "Quais os 4 tipos principais de sonda nasogástrica/nasoenteral e suas indicações?", a: "<strong>Levin:</strong> 1 luz, descompressão gástrica simples. <strong>Salem:</strong> 2 luzes (radiopaca), manutenção do estômago vazio no pós-op. <strong>Dobhoff:</strong> ponta pesada, nutrição enteral de longa duração (nasojejunal). <strong>Sengstaken-Blakemore:</strong> 3 luzes + 2 balões, <span class='alert'>varizes esofagianas sangrantes</span>." },
+  { tag: "SNG", q: "Qual é a contraindicação ABSOLUTA da sonda nasogástrica pela via nasal?", a: "<span class='alert'>Fratura de base do crânio</span> com suspeita de lâmina cribriforme fraturada → risco de inserção intracraniana (lesão fatal). Usar <strong>sonda orogástrica</strong> (via oral). Sinais de fratura de base: equimose periorbitária (olhos de guaxinim), equimose retroauricular (sinal de Battle), hemotímpano, rinorreia/otorreia de LCR." },
+  { tag: "SNG", q: "Como confirmar corretamente a posição da SNG após a inserção?", a: "<strong>Método preferido:</strong> aspirar conteúdo gástrico e verificar pH ≤ 5 com fita de pH. <span class='alert'>Ausculta do epigástrio (borbulhamento ao injetar ar) NÃO é confiável isoladamente</span> — pode ser positivo com sonda no brônquio. <strong>Gold standard para dúvida: RX de abdome</strong>. Nunca iniciar dieta sem confirmar posição." },
+  { tag: "SNG", q: "Como medir o comprimento de inserção da SNG antes do procedimento?", a: "Medir da <strong>ponta do nariz → lobo da orelha → apêndice xifóide</strong>. No adulto: aproximadamente <strong>45–55 cm</strong>. Marcar com fita adesiva na sonda. Após inserção confirmar com aspiração de conteúdo gástrico + pH ou RX." },
+  { tag: "SNG", q: "Para qual direção deve ser inserida a sonda nasogástrica ao entrar pela narina?", a: "<strong>Para baixo e para trás</strong> (paralela ao assoalho nasal/palato), <span class='alert'>nunca para cima</span>. A uretra nasal tem uma curvatura que leva ao assoalho nasal → seguir essa via. Inserir para cima → trauma de corneto nasal e falsa via. Ao atingir a nasofaringe: pedir ao paciente para <strong>deglutir</strong>." },
+  { tag: "SNG", q: "Sengstaken-Blakemore: qual a ordem de insuflação dos balões e o risco de não seguir?", a: "<strong>Sempre inflar o balão gástrico PRIMEIRO</strong> (200–250 mL ar) para ancorar no estômago → depois balão esofagianes (50–100 mL, pressão <40 mmHg). <span class='alert'>Se inflar apenas o esofagianes sem ancorar o gástrico</span>: migração da sonda → obstrução de via aérea → parada respiratória. Paciente com SB deve estar <strong>intubado</strong>." },
+
+  // ── SUTURAS ──
+  { tag: "Suturas", q: "Quais os 7 princípios de Halsted? Qual o mais importante para evitar deiscência?", a: "(1) Manuseio suave dos tecidos; (2) Hemostasia meticulosa; (3) Preservação do suprimento sanguíneo; (4) Técnica asséptica rigorosa; (5) Evitar espaços mortos; (6) <strong>Aproximação precisa dos tecidos</strong>; (7) <strong>Imobilização sem tensão</strong>. O mais crítico para deiscência: <span class='alert'>tensão excessiva → isquemia → abertura da ferida</span>." },
+  { tag: "Suturas", q: "Quais são os fios absorvíveis em ordem crescente de tempo de absorção?", a: "<strong>Categute simples:</strong> 7–10 dias (curtíssimo). <strong>Categute cromado:</strong> 15–20 dias (curto). <strong>Ácido poliglicólico/Vicryl:</strong> 50–70 dias (médio). <strong>Poliglecaprona/Monocryl:</strong> 90–120 dias (moderado). <strong>Polidioxanona (PDS):</strong> 90–180 dias (longo). PDS = fio mais próximo do ideal." },
+  { tag: "Suturas", q: "Monofilamentar vs multifilamentar: qual tem menor risco de infecção e por quê?", a: "<strong>Monofilamentar</strong> (nylon, PDS, prolene) — menor capilaridade → <span class='ok'>menor aderência microbiana</span>. Multifilamentar (vicryl, seda) — vários filamentos criam espaços → maior capilaridade → fluidos se alojam ao longo do fio → <span class='alert'>maior risco de colonização bacteriana e infecção</span>. Em campos contaminados: preferir monofilamentar." },
+  { tag: "Suturas", q: "Agulha cortante vs cilíndrica: quando usar cada uma?", a: "<strong>Cortante (triangular):</strong> tecidos resistentes que exigem afastamento das fibras — <span class='alert'>pele e aponeurose</span>. <strong>Cilíndrica (não-cortante):</strong> tecidos moles de fácil penetração que não devem ser lacerados — <span class='ok'>mucosas, vísceras ocas (intestino, estômago), vasos</span>. Agulha reta: usada com a mão (vísceras, tendões, intradérmico)." },
+  { tag: "Suturas", q: "O que é o ponto de Donatti e quando é indicado?", a: "Ponto de <strong>Donatti (ponto em U vertical distante):</strong> passa 'longe-longe' em profundidade (aproxima tecidos profundos) e 'perto-perto' na superfície (approxima borda da pele). Indicado em <strong>pele sob tensão</strong> — distribui a tração em toda a espessura da pele, reduzindo o risco de isquemia nas bordas." },
+  { tag: "Suturas", q: "Qual o prazo para retirada de pontos na face vs no tronco?", a: "<strong>Face:</strong> <span class='ok'>4–5 dias</span> — cicatrização rápida (rica vascularização) + resultado estético prioritário. <strong>Tronco/membros:</strong> <span class='warn'>7–8 dias</span>. <strong>Tensão/idosos/desnutridos:</strong> 10–14 dias. <strong>Esterno:</strong> 3–4 semanas. Regra dos nós: dar <strong>número do fio + 1</strong> nós (fio 3-0 → 4 nós)." },
+  { tag: "Suturas", q: "Classifique as feridas cirúrgicas pelo CDC e cite as taxas de ISC.", a: "<strong>Classe I (limpa):</strong> sem inflamação, campo fechado — ISC 1–5%. <strong>Classe II (limpa-contaminada):</strong> abertura controlada de tratos — ISC 3–11%. <strong>Classe III (contaminada):</strong> violação de técnica/inflamação aguda sem pus — ISC 0–17%. <span class='alert'>Classe IV (infectada):</span> pus, víscera perfurada — ISC >27%." },
+  { tag: "Suturas", q: "Quais os 3 tipos de fechamento de ferida e suas indicações?", a: "<strong>Primário (1ª intenção):</strong> bordas aproximadas imediatamente — feridas limpas e limpas-contaminadas. <strong>Secundário (2ª intenção):</strong> sem aproximação, fechamento por granulação 'de baixo para cima' — feridas infectadas. <strong>Terciário (1ª intenção retardada):</strong> aberto 48–72h e depois fechado — contaminadas com risco de infecção." },
+
+  // ── PRINCÍPIOS CIRÚRGICOS ──
+  { tag: "Princípios Cirúrgicos", q: "Qual a diferença entre assepsia e antissepsia?", a: "<strong>Assepsia:</strong> conjunto de práticas para <span class='ok'>impedir a entrada</span> de microrganismos em áreas estéreis (refere-se a objetos/ambiente). <strong>Antissepsia:</strong> eliminação de microrganismos da <strong>pele ou mucosas</strong> com substâncias químicas. Exemplo: lavagem cirúrgica das mãos = antissepsia; campo estéril = assepsia." },
+  { tag: "Princípios Cirúrgicos", q: "Qual o antisséptico de 1ª escolha para preparo da pele no CC e por quê?", a: "<strong>Clorexidina alcoólica 2%</strong> — mais eficaz na redução da flora bacteriana, ação rápida (30s–2 min), residual. <span class='alert'>Deve secar completamente antes da incisão</span>. Alternativa: PVPI 10% (ação lenta, mín 2 min; indicado em alergia à clorexidina ou próximo a mucosas). <span class='alert'>Nunca usar simultaneamente</span> — reação química." },
+  { tag: "Princípios Cirúrgicos", q: "Quais os erros que comprometem a esterilidade no centro cirúrgico?", a: "(1) Toque cruzado entre áreas estéreis e não estéreis; (2) Campo molhado ou rasgado (barreira quebrada); (3) Instrumental abaixo da cintura ou fora do campo visual; (4) Abertura excessiva de portas; (5) Trocar apenas luvas quando o avental foi comprometido; (6) <span class='alert'>Tossir/espirrar sem máscara ajustada sobre o campo</span>." },
+  { tag: "Princípios Cirúrgicos", q: "Cicatriz hipertrófica vs queloide: quais as diferenças clínicas e prognóstico?", a: "<strong>Cicatriz hipertrófica:</strong> permanece nos <span class='ok'>limites da lesão</span>, é <span class='ok'>prevenível e regride espontaneamente</span>, pode ocorrer em qualquer região. <strong>Queloide:</strong> cresce <span class='alert'>além das margens da ferida</span>, <span class='alert'>não é prevenível e não regride</span>, predisposição genética, mais comum em peles escuras (15–20%), localização: clavícula, tronco, MMSS, face." },
+  { tag: "Princípios Cirúrgicos", q: "Quais as 3 fases da cicatrização de feridas e os eventos de cada fase?", a: "<strong>Inflamatória:</strong> hemostasia (tampão plaquetário + coagulação) + migração de PMN, macrófagos, linfócitos — macrófago é a célula central. <strong>Proliferativa:</strong> angiogênese + fibroplasia (fibroblastos) + síntese de colágeno + epitelização. <strong>Maturação:</strong> contração da ferida + remodelação do colágeno. Adulto: rapidez de reparo > precisão de regeneração." },
+];
+
+let deck = [...ALL_CARDS];
+let current = 0;
+let isFlipped = false;
+let statusMap = {};
+let activeFilter = 'all';
+let activeTag = null;
+
+const tags = [...new Set(ALL_CARDS.map(c => c.tag))];
+
+function buildTagFilters() {
+  const container = document.getElementById('tagFilters');
+  container.innerHTML = '';
+  const allBtn = document.createElement('button');
+  allBtn.textContent = 'Todos os temas';
+  allBtn.className = 'active';
+  allBtn.id = 'tagAll';
+  allBtn.onclick = () => setTag(null);
+  container.appendChild(allBtn);
+  tags.forEach(tag => {
+    const btn = document.createElement('button');
+    btn.textContent = tag;
+    btn.id = 'tag_' + tag;
+    btn.onclick = () => setTag(tag);
+    container.appendChild(btn);
+  });
+}
+
+function setTag(tag) {
+  activeTag = tag;
+  document.querySelectorAll('.filter-tags button').forEach(b => b.classList.remove('active'));
+  const el = tag ? document.getElementById('tag_' + tag) : document.getElementById('tagAll');
+  if (el) el.classList.add('active');
+  rebuildDeck();
+}
+
+function rebuildDeck() {
+  let base = activeTag ? ALL_CARDS.filter(c => c.tag === activeTag) : [...ALL_CARDS];
+  if (activeFilter === 'review') {
+    base = base.filter(c => statusMap[c.q] === false || statusMap[c.q] === undefined);
+    if (base.length === 0) base = activeTag ? ALL_CARDS.filter(c => c.tag === activeTag) : [...ALL_CARDS];
+  }
+  deck = base;
+  current = 0;
+  render();
+}
+
+function render() {
+  const c = deck[current];
+  document.getElementById('cardTag').textContent = c.tag;
+  document.getElementById('cardTagB').textContent = c.tag;
+  document.getElementById('cardQ').textContent = c.q;
+  document.getElementById('cardA').innerHTML = c.a;
+  document.getElementById('cardNum').textContent = `${current + 1} / ${deck.length}`;
+  document.getElementById('cardEl').classList.remove('flipped');
+  isFlipped = false;
+  document.getElementById('resultBtns').style.display = 'none';
+  updateProgress();
+  document.getElementById('btnPrev').disabled = current === 0;
+  document.getElementById('btnNext').disabled = current === deck.length - 1;
+}
+
+function flipCard() {
+  isFlipped = !isFlipped;
+  document.getElementById('cardEl').classList.toggle('flipped', isFlipped);
+  document.getElementById('resultBtns').style.display = isFlipped ? 'flex' : 'none';
+}
+
+function nextCard() { if (current < deck.length - 1) { current++; render(); } }
+function prevCard() { if (current > 0) { current--; render(); } }
+
+function markCard(know) {
+  statusMap[deck[current].q] = know;
+  updateStats();
+  if (current < deck.length - 1) { current++; render(); }
+}
+
+function updateProgress() {
+  const done = Object.keys(statusMap).length;
+  const total = ALL_CARDS.length;
+  document.getElementById('progText').textContent = `${done} / ${total}`;
+  document.getElementById('progFill').style.width = `${(done / total) * 100}%`;
+}
+
+function updateStats() {
+  const vals = Object.values(statusMap);
+  document.getElementById('statKnow').textContent = vals.filter(v => v).length;
+  document.getElementById('statDk').textContent = vals.filter(v => !v).length;
+}
+
+function shuffle() {
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  current = 0; render();
+}
+
+function filterMode(mode) {
+  activeFilter = mode;
+  document.getElementById('btnAll').classList.toggle('active', mode === 'all');
+  document.getElementById('btnRev').classList.toggle('active', mode === 'review');
+  rebuildDeck();
+}
+
+function resetAll() {
+  statusMap = {};
+  activeFilter = 'all';
+  activeTag = null;
+  document.getElementById('btnAll').classList.add('active');
+  document.getElementById('btnRev').classList.remove('active');
+  document.getElementById('statKnow').textContent = '0';
+  document.getElementById('statDk').textContent = '0';
+  setTag(null);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') nextCard();
+  else if (e.key === 'ArrowLeft') prevCard();
+  else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+  else if (e.key === '1' && isFlipped) markCard(false);
+  else if (e.key === '2' && isFlipped) markCard(true);
+});
+
+buildTagFilters();
+render();
+</script>
+</body>
+</html>

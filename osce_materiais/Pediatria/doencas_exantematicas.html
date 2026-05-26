@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doenças Exantemáticas em Pediatria · OSCE</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e3da;
+    --text: #1a1a1a;
+    --muted: #666;
+    --accent: #1a1a1a;
+    --green: #2d6a4f;
+    --green-bg: #e8f5ee;
+    --blue: #0d47a1;
+    --blue-bg: #e3f2fd;
+    --r: 8px;
+    --font-body: Georgia, 'Times New Roman', serif;
+    --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.75;
+    min-height: 100vh;
+    padding-bottom: 70px;
+  }
+
+  .site-header {
+    background: var(--accent);
+    color: #f5f0e8;
+    padding: 16px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+  .header-inner { max-width: 780px; margin: 0 auto; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--font-ui); font-size: 11px; letter-spacing: .4px;
+    color: #a89f8c; text-decoration: none; margin-bottom: 8px;
+    border: 1px solid #444; border-radius: 20px; padding: 2px 10px;
+    transition: color .15s, border-color .15s;
+  }
+  .back-btn:hover { color: #f5f0e8; border-color: #888; }
+  .header-eyebrow {
+    font-family: var(--font-ui); font-size: 10px; letter-spacing: 2.5px;
+    color: #a89f8c; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .header-title {
+    font-size: 19px; font-weight: normal; letter-spacing: -.3px; line-height: 1.3;
+  }
+  .check-progress-bar {
+    height: 3px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 10px;
+  }
+  .check-progress-fill {
+    height: 100%; background: linear-gradient(90deg,#f4c842,#7ecf8a);
+    border-radius: 2px; transition: width .4s ease;
+  }
+  .check-total-label {
+    font-family: var(--font-ui); font-size: 10px; color: #a89f8c; margin-top: 3px;
+  }
+
+  .main { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
+
+  .page-h1 { display: none; }
+  h2.section-heading {
+    font-family: var(--font-ui); font-size: 11px; font-weight: bold;
+    letter-spacing: 1.8px; text-transform: uppercase; color: #777;
+    margin: 30px 0 10px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--border);
+  }
+  h3.section-heading {
+    font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+    margin: 22px 0 8px; color: var(--text);
+  }
+  h4.section-heading, h5.section-heading {
+    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+    margin: 16px 0 6px; color: var(--muted);
+  }
+  p { margin: 10px 0; font-size: 15px; }
+  p.eyebrow-meta {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted);
+    font-style: italic; margin: 4px 0 20px;
+    border-left: 3px solid var(--border); padding-left: 10px;
+  }
+  code {
+    background: #f0ede8; border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; font-size: 13px;
+    font-family: 'Consolas', 'Monaco', monospace;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  ul, ol { padding-left: 22px; margin: 10px 0; }
+  li { margin: 5px 0; font-size: 15px; }
+
+  .table-wrap {
+    overflow-x: auto; margin: 16px 0;
+    border-radius: var(--r); border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  table { width: 100%; border-collapse: collapse; font-family: var(--font-ui); font-size: 13px; }
+  th {
+    background: #1a1a1a; color: #f5f0e8;
+    padding: 9px 12px; text-align: left; font-weight: 600;
+    font-size: 11px; letter-spacing: .5px;
+  }
+  td { padding: 8px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f5f2ee; }
+  tr:hover td { background: #ede8e2; }
+
+  .checklist {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 12px 14px 10px; margin: 16px 0;
+    display: flex; flex-direction: column; gap: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    cursor: pointer; padding: 6px 4px;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 14px; line-height: 1.5; transition: background .1s;
+    border-radius: 4px;
+  }
+  .check-item:last-of-type { border-bottom: none; }
+  .check-item:hover { background: #f8f5f0; }
+  .check-item input[type=checkbox] {
+    width: 18px; height: 18px; min-width: 18px;
+    margin-top: 2px; accent-color: var(--green); cursor: pointer;
+  }
+  .check-item input[type=checkbox]:checked + span {
+    color: var(--muted); text-decoration: line-through;
+  }
+  .check-item span { flex: 1; }
+  .check-sub { margin: 6px 0 2px 4px; padding-left: 18px; }
+  .check-sub li { font-size: 13px; color: var(--muted); margin: 3px 0; }
+  .check-note { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .check-progress {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);
+  }
+  .prog-text {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted); font-weight: 600;
+  }
+
+  .professor-block {
+    background: var(--blue-bg); border-left: 4px solid #1976d2;
+    border-radius: 0 var(--r) var(--r) 0; padding: 14px 16px; margin: 20px 0 8px;
+    font-size: 14px; line-height: 1.65; color: #0a2e6e;
+  }
+  .question-label {
+    font-family: var(--font-ui); font-weight: 700; font-size: 14px;
+    margin: 20px 0 6px; color: var(--text); padding-left: 2px;
+  }
+  .answer-block {
+    background: var(--green-bg); border-left: 4px solid var(--green);
+    border-radius: 0 var(--r) var(--r) 0; padding: 12px 16px; margin: 6px 0 20px;
+    font-size: 14px; line-height: 1.65; color: #1b4332;
+  }
+  blockquote {
+    border-left: 3px solid var(--border); padding: 8px 14px;
+    margin: 12px 0; color: var(--muted); font-style: italic; font-size: 14px;
+  }
+
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1a1a1a; padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 200; border-top: 1px solid #333;
+  }
+  .bottom-nav a {
+    color: #a89f8c; text-decoration: none; font-family: var(--font-ui);
+    font-size: 12px; padding: 5px 14px; border: 1px solid #444;
+    border-radius: 20px; transition: color .15s, border-color .15s;
+  }
+  .bottom-nav a:hover { color: #f5f0e8; border-color: #888; }
+  .bottom-total { font-family: var(--font-ui); font-size: 12px; color: #a89f8c; }
+
+  @media (max-width: 600px) {
+    .header-title { font-size: 16px; }
+    td, th { padding: 6px 8px; font-size: 12px; }
+    .check-item { font-size: 13px; }
+    p, li { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../../osce-plano.html" class="back-btn">← Plano de estudos</a>
+    <div class="header-eyebrow">Pediatria · Infectologia Pediátrica</div>
+    <div class="header-title">Doenças Exantemáticas em Pediatria</div>
+    <div class="check-progress-bar" id="hdrBar" style="display:none">
+      <div class="check-progress-fill" id="hdrFill" style="width:0%"></div>
+    </div>
+    <div class="check-total-label" id="hdrLabel"></div>
+  </div>
+</header>
+
+<main class="main">
+<h1 class="page-h1">Doenças Exantemáticas em Pediatria</h1>
+<p class="eyebrow-meta">Pediatria · Infectologia Pediátrica | Método: Simulação OSCE + Tabela-Mestre</p>
+<hr>
+<h2 class="section-heading">TABELA-MESTRE — Diagnóstico Diferencial dos Exantemas</h2>
+<figure style="margin:22px 0;text-align:center"><img src="playbook_cl_nico_de_exantemas_pg06.png" alt="Foto exantema eritematoso" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Exantema morbiliforme: maculopápulas confluentes avermelhadas</figcaption></figure>
+
+<figure style="margin:22px 0;text-align:center"><img src="playbook_cl_nico_de_exantemas_pg08.png" alt="Bebe com exantema" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Exantema pápulo-vesicular em lactente — polimorfismo lesional típico da varicela</figcaption></figure>
+
+<div class="table-wrap"><table>
+<thead><tr><th>Doença</th><th>Agente</th><th>Faixa Etária</th><th>Período Incubação</th><th>Pródromo</th><th>Exantema</th><th>Lesão Patognomônica</th><th>Progressão</th><th>Tratamento</th></tr></thead><tbody>
+<tr><td><strong>Sarampo</strong></td><td>Vírus Sarampo (RNA)</td><td>Qualquer</td><td>10–12 dias</td><td>3–5 dias: febre alta, coriza, tosse, conjuntivite</td><td>Morbiliforme (maculopapular, avermelhado, 3–10 mm)</td><td><strong>Manchas de Koplik</strong> (brancas na mucosa jugal)</td><td>Retroauricular → face → pescoço → MMSS → tronco → MMII</td><td>Sintomático + isolamento</td></tr>
+<tr><td><strong>Rubéola</strong></td><td>Vírus Rubéola (RNA)</td><td>Qualquer (mais escolar)</td><td>14–21 dias</td><td>Febre baixa, adenomegalia retroauricular, coriza leve</td><td>Rubeoliforme (róseo, maculopapular, pápulas menores que sarampo)</td><td><strong>Adenomegalia retroauricular e occipital</strong></td><td>Crânio → caudal, 4–5 dias; não descamativo</td><td>Sintomático</td></tr>
+<tr><td><strong>Exantema Súbito (Roséola)</strong></td><td>HHV-6 e 7</td><td>6 meses–3 anos</td><td>10–15 dias</td><td>Febre ALTA 3–5 dias + irritabilidade; febre cede em lise</td><td>Maculopapular róseo claro, pós-queda da febre</td><td><strong>Aparecimento do exantema exatamente após a queda da febre</strong></td><td>Tronco → pescoço → face → MMSS</td><td>Sintomático</td></tr>
+<tr><td><strong>Eritema Infeccioso (5ª doença)</strong></td><td>Parvovírus B19</td><td>5–10 anos</td><td>4–14 dias</td><td>Febre baixa, cefaleia, IVAS</td><td><strong>Fácies esbofeteada</strong> (eritema malar bilateral) → rendilhado em extremidades</td><td>Fácies esbofeteada + rendilhado central nas lesões</td><td>3 fases: bochechas → extremidades → recidiva com calor/sol</td><td>Sintomático</td></tr>
+<tr><td><strong>Escarlatina</strong></td><td>S. pyogenes β-hemolítico grupo A</td><td>>2 anos (escolar)</td><td>2–4 dias</td><td>Febre alta, odinofagia, cefaleia, exantema palatal</td><td>Escarlatiniforme (micropapular, áspero "lixa", vermelho vivo)</td><td><strong>Sinal de Filatov</strong> (palidez perioral), <strong>Sinal de Pastia</strong> (linhas vermelhas nas dobras) + <strong>língua em framboesa</strong></td><td>Pescoço → tronco → generalizado</td><td><strong>Penicilina/amoxicilina 10 dias</strong></td></tr>
+<tr><td><strong>Varicela (Catapora)</strong></td><td>Vírus Varicela-Zóster (VZV)</td><td>Pré-escolar, escolar</td><td>10–21 dias</td><td>Febre moderada 1–2 dias + mal-estar</td><td><strong>Pápulo-vesicular polimorfo</strong> (lesões em diferentes estágios: mácula → pápula → vesícula → pústula → crosta)</td><td>Polimorfismo lesional; acometimento do couro cabeludo</td><td><strong>Centrípeta</strong> (tronco > face > extremidades)</td><td>Sintomático; aciclovir para imunocomprometidos</td></tr>
+<tr><td><strong>Doença Mão-Pé-Boca</strong></td><td>Coxsackie A16, Enterovírus 71</td><td>Lactentes, pré-escolares</td><td>3–7 dias</td><td>Febre baixa 3–5 dias, odinofagia</td><td>Pápulo-vesicular em mãos, pés, nádegas e boca (aftas)</td><td>Aftas orais + lesões nas PALMAS e PLANTAS</td><td>Mãos + pés + boca</td><td>Sintomático</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">CLASSIFICAÇÃO DOS TIPOS DE EXANTEMA</h2>
+<figure style="margin:22px 0;text-align:center"><img src="playbook_cl_nico_de_exantemas_pg11.png" alt="Mapeamento anatomico exantemas" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Mapeamento anatômico: Escarlatina (Filatov, Pastia, língua em framboesa) × Eritema Infeccioso (fácies esbofeteada, rendilhado)</figcaption></figure>
+
+<div class="table-wrap"><table>
+<thead><tr><th>Tipo</th><th>Característica</th><th>Doenças</th></tr></thead><tbody>
+<tr><td><strong>Morbiliforme</strong></td><td>Maculopápulas 3–10 mm, avermelhadas, com pele sã entre elas, podem confluir</td><td>Sarampo, mononucleose, enteroviroses</td></tr>
+<tr><td><strong>Rubeoliforme</strong></td><td>Similar ao morbiliforme, mas róseo, pápulas menores</td><td>Rubéola, enteroviroses</td></tr>
+<tr><td><strong>Escarlatiniforme</strong></td><td>Eritema micropapular difuso, áspero (lixa), sem pele normal entre as lesões, poupa região perioral</td><td>Escarlatina, doença de Kawasaki (às vezes)</td></tr>
+<tr><td><strong>Papulovesicular</strong></td><td>Pápulas + vesículas, perceptíveis ao tato</td><td>Varicela, HSV, doença mão-pé-boca</td></tr>
+<tr><td><strong>Petequial/Purpúrico</strong></td><td>Pontos avermelhados que NÃO somem à vitropressão</td><td>Meningococcemia, dengue, PTI</td></tr>
+<tr><td><strong>Urticariforme</strong></td><td>Pápulas eritematosas com contornos irregulares, evanescentes</td><td>Reações alérgicas/medicamentosas, coxsackie</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">ESTAÇÃO 1 — Caso: Varicela</h2>
+<p><strong>[CASO]:</strong> Menino, 5 anos, previamente hígido. Febre baixa há 2 dias. Lesões que começaram no tronco, se disseminaram para face e couro cabeludo. Evoluíram de máculas avermelhadas → pápulas → vesículas pruriginosas → crostas. Observa-se lesões em TODOS os estágios ao mesmo tempo.</p>
+<div class="question-label"><strong>Pergunta 1:</strong> Qual o diagnóstico e como confirmar?</div>
+<blockquote><strong>Varicela</strong>. Diagnóstico clínico. Características: exantema pápulo-vesicular polimorfo (lesões em diferentes estágios), distribuição centrípeta (tronco > face > extremidades), acometimento do couro cabeludo e mucosa oral.</blockquote>
+<blockquote>Confirmação: sorologia VZV (IgM e IgG) ou hemograma com leucopenia inicial + linfocitose posterior.</blockquote>
+<div class="question-label"><strong>Pergunta 2:</strong> Qual o tratamento?</div>
+<blockquote>Sintomático: analgésicos/antitérmicos, loção de calamina para prurido, anti-histamínico.</blockquote>
+<blockquote><strong>Aciclovir</strong>: reservado para imunocomprometidos, >12 anos, doença crônica de pele (eczema), uso de corticoide oral prolongado.</blockquote>
+<blockquote>Isolamento respiratório até todas as lesões estarem em crosta (5–7 dias após início do exantema).</blockquote>
+<div class="question-label"><strong>Pergunta 3:</strong> Qual a profilaxia?</div>
+<blockquote>Tetraviral (15 meses) + reforço aos 4 anos. Imunoglobulina específica para contatos suscetíveis imunocomprometidos.</blockquote>
+<hr>
+<h2 class="section-heading">ESTAÇÃO 2 — Caso: Exantema Súbito (Roséola)</h2>
+<p><strong>[CASO]:</strong> Menina, 1 ano e 4 meses. Febre alta (39,5°C) há 3 dias, de difícil controle, sem outros sintomas. No quarto dia, a febre cessou abruptamente e apareceram manchas avermelhadas difusas pelo corpo.</p>
+<div class="question-label"><strong>Pergunta 1:</strong> Qual o diagnóstico?</div>
+<blockquote><strong>Exantema Súbito (Roséola Infantil)</strong> por HHV-6/7. Tríade clássica: febre alta por 3–5 dias + queda brusca da febre + aparecimento simultâneo do exantema maculopapular.</blockquote>
+<div class="question-label"><strong>Pergunta 2:</strong> Qual a complicação mais temida?</div>
+<blockquote><strong>Convulsão febril</strong> (complicação principal do exantema súbito, relacionada à queda brusca da febre).</blockquote>
+<div class="question-label"><strong>Pergunta 3:</strong> Quais diagnósticos diferenciais excluir?</div>
+<blockquote>Se a criança tiver 2 doses da tríplice viral: sarampo e rubéola ficam afastados.</blockquote>
+<blockquote>Diagnóstico diferencial: rubéola, sarampo, reação medicamentosa.</blockquote>
+<hr>
+<h2 class="section-heading">ESTAÇÃO 3 — Caso: Escarlatina (Playbook)</h2>
+<figure style="margin:22px 0;text-align:center"><img src="playbook_cl_nico_de_exantemas_pg12.png" alt="Cinetica febre vs exantema" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Cinética febre × exantema: Escarlatina (junto à febre) × Eritema Infeccioso (surge após queda da febre)</figcaption></figure>
+
+<figure style="margin:22px 0;text-align:center"><img src="playbook_cl_nico_de_exantemas_pg13.png" alt="Arvore de raciocinio clinico" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Raciocínio clínico: toxemia + odinofagia + exantema lixa → Escarlatina | bom estado + fácies → Eritema Infeccioso</figcaption></figure>
+
+<figure style="margin:22px 0;text-align:center"><img src="playbook_cl_nico_de_exantemas_pg14.png" alt="Matriz DDx Escarlatina vs Eritema Infeccioso" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">DDx: Escarlatina (S. pyogenes, antibiótico obrigatório) × Eritema Infeccioso (Parvovírus B19, autolimitado)</figcaption></figure>
+
+<p><strong>[CASO]:</strong> Menina, 6 anos. Febre (38,5°C) há 2 dias + dor de garganta intensa + exantema áspero (sensação de lixa) eritematoso, generalizado, iniciado no pescoço. Língua com aspecto de morango. Região perioral pálida. Linhas vermelhas nas axilas.</p>
+<div class="question-label"><strong>Pergunta 1:</strong> Qual o diagnóstico e seus achados patognomônicos?</div>
+<blockquote><strong>Escarlatina</strong> por S. pyogenes β-hemolítico grupo A.</blockquote>
+<blockquote>- Sinal de Filatov: <strong>palidez perioral</strong> em contraste com o eritema facial</blockquote>
+<blockquote>- Sinal de Pastia: <strong>linhas avermelhadas nas dobras</strong> (axila, fossa antecubital, virilha)</blockquote>
+<blockquote>- <strong>Língua em framboesa</strong>: entre 3º e 4º dia, papilas proeminentes vermelhas</blockquote>
+<blockquote>- Descamação lamelar após resolução (1 semana)</blockquote>
+<div class="question-label"><strong>Pergunta 2:</strong> Como confirmar o diagnóstico?</div>
+<blockquote>Diagnóstico clínico + swab de orofaringe (padrão ouro) + ASLO elevado + leucocitose com desvio à esquerda.</blockquote>
+<div class="question-label"><strong>Pergunta 3:</strong> Qual o tratamento e por quê deve ser feito?</div>
+<blockquote><strong>Penicilina ou amoxicilina por 10 dias</strong> — tratamento previne febre reumática (principal complicação não supurativa).</blockquote>
+<blockquote>Complicações supurativas: abscesso periamigdaliano, otite, sinusite.</blockquote>
+<blockquote>Complicações não supurativas: febre reumática (2–3 semanas), GNDA (1–3 semanas).</blockquote>
+<hr>
+<h2 class="section-heading">Escarlatina × Doença de Kawasaki — Diferencial</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Característica</th><th>Escarlatina</th><th>Kawasaki</th></tr></thead><tbody>
+<tr><td>Língua em framboesa</td><td>Sim</td><td>Sim</td></tr>
+<tr><td>Exantema</td><td>Micropapular áspero "lixa"</td><td>Polimorfo (morbiliforme, urticariforme)</td></tr>
+<tr><td>Odinofagia</td><td>Sim (faringoamigdalite)</td><td>Não (fissuras labiais, não exsudato)</td></tr>
+<tr><td>Conjuntivite</td><td>Não</td><td>Sim (bilateral, sem exsudato)</td></tr>
+<tr><td>Edema dorsal mãos/pés</td><td>Não</td><td>Sim (eritema palmoplantar + descamação periungueal)</td></tr>
+<tr><td>Febre</td><td><5 dias</td><td><strong>≥5 dias</strong> (critério diagnóstico)</td></tr>
+<tr><td>Adenomegalia</td><td>Cervical, bilateral</td><td>Cervical ≥1,5 cm, unilateral</td></tr>
+<tr><td>Tratamento</td><td>ATB</td><td>AAS + imunoglobulina IV</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Pontos que o Professor Vai Checar</h2>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span>Identifica Manchas de Koplik (sarampo) como patognomônicas</span></label><label class="check-item"><input type="checkbox"><span>Sabe que exantema súbito = febre ANTES do exantema (o oposto da rubéola)</span></label><label class="check-item"><input type="checkbox"><span>Reconhece Filatov (palidez perioral) e Pastia (linhas nas dobras) na escarlatina</span></label><label class="check-item"><input type="checkbox"><span>Sabe que varicela tem lesões em TODOS os estágios ao mesmo tempo</span></label><label class="check-item"><input type="checkbox"><span>Indica penicilina 10 dias na escarlatina (previne febre reumática)</span></label><label class="check-item"><input type="checkbox"><span>Diferencia eritema infeccioso: "fácies esbofeteada" + rendilhado = Parvovírus B19</span></label><div class="check-progress"><span class="prog-text">0/6 marcados</span></div></div>
+<h2 class="section-heading">Alertas OSCE ⚠️</h2>
+<ul><li><strong>Sarampo = Notificação compulsória</strong> imediata (assim como meningococcemia, dengue)</li><li>Varicela com aciclovir: somente em imunocomprometidos (não é de rotina!)</li><li>Petéquias + febre = meningococcemia até prova em contrário — NÃO confundir com exantema infeccioso</li><li>Escarlatina sem tratamento → febre reumática (2–3 semanas) → cardite → valvopatia crônica</li><li>Eritema infeccioso: gestantes com Parvovírus B19 → risco de hidropsia fetal não imune</li></ul>
+<hr>
+<h2 class="section-heading">Fonte</h2>
+<ul><li>Gerado a partir de: <code>conteudo_doencas_exantematicas.md</code> (Aula 07 Teórica + Aula 08 Prática — Casos Varicela, Exantema Súbito, Impetigo Bolhoso)</li><li>Complementado com: <code>Playbook_Clínico_de_Exantemas.pdf</code> (lido visualmente — Cenário 1: Escarlatina; Cenário 2: Eritema Infeccioso)</li><li>Gaps identificados: doença de Kawasaki não detalhada no material — complementada com conhecimento geral para fins de diagnóstico diferencial com escarlatina</li></ul>
+</main>
+
+<nav class="bottom-nav">
+  <a href="../../osce-plano.html">← Voltar ao plano</a>
+  <span class="bottom-total" id="bottomTotal"></span>
+</nav>
+
+<script>
+(function() {
+  var KEY = 'osce_v1_' + location.pathname;
+  var state = JSON.parse(localStorage.getItem(KEY) || '{}');
+  var boxes = document.querySelectorAll('input[type=checkbox]');
+  var total = boxes.length;
+
+  boxes.forEach(function(cb, idx) {
+    if (state[idx]) cb.checked = true;
+    cb.addEventListener('change', function() {
+      state[idx] = cb.checked;
+      localStorage.setItem(KEY, JSON.stringify(state));
+      updateAll();
+    });
+  });
+
+  function updateAll() {
+    var done = 0;
+    boxes.forEach(function(c){ if (c.checked) done++; });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    var bar = document.getElementById('hdrBar');
+    var fill = document.getElementById('hdrFill');
+    var lbl = document.getElementById('hdrLabel');
+    var bot = document.getElementById('bottomTotal');
+    if (total > 0) {
+      bar.style.display = 'block';
+      fill.style.width = pct + '%';
+      lbl.textContent = done + '/' + total + ' itens marcados (' + pct + '%)';
+      bot.textContent = done + '/' + total + ' checados';
+    }
+    document.querySelectorAll('.checklist').forEach(function(cl) {
+      var cbs = cl.querySelectorAll('input[type=checkbox]');
+      var cd = 0;
+      cbs.forEach(function(c){ if (c.checked) cd++; });
+      var prog = cl.querySelector('.prog-text');
+      if (prog) prog.textContent = cd + '/' + cbs.length + ' marcados';
+    });
+  }
+
+  updateAll();
+})();
+</script>
+</body>
+</html>

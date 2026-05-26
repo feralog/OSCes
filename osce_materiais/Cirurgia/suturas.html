@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suturas Cirúrgicas · OSCE</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e3da;
+    --text: #1a1a1a;
+    --muted: #666;
+    --accent: #1a1a1a;
+    --green: #2d6a4f;
+    --green-bg: #e8f5ee;
+    --blue: #0d47a1;
+    --blue-bg: #e3f2fd;
+    --r: 8px;
+    --font-body: Georgia, 'Times New Roman', serif;
+    --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.75;
+    min-height: 100vh;
+    padding-bottom: 70px;
+  }
+
+  .site-header {
+    background: var(--accent);
+    color: #f5f0e8;
+    padding: 16px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+  .header-inner { max-width: 780px; margin: 0 auto; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--font-ui); font-size: 11px; letter-spacing: .4px;
+    color: #a89f8c; text-decoration: none; margin-bottom: 8px;
+    border: 1px solid #444; border-radius: 20px; padding: 2px 10px;
+    transition: color .15s, border-color .15s;
+  }
+  .back-btn:hover { color: #f5f0e8; border-color: #888; }
+  .header-eyebrow {
+    font-family: var(--font-ui); font-size: 10px; letter-spacing: 2.5px;
+    color: #a89f8c; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .header-title {
+    font-size: 19px; font-weight: normal; letter-spacing: -.3px; line-height: 1.3;
+  }
+  .check-progress-bar {
+    height: 3px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 10px;
+  }
+  .check-progress-fill {
+    height: 100%; background: linear-gradient(90deg,#f4c842,#7ecf8a);
+    border-radius: 2px; transition: width .4s ease;
+  }
+  .check-total-label {
+    font-family: var(--font-ui); font-size: 10px; color: #a89f8c; margin-top: 3px;
+  }
+
+  .main { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
+
+  .page-h1 { display: none; }
+  h2.section-heading {
+    font-family: var(--font-ui); font-size: 11px; font-weight: bold;
+    letter-spacing: 1.8px; text-transform: uppercase; color: #777;
+    margin: 30px 0 10px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--border);
+  }
+  h3.section-heading {
+    font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+    margin: 22px 0 8px; color: var(--text);
+  }
+  h4.section-heading, h5.section-heading {
+    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+    margin: 16px 0 6px; color: var(--muted);
+  }
+  p { margin: 10px 0; font-size: 15px; }
+  p.eyebrow-meta {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted);
+    font-style: italic; margin: 4px 0 20px;
+    border-left: 3px solid var(--border); padding-left: 10px;
+  }
+  code {
+    background: #f0ede8; border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; font-size: 13px;
+    font-family: 'Consolas', 'Monaco', monospace;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  ul, ol { padding-left: 22px; margin: 10px 0; }
+  li { margin: 5px 0; font-size: 15px; }
+
+  .table-wrap {
+    overflow-x: auto; margin: 16px 0;
+    border-radius: var(--r); border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  table { width: 100%; border-collapse: collapse; font-family: var(--font-ui); font-size: 13px; }
+  th {
+    background: #1a1a1a; color: #f5f0e8;
+    padding: 9px 12px; text-align: left; font-weight: 600;
+    font-size: 11px; letter-spacing: .5px;
+  }
+  td { padding: 8px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f5f2ee; }
+  tr:hover td { background: #ede8e2; }
+
+  .checklist {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 12px 14px 10px; margin: 16px 0;
+    display: flex; flex-direction: column; gap: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    cursor: pointer; padding: 6px 4px;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 14px; line-height: 1.5; transition: background .1s;
+    border-radius: 4px;
+  }
+  .check-item:last-of-type { border-bottom: none; }
+  .check-item:hover { background: #f8f5f0; }
+  .check-item input[type=checkbox] {
+    width: 18px; height: 18px; min-width: 18px;
+    margin-top: 2px; accent-color: var(--green); cursor: pointer;
+  }
+  .check-item input[type=checkbox]:checked + span {
+    color: var(--muted); text-decoration: line-through;
+  }
+  .check-item span { flex: 1; }
+  .check-sub { margin: 6px 0 2px 4px; padding-left: 18px; }
+  .check-sub li { font-size: 13px; color: var(--muted); margin: 3px 0; }
+  .check-note { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .check-progress {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);
+  }
+  .prog-text {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted); font-weight: 600;
+  }
+
+  .professor-block {
+    background: var(--blue-bg); border-left: 4px solid #1976d2;
+    border-radius: 0 var(--r) var(--r) 0; padding: 14px 16px; margin: 20px 0 8px;
+    font-size: 14px; line-height: 1.65; color: #0a2e6e;
+  }
+  .question-label {
+    font-family: var(--font-ui); font-weight: 700; font-size: 14px;
+    margin: 20px 0 6px; color: var(--text); padding-left: 2px;
+  }
+  .answer-block {
+    background: var(--green-bg); border-left: 4px solid var(--green);
+    border-radius: 0 var(--r) var(--r) 0; padding: 12px 16px; margin: 6px 0 20px;
+    font-size: 14px; line-height: 1.65; color: #1b4332;
+  }
+  blockquote {
+    border-left: 3px solid var(--border); padding: 8px 14px;
+    margin: 12px 0; color: var(--muted); font-style: italic; font-size: 14px;
+  }
+
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1a1a1a; padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 200; border-top: 1px solid #333;
+  }
+  .bottom-nav a {
+    color: #a89f8c; text-decoration: none; font-family: var(--font-ui);
+    font-size: 12px; padding: 5px 14px; border: 1px solid #444;
+    border-radius: 20px; transition: color .15s, border-color .15s;
+  }
+  .bottom-nav a:hover { color: #f5f0e8; border-color: #888; }
+  .bottom-total { font-family: var(--font-ui); font-size: 12px; color: #a89f8c; }
+
+  @media (max-width: 600px) {
+    .header-title { font-size: 16px; }
+    td, th { padding: 6px 8px; font-size: 12px; }
+    .check-item { font-size: 13px; }
+    p, li { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../../osce-plano.html" class="back-btn">← Plano de estudos</a>
+    <div class="header-eyebrow">Cirurgia</div>
+    <div class="header-title">Suturas Cirúrgicas</div>
+    <div class="check-progress-bar" id="hdrBar" style="display:none">
+      <div class="check-progress-fill" id="hdrFill" style="width:0%"></div>
+    </div>
+    <div class="check-total-label" id="hdrLabel"></div>
+  </div>
+</header>
+
+<main class="main">
+<h1 class="page-h1">Suturas Cirúrgicas — Fios, Agulhas e Técnicas</h1>
+<p class="eyebrow-meta">Cirurgia | Método: Checklist + Tabela de Indicações</p>
+<hr>
+<h2 class="section-heading">Princípios de Halsted (Base da Cirurgia Moderna)</h2>
+<ol><li><strong>Manuseio suave dos tecidos</strong> — traumas excessivos → inflamação, necrose, piora da cicatrização</li><li><strong>Hemostasia meticulosa</strong> — sangramento aumenta risco de infecção e compromete visualização</li><li><strong>Preservação do suprimento sanguíneo</strong> — dissecar no plano correto; respeitar vasos</li><li><strong>Técnica asséptica rigorosa</strong> — previne ISC (Infecção de Sítio Cirúrgico)</li><li><strong>Evitar espaços mortos</strong> — acúmulo de líquido favorece infecção; aproximar planos e usar dreno quando necessário</li><li><strong>Aproximação precisa dos tecidos</strong> — cicatrização por primeira intenção; pontos simétricos sem tração excessiva</li><li><strong>Imobilização adequada sem tensão</strong> — evita deiscência; sutura adequada ao tipo de tecido</li></ol>
+<hr>
+<h2 class="section-heading">Fases da Cicatrização</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Fase</th><th>Eventos</th></tr></thead><tbody>
+<tr><td><strong>Inflamatória</strong></td><td>Hemostasia (tampão plaquetário, cascata de coagulação) + aumento da permeabilidade vascular + migração de PMN, macrófagos e linfócitos</td></tr>
+<tr><td><strong>Proliferativa</strong></td><td>Angiogênese + fibroplasia (migração de fibroblastos) + síntese de colágeno + epitelização</td></tr>
+<tr><td><strong>Maturação</strong></td><td>Contração da ferida + remodelação do colágeno</td></tr>
+</tbody></table></div>
+<blockquote>O macrófago é a célula central da cicatrização. Sua ausência compromete todo o processo.</blockquote>
+<hr>
+<h2 class="section-heading">Princípio de Van Winkle e Hasting</h2>
+<blockquote><strong>O fio deve ter resistência tênsil semelhante ao tecido que será suturado.</strong> Enquanto o fio perde resistência, a cicatriz ganha — a razão entre eles permanece constante.</blockquote>
+<hr>
+<h2 class="section-heading">Classificação dos Fios de Sutura</h2>
+<h3 class="section-heading">Quanto à Absorção</h3>
+<h4 class="section-heading">Fios Absorvíveis — usados em planos internos, mucosas, subcutâneo</h4>
+<div class="table-wrap"><table>
+<thead><tr><th>Fio</th><th>Tempo de absorção</th><th>Uso principal</th></tr></thead><tbody>
+<tr><td><strong>Categute simples</strong></td><td>7–10 dias (curtíssimo)</td><td>Suturas GI, ligaduras vasculares em subcutâneo, cirurgias ginecológicas e urológicas</td></tr>
+<tr><td><strong>Categute cromado</strong></td><td>15–20 dias (curto)</td><td>Igual ao simples, com resistência levemente maior</td></tr>
+<tr><td><strong>Ácido poliglicólico (Dexon)</strong></td><td>50–70 dias (médio)</td><td>Cirurgias GI, urológicas, ginecológicas, oftalmológicas, subcutâneo</td></tr>
+<tr><td><strong>Poliglactina (Vicryl)</strong></td><td>50–70 dias (médio)</td><td>Músculos, fáscias, subcutâneo</td></tr>
+<tr><td><strong>Poliglecaprona (Monocryl)</strong></td><td>90–120 dias (moderado)</td><td>Pele (intradérmico), subcutâneo</td></tr>
+<tr><td><strong>Polidioxanona (PDS)</strong></td><td>90–180 dias (longo)</td><td>Fechamento de aponeurose, anastomoses em tecidos de cicatrização lenta</td></tr>
+<tr><td><strong>Poligliconato</strong></td><td>150–180 dias (longo)</td><td>Igual ao PDS</td></tr>
+</tbody></table></div>
+<blockquote><strong>PDS = fio mais próximo do ideal</strong> — absorção lenta com mínima reação tecidual</blockquote>
+<h4 class="section-heading">Fios Não Absorvíveis — fechamento de pele, anastomoses vasculares, tendões</h4>
+<div class="table-wrap"><table>
+<thead><tr><th>Fio</th><th>Origem</th><th>Estrutura</th><th>Uso principal</th></tr></thead><tbody>
+<tr><td><strong>Nylon</strong></td><td>Sintético (poliamida)</td><td>Mono ou multifilamentar</td><td>Fechamento de pele; anastomoses vasculares</td></tr>
+<tr><td><strong>Polipropileno (Prolene)</strong></td><td>Sintético (poliolefina)</td><td>Monofilamentar</td><td>Anastomoses vasculares, pele</td></tr>
+<tr><td><strong>Seda</strong></td><td>Natural (bicho-da-seda)</td><td>Multifilamentar</td><td>Ligaduras, fechamento de pele (mais reação tecidual)</td></tr>
+<tr><td><strong>Algodão / Linho</strong></td><td>Natural (vegetal)</td><td>Multifilamentar</td><td>Uso em queda; reação tecidual alta</td></tr>
+<tr><td><strong>Poliéster (Dácron)</strong></td><td>Sintético</td><td>Multifilamentar</td><td>Próteses vasculares, valvas cardíacas</td></tr>
+<tr><td><strong>Aço inoxidável</strong></td><td>Metálico</td><td>Mono ou multifilamentar</td><td>Esterno, tendões, anastomoses especiais</td></tr>
+</tbody></table></div>
+<h3 class="section-heading">Quanto à Estrutura</h3>
+<figure style="margin:22px 0;text-align:center"><img src="fios_agulhas_pdf_aula_07_fios_e_agulhas_pdf_pg3_img2.png" alt="Estrutura fios sutura mono torcido trancado multifilamentar revestido" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Estrutura: Monofilamentar (menor infecção, mais memória) | Torcido | Trançado (maior força de nó) | Revestido multifilamentar (maneabilidade + resistência)</figcaption></figure>
+
+<div class="table-wrap"><table>
+<thead><tr><th>Estrutura</th><th>Características</th><th>Implicações</th></tr></thead><tbody>
+<tr><td><strong>Monofilamentar</strong></td><td>Filamento único; menor capilaridade</td><td>Menor aderência bacteriana (menos infecção), mas exige mais nós e é menos maleável</td></tr>
+<tr><td><strong>Multifilamentar</strong></td><td>Vários filamentos trançados ou torcidos</td><td>Maior maleabilidade, melhor manuseio, mas maior capilaridade → maior risco de infecção</td></tr>
+</tbody></table></div>
+<h3 class="section-heading">Quanto ao Calibre (Diâmetro)</h3>
+<blockquote>Quanto maior o número <strong>antes do zero</strong>, mais <strong>fino</strong> é o fio:</blockquote>
+<blockquote>6-0 < 5-0 < 4-0 < 3-0 < 2-0 < 0 < 1 < 2</blockquote>
+<ul><li>Tecidos delicados (pele de face, vasos): fios finos (4-0, 5-0, 6-0)</li><li>Tecidos resistentes (aponeurose, pele do tronco): fios grossos (0, 1, 2)</li></ul>
+<hr>
+<h2 class="section-heading">Regra dos Nós</h2>
+<blockquote><strong>Dar um nó a mais do que o número do fio:</strong></blockquote>
+<blockquote>- Fio 3-0 → 4 nós</blockquote>
+<blockquote>- Fio 5-0 → 6 nós</blockquote>
+<p>O nó cirúrgico tem 3 laçadas:</p>
+<ol><li><strong>Primeira laçada:</strong> aperta</li><li><strong>Segunda laçada:</strong> impede afrouxamento</li><li><strong>Terceira laçada:</strong> segurança</li></ol>
+<hr>
+<h2 class="section-heading">Classificação das Agulhas</h2>
+<figure style="margin:22px 0;text-align:center"><img src="fios_agulhas_pdf_aula_7_fios_e_agulhas_pdf_pg21_img1.png" alt="Como ler embalagem fio sutura agulha acido poliglicolico" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Leitura da embalagem: tipo do fio | calibre (1=espessura) | cor | comprimento | curvatura (M=meia circunferência) | ponta da agulha (R=romba/Cil=cilíndrica) | comprimento da agulha (4,0 cm)</figcaption></figure>
+
+<h3 class="section-heading">Quanto à Ponta</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Tipo</th><th>Uso</th></tr></thead><tbody>
+<tr><td><strong>Cortante (triangular)</strong></td><td>Pele e estruturas resistentes que exigem afastamento das fibras</td></tr>
+<tr><td><strong>Não-cortante / cilíndrica</strong></td><td>Mucosas, vísceras ocas, tecidos moles de fácil penetração</td></tr>
+</tbody></table></div>
+<h3 class="section-heading">Quanto ao Corpo</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Formato</th><th>Uso</th></tr></thead><tbody>
+<tr><td><strong>Curva</strong></td><td>Mais usada; empregada com porta-agulhas</td></tr>
+<tr><td><strong>Reta</strong></td><td>Vísceras ocas, tendões, nervos, suturas intradérmicas; usada com a mão</td></tr>
+<tr><td><strong>Semi-reta</strong></td><td>Uso intermediário</td></tr>
+</tbody></table></div>
+<h3 class="section-heading">Quanto ao Fundo</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Tipo</th><th>Característica</th></tr></thead><tbody>
+<tr><td><strong>Encrustada (atraumática)</strong></td><td>Fio fixado dentro da agulha (uma unidade); menos trauma</td></tr>
+<tr><td><strong>Não-encrustada (traumática)</strong></td><td>Fio deve ser passado pelo olho da agulha; mais trauma tecidual</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Tipos de Sutura (Pontos)</h2>
+<h3 class="section-heading">Pontos Separados (Interrompidos)</h3>
+<ul><li>Vantagem: afrouxamento de um nó não compromete o restante</li><li>São menos isquemiantes que os contínuos</li></ul>
+<div class="table-wrap"><table>
+<thead><tr><th>Ponto</th><th>Uso</th></tr></thead><tbody>
+<tr><td><strong>Simples</strong></td><td>Padrão; pele, aponeurose</td></tr>
+<tr><td><strong>Ponto em U (horizontal / vertical)</strong></td><td>Maior resistência à tração; hemostasia local</td></tr>
+<tr><td><strong>Ponto em X (horizontal / vertical)</strong></td><td>Locais que sangram muito (hemostático)</td></tr>
+<tr><td><strong>Ponto de Donatti (far-near)</strong></td><td>"Longe-longe" aproxima tecidos profundos; "perto-perto" aproxima tecidos superficiais; útil em pele sob tensão</td></tr>
+</tbody></table></div>
+<h3 class="section-heading">Pontos Contínuos (Chuleio)</h3>
+<ul><li>Vantagem: mais rápidos; distribuição uniforme da tensão</li></ul>
+<div class="table-wrap"><table>
+<thead><tr><th>Ponto</th><th>Uso</th></tr></thead><tbody>
+<tr><td><strong>Chuleio simples</strong></td><td>Planos internos, fechamento rápido</td></tr>
+<tr><td><strong>Chuleio ancorado</strong></td><td>Reforço adicional; cada ponto é ancorado</td></tr>
+<tr><td><strong>Sutura intradérmica (intratecidual)</strong></td><td>Pele (resultado estético superior); fio paralelo à superfície</td></tr>
+<tr><td><strong>Sutura em barra grega</strong></td><td>Fechamento de aponeurose</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Tabela de Indicações por Tecido</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Tecido</th><th>Fio recomendado</th><th>Tipo de sutura</th><th>Retirada</th></tr></thead><tbody>
+<tr><td><strong>Pele (face)</strong></td><td>Nylon 4-0 a 6-0 ou Prolene</td><td>Pontos separados ou intradérmico</td><td>4–5 dias</td></tr>
+<tr><td><strong>Pele (tronco / membros)</strong></td><td>Nylon 3-0 a 4-0</td><td>Pontos separados</td><td>7–8 dias (ou > 10 dias se tensão)</td></tr>
+<tr><td><strong>Subcutâneo</strong></td><td>Vicryl 3-0 a 4-0</td><td>Chuleio simples</td><td>Absorvível</td></tr>
+<tr><td><strong>Aponeurose</strong></td><td>PDS 0 ou 1 / Nylon 0</td><td>Chuleio ou pontos separados</td><td>Absorção lenta / não remove</td></tr>
+<tr><td><strong>Músculo</strong></td><td>Vicryl 2-0 a 0</td><td>Pontos separados ou chuleio</td><td>Absorvível</td></tr>
+<tr><td><strong>Mucosa GI</strong></td><td>Vicryl / PDS 3-0 a 4-0</td><td>Chuleio ou pontos separados</td><td>Absorvível</td></tr>
+<tr><td><strong>Anastomose vascular</strong></td><td>Prolene 4-0 a 6-0</td><td>Chuleio</td><td>Não remove</td></tr>
+<tr><td><strong>Tendão</strong></td><td>Nylon / Prolene 3-0</td><td>Pontos separados (Kessler, Bunnell)</td><td>Não remove</td></tr>
+<tr><td><strong>Esterno</strong></td><td>Aço n° 6</td><td>Pontos em 8</td><td>Não remove</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Tipos de Fechamento de Feridas</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Tipo</th><th>Definição</th><th>Indicação</th></tr></thead><tbody>
+<tr><td><strong>Primário (1ª intenção)</strong></td><td>Bordas aproximadas imediatamente; perda mínima de tecido</td><td>Feridas limpas e limpas-contaminadas</td></tr>
+<tr><td><strong>Secundário (2ª intenção)</strong></td><td>Bordas não unidas; fechamento por granulação "de baixo para cima"</td><td>Feridas infectadas, contaminadas</td></tr>
+<tr><td><strong>Terciário (1ª intenção retardada)</strong></td><td>Ferida deixada aberta inicialmente; fechada cirurgicamente após 48–72h</td><td>Feridas contaminadas com risco de infecção</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Classificação de Feridas Cirúrgicas (CDC)</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Classe</th><th>Definição</th><th>ISC</th></tr></thead><tbody>
+<tr><td><strong>I — Limpa</strong></td><td>Sem inflamação, sem abertura de tratos; campo fechado</td><td>1–5%</td></tr>
+<tr><td><strong>II — Limpa-contaminada</strong></td><td>Abertura controlada de tratos (digestivo, respiratório, GU)</td><td>3–11%</td></tr>
+<tr><td><strong>III — Contaminada</strong></td><td>Violação de técnica estéril; inflamação aguda sem pus; trauma recente</td><td>0–17%</td></tr>
+<tr><td><strong>IV — Infectada</strong></td><td>Pus, víscera perfurada, trauma antigo</td><td>> 27%</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Retirada de Fios</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Região</th><th>Prazo de retirada</th></tr></thead><tbody>
+<tr><td>Face</td><td><strong>4–5 dias</strong> (cicatrização rápida + resultado estético)</td></tr>
+<tr><td>Pele do tronco / membros</td><td><strong>7–8 dias</strong></td></tr>
+<tr><td>Pele sob tensão / idosos / desnutridos</td><td><strong>10–14 dias</strong></td></tr>
+<tr><td>Esterno</td><td><strong>3–4 semanas</strong></td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Checklist — Síntese Cirúrgica</h2>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span>Assepsia rigorosa antes de qualquer contato com o campo</span></label><label class="check-item"><input type="checkbox"><span>Escolha do fio: considerar tecido, tempo de cicatrização e contaminação do campo</span></label><label class="check-item"><input type="checkbox"><span>Aproximação anatômica: reunir as camadas de tecido de forma precisa</span></label><label class="check-item"><input type="checkbox"><span>Tensão mínima: não suturar sob tensão excessiva (causa isquemia e deiscência)</span></label><label class="check-item"><input type="checkbox"><span>Evitar espaços mortos (aproximar planos)</span></label><label class="check-item"><input type="checkbox"><span>Número correto de nós (número do fio + 1)</span></label><label class="check-item"><input type="checkbox"><span>Nós posicionados ao lado da ferida (nunca sobre ela)</span></label><label class="check-item"><input type="checkbox"><span>Registrar tipo e calibre do fio usado em cada plano</span></label><div class="check-progress"><span class="prog-text">0/8 marcados</span></div></div>
+<hr>
+<h2 class="section-heading">Alertas OSCE ⚠️</h2>
+<ul><li>Multifilamentar > capilaridade > maior risco de infecção em campo contaminado → usar monofilamentar nesses casos</li><li><strong>Tecido mucoso cicatriza mais rápido que pele</strong> → fio absorvível de curta duração para mucosas</li><li>Sutura sob tensão = isquemia = deiscência — nunca fechar à força (considerar retalho ou fechamento secundário)</li><li><strong>Donatti:</strong> "longe-longe" em profundidade + "perto-perto" em superfície → distribui tensão em toda a espessura</li><li>Cicatriz hipertrófica: permanece nos limites da lesão, regride espontaneamente</li><li>Queloide: cresce ALÉM das margens, não regride; predisposição genética; peles escuras (15–20% de negros/hispânicos); localização: clavícula, tronco, MMSS, face</li></ul>
+<hr>
+<h2 class="section-heading">Fonte</h2>
+<ul><li>Gerado a partir de: <code>conteudo_fios_e_agulhas.md</code>, <code>conteudo_incisoes_cirurgicas_disseccao_sintese.md</code>, <code>conteudo_feridas_cirurgicas.md</code> (Aulas 2, 5, 7 e 8 — Cirurgia UNISA)</li></ul>
+</main>
+
+<nav class="bottom-nav">
+  <a href="../../osce-plano.html">← Voltar ao plano</a>
+  <span class="bottom-total" id="bottomTotal"></span>
+</nav>
+
+<script>
+(function() {
+  var KEY = 'osce_v1_' + location.pathname;
+  var state = JSON.parse(localStorage.getItem(KEY) || '{}');
+  var boxes = document.querySelectorAll('input[type=checkbox]');
+  var total = boxes.length;
+
+  boxes.forEach(function(cb, idx) {
+    if (state[idx]) cb.checked = true;
+    cb.addEventListener('change', function() {
+      state[idx] = cb.checked;
+      localStorage.setItem(KEY, JSON.stringify(state));
+      updateAll();
+    });
+  });
+
+  function updateAll() {
+    var done = 0;
+    boxes.forEach(function(c){ if (c.checked) done++; });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    var bar = document.getElementById('hdrBar');
+    var fill = document.getElementById('hdrFill');
+    var lbl = document.getElementById('hdrLabel');
+    var bot = document.getElementById('bottomTotal');
+    if (total > 0) {
+      bar.style.display = 'block';
+      fill.style.width = pct + '%';
+      lbl.textContent = done + '/' + total + ' itens marcados (' + pct + '%)';
+      bot.textContent = done + '/' + total + ' checados';
+    }
+    document.querySelectorAll('.checklist').forEach(function(cl) {
+      var cbs = cl.querySelectorAll('input[type=checkbox]');
+      var cd = 0;
+      cbs.forEach(function(c){ if (c.checked) cd++; });
+      var prog = cl.querySelector('.prog-text');
+      if (prog) prog.textContent = cd + '/' + cbs.length + ' marcados';
+    });
+  }
+
+  updateAll();
+})();
+</script>
+</body>
+</html>

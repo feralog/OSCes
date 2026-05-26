@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Síndrome da Mononucleose · OSCE</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e3da;
+    --text: #1a1a1a;
+    --muted: #666;
+    --accent: #1a1a1a;
+    --green: #2d6a4f;
+    --green-bg: #e8f5ee;
+    --blue: #0d47a1;
+    --blue-bg: #e3f2fd;
+    --r: 8px;
+    --font-body: Georgia, 'Times New Roman', serif;
+    --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.75;
+    min-height: 100vh;
+    padding-bottom: 70px;
+  }
+
+  .site-header {
+    background: var(--accent);
+    color: #f5f0e8;
+    padding: 16px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+  .header-inner { max-width: 780px; margin: 0 auto; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--font-ui); font-size: 11px; letter-spacing: .4px;
+    color: #a89f8c; text-decoration: none; margin-bottom: 8px;
+    border: 1px solid #444; border-radius: 20px; padding: 2px 10px;
+    transition: color .15s, border-color .15s;
+  }
+  .back-btn:hover { color: #f5f0e8; border-color: #888; }
+  .header-eyebrow {
+    font-family: var(--font-ui); font-size: 10px; letter-spacing: 2.5px;
+    color: #a89f8c; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .header-title {
+    font-size: 19px; font-weight: normal; letter-spacing: -.3px; line-height: 1.3;
+  }
+  .check-progress-bar {
+    height: 3px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 10px;
+  }
+  .check-progress-fill {
+    height: 100%; background: linear-gradient(90deg,#f4c842,#7ecf8a);
+    border-radius: 2px; transition: width .4s ease;
+  }
+  .check-total-label {
+    font-family: var(--font-ui); font-size: 10px; color: #a89f8c; margin-top: 3px;
+  }
+
+  .main { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
+
+  .page-h1 { display: none; }
+  h2.section-heading {
+    font-family: var(--font-ui); font-size: 11px; font-weight: bold;
+    letter-spacing: 1.8px; text-transform: uppercase; color: #777;
+    margin: 30px 0 10px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--border);
+  }
+  h3.section-heading {
+    font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+    margin: 22px 0 8px; color: var(--text);
+  }
+  h4.section-heading, h5.section-heading {
+    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+    margin: 16px 0 6px; color: var(--muted);
+  }
+  p { margin: 10px 0; font-size: 15px; }
+  p.eyebrow-meta {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted);
+    font-style: italic; margin: 4px 0 20px;
+    border-left: 3px solid var(--border); padding-left: 10px;
+  }
+  code {
+    background: #f0ede8; border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; font-size: 13px;
+    font-family: 'Consolas', 'Monaco', monospace;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  ul, ol { padding-left: 22px; margin: 10px 0; }
+  li { margin: 5px 0; font-size: 15px; }
+
+  .table-wrap {
+    overflow-x: auto; margin: 16px 0;
+    border-radius: var(--r); border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  table { width: 100%; border-collapse: collapse; font-family: var(--font-ui); font-size: 13px; }
+  th {
+    background: #1a1a1a; color: #f5f0e8;
+    padding: 9px 12px; text-align: left; font-weight: 600;
+    font-size: 11px; letter-spacing: .5px;
+  }
+  td { padding: 8px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f5f2ee; }
+  tr:hover td { background: #ede8e2; }
+
+  .checklist {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 12px 14px 10px; margin: 16px 0;
+    display: flex; flex-direction: column; gap: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    cursor: pointer; padding: 6px 4px;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 14px; line-height: 1.5; transition: background .1s;
+    border-radius: 4px;
+  }
+  .check-item:last-of-type { border-bottom: none; }
+  .check-item:hover { background: #f8f5f0; }
+  .check-item input[type=checkbox] {
+    width: 18px; height: 18px; min-width: 18px;
+    margin-top: 2px; accent-color: var(--green); cursor: pointer;
+  }
+  .check-item input[type=checkbox]:checked + span {
+    color: var(--muted); text-decoration: line-through;
+  }
+  .check-item span { flex: 1; }
+  .check-sub { margin: 6px 0 2px 4px; padding-left: 18px; }
+  .check-sub li { font-size: 13px; color: var(--muted); margin: 3px 0; }
+  .check-note { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .check-progress {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);
+  }
+  .prog-text {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted); font-weight: 600;
+  }
+
+  .professor-block {
+    background: var(--blue-bg); border-left: 4px solid #1976d2;
+    border-radius: 0 var(--r) var(--r) 0; padding: 14px 16px; margin: 20px 0 8px;
+    font-size: 14px; line-height: 1.65; color: #0a2e6e;
+  }
+  .question-label {
+    font-family: var(--font-ui); font-weight: 700; font-size: 14px;
+    margin: 20px 0 6px; color: var(--text); padding-left: 2px;
+  }
+  .answer-block {
+    background: var(--green-bg); border-left: 4px solid var(--green);
+    border-radius: 0 var(--r) var(--r) 0; padding: 12px 16px; margin: 6px 0 20px;
+    font-size: 14px; line-height: 1.65; color: #1b4332;
+  }
+  blockquote {
+    border-left: 3px solid var(--border); padding: 8px 14px;
+    margin: 12px 0; color: var(--muted); font-style: italic; font-size: 14px;
+  }
+
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1a1a1a; padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 200; border-top: 1px solid #333;
+  }
+  .bottom-nav a {
+    color: #a89f8c; text-decoration: none; font-family: var(--font-ui);
+    font-size: 12px; padding: 5px 14px; border: 1px solid #444;
+    border-radius: 20px; transition: color .15s, border-color .15s;
+  }
+  .bottom-nav a:hover { color: #f5f0e8; border-color: #888; }
+  .bottom-total { font-family: var(--font-ui); font-size: 12px; color: #a89f8c; }
+
+  @media (max-width: 600px) {
+    .header-title { font-size: 16px; }
+    td, th { padding: 6px 8px; font-size: 12px; }
+    .check-item { font-size: 13px; }
+    p, li { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../../../osce-plano.html" class="back-btn">← Plano de estudos</a>
+    <div class="header-eyebrow">Clínica Médica · Infectologia</div>
+    <div class="header-title">Síndrome da Mononucleose</div>
+    <div class="check-progress-bar" id="hdrBar" style="display:none">
+      <div class="check-progress-fill" id="hdrFill" style="width:0%"></div>
+    </div>
+    <div class="check-total-label" id="hdrLabel"></div>
+  </div>
+</header>
+
+<main class="main">
+<h1 class="page-h1">Síndrome da Mononucleose</h1>
+<p class="eyebrow-meta">Clínica Médica · Infectologia | Método: Resumo Clínico</p>
+<hr>
+<h2 class="section-heading">Definição</h2>
+<p><strong>Síndrome da mononucleose:</strong> conjunto de sinais, sintomas e alterações laboratoriais que se assemelham à mononucleose infecciosa clássica por EBV.</p>
+<p><strong>Agentes causadores:</strong></p>
+<ol><li><strong>Vírus Epstein-Barr (EBV/HHV-4)</strong> — causa + comum; mononucleose infecciosa clássica</li><li><strong>Citomegalovírus (CMV/HHV-5)</strong> — CMV agudo</li><li><strong>HIV</strong> — infecção aguda pelo HIV</li><li><strong>Toxoplasma gondii</strong> — toxoplasmose aguda</li><li>HHV-6, rubéola, hepatite A, adenovírus, Bartonella</li></ol>
+<hr>
+<h2 class="section-heading">PARTE 1 — Mononucleose Infecciosa (EBV)</h2>
+<h3 class="section-heading">Epidemiologia</h3>
+<ul><li><strong>"Doença do beijo"</strong> — transmissão por secreções orais (saliva); baixa transmissibilidade (contato íntimo necessário)</li><li>Incubação: <strong>33–49 dias</strong> (Hoagland: cadetes de West Point adoeciam 6 semanas pós-férias)</li><li>90% dos adultos já tiveram a infecção (prevalência mundial)</li><li>50% das crianças até 5 anos nos EUA</li><li>EBV latente em linfócitos B por toda a vida</li><li>90% dos casos são <strong>assintomáticos</strong> (infecção na infância)</li><li>Adolescentes e adultos: sintomáticos</li></ul>
+<h3 class="section-heading">Quadro Clínico (Tétrade)</h3>
+<ol><li><strong>Faringite exsudativa</strong> (placas brancas nas amígdalas — difícil diferenciar de estreptocócica)</li><li><strong>Febre alta</strong> (39–40°C)</li><li><strong>Adenomegalia cervical</strong> bilateral e posterior (linfonodos móveis, dolorosos, não aderidos)</li><li>Mal-estar, fadiga, mialgia, cefaleia</li></ol>
+<p><strong>Outros:</strong></p>
+<ul><li>Esplenomegalia (risco de <strong>ruptura esplênica</strong> — evitar esportes de contato)</li><li>Hepatomegalia discreta + ↑ transaminases (hepatite leve, sem icterícia)</li><li>Exantema maculopapular (10–20%)</li><li>Edema bipalpebral bilateral = <strong>Sinal de Hoagland</strong> (clássico da mononucleose)</li></ul>
+<h3 class="section-heading">Armadilha Clínica — Amoxicilina</h3>
+<blockquote><strong>90% dos pacientes com mononucleose que recebem amoxicilina</strong> desenvolvem exantema maculopapular intenso — <strong>NÃO rotular como alérgico à penicilina</strong> (é específico da mononucleose, não alergia verdadeira)</blockquote>
+<h3 class="section-heading">Complicações (Raras)</h3>
+<ul><li>Ruptura esplênica (0,5–1%) — evitar esportes e esforços nas primeiras 3–4 semanas</li><li>Trombocitopenia leve</li><li>Síndrome de Guillain-Barré (< 1%)</li><li>Mielite transversa (< 1%)</li><li>Síndrome de fadiga crônica</li><li>Linfoma de Burkitt (associação com EBV endêmico)</li></ul>
+<h3 class="section-heading">Diagnóstico</h3>
+<p><strong>Hemograma:</strong></p>
+<ul><li>Linfocitose com <strong>linfócitos atípicos</strong> (virocitócitos) — achado característico</li><li>↑ transaminases em 90% dos casos</li></ul>
+<p><strong>Específico:</strong></p>
+<ul><li><strong>Anti-VCA IgM:</strong> aparece precocemente e desaparece em 4–6 semanas (infecção aguda)</li><li><strong>Anti-VCA IgG:</strong> fase aguda, pico 2–4 semanas, persiste para sempre</li><li><strong>Anti-EBNA:</strong> aparece 3–4 semanas após e persiste por toda a vida — indica infecção passada</li><li><strong>Teste Monospot (heterófilos):</strong> triagem rápida (anticorpos heterófilos)</li></ul>
+<h3 class="section-heading">Tratamento</h3>
+<ul><li><strong>Sintomático</strong> — sem antivirais específicos; sem vacina</li><li>Repouso, analgesia, hidratação</li><li>Evitar esportes de contato (risco de ruptura esplênica por 3–4 semanas)</li><li><strong>Corticoide:</strong> amigdalite grave com risco de obstrução das vias aéreas</li><li><strong>NÃO usar amoxicilina/ampicilina</strong></li></ul>
+<hr>
+<h2 class="section-heading">PARTE 2 — Citomegalovírus (CMV)</h2>
+<h3 class="section-heading">Epidemiologia</h3>
+<ul><li>Anticorpos em ~80% dos adultos (infecção universal)</li><li>Transmissão: saliva, sexual, hemoderivados, transplante, vertical (congênita, parto, amamentação)</li><li>Incubação: 7–14 dias</li><li>Latência em linfócitos T e macrófagos</li></ul>
+<h3 class="section-heading">Quadro Clínico</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Situação</th><th>Manifestação</th></tr></thead><tbody>
+<tr><td>Imunocompetente</td><td>Oligo/assintomático; síndrome mononucleose-like</td></tr>
+<tr><td>Imunocomprometido (HIV CD4 < 100)</td><td>Retinite (+ comum), esofagite, colite, encefalite</td></tr>
+<tr><td>Transplantado</td><td>Pneumonite, esofagite, hepatite, retinite</td></tr>
+<tr><td><strong>Gestante (infecção primária)</strong></td><td>30–40% prematuridade, retardo crescimento fetal, hipotonia, coriorretinite, calcificações SNC, surdez</td></tr>
+</tbody></table></div>
+<blockquote><strong>Risco fetal maior no 1º trimestre</strong> (sequelas graves: microcefalia, coriorretinite, surdez, cegueira)</blockquote>
+<h3 class="section-heading">Diagnóstico CMV</h3>
+<ul><li>IgM + IgG: infecção aguda</li><li><strong>Teste de avidez:</strong> baixa avidez (< 16ª semana pós-infecção) = infecção recente; alta avidez (> 16 semanas) = infecção passada</li><li><strong>Antigenemia/PCR CMV:</strong> quantificação viral em imunocomprometidos</li><li>Triagem pré-natal: CMV IgG + IgM na gestação (pré-natal de rotina no Brasil)</li></ul>
+<h3 class="section-heading">Tratamento CMV</h3>
+<ul><li>Imunocompetente: <strong>suporte</strong> (autolimitado)</li><li>Imunocomprometido/lesão em órgão alvo: <strong>ganciclovir EV</strong> ou valganciclovir VO</li><li>Gestação: valaciclovir (reduz transmissão vertical — ainda não na recomendação brasileira oficial)</li><li>Transplante: profilaxia com valganciclovir</li></ul>
+<hr>
+<h2 class="section-heading">PARTE 3 — Toxoplasmose (Resumo)</h2>
+<h3 class="section-heading">Agente e Ciclo</h3>
+<ul><li><em>Toxoplasma gondii</em> — protozoário intracelular; gato = hospedeiro definitivo (elimina oocistos)</li><li>Transmissão: ingestão de oocistos (vegetais, água) ou cistos em carne crua/mal passada</li></ul>
+<h3 class="section-heading">Quadro Clínico</h3>
+<ul><li>80–90% <strong>assintomáticos</strong></li><li>Linfadenopatia cervical bilateral não dolorosa (principal)</li><li>Febre, mialgia, adinamia, exantema raro</li></ul>
+<h3 class="section-heading">Diagnóstico</h3>
+<ul><li>IgM + IgG + <strong>Teste de avidez IgG</strong>:</li><li><strong>Baixa avidez</strong> (< 12 semanas) = infecção recente</li><li><strong>Alta avidez</strong> (> 12–16 semanas) = infecção mais antiga</li><li>Interpretação:</li><li>Imune: IgG+ / IgM−</li><li>Suscetível: IgG− / IgM−</li><li>Infecção recente: IgG+ / IgM+ / baixa avidez</li></ul>
+<h3 class="section-heading">Tratamento</h3>
+<ul><li>Imunocompetente: <strong>não tratar</strong> (autolimitado) — exceto se sintomas graves</li><li>Imunocomprometido (HIV): <strong>sulfadiazina + pirimetamina</strong> (obrigatório)</li><li>Gestação: espiramicina (antes de confirmação fetal) ou sulfadiazina + pirimetamina (após 2º tri)</li></ul>
+<hr>
+<h2 class="section-heading">Alertas OSCE ⚠️</h2>
+<ul><li><strong>Amoxicilina em mononucleose = exantema generalizado</strong> (não é alergia real!)</li><li>Linfócitos atípicos no hemograma = sinal chave de mononucleose/CMV/HIV agudo</li><li>Esplenomegalia + mononucleose = restrição de esportes por ≥ 3 semanas (ruptura esplênica)</li><li>Anti-EBNA + = infecção passada (não aguda)</li><li>Teste de avidez IgG: baixa = recente; alta = antiga</li><li>CMV em HIV com CD4 < 100 → retinite (flashes + manchas visuais) → ganciclovir</li></ul>
+<hr>
+<h2 class="section-heading">Fonte</h2>
+<ul><li>Gerado a partir de: <code>conteudo_sindrome_da_mononucleose.md</code> (Aulas 2 e 3 — Síndrome da Mononucleose — Infectologia CM)</li></ul>
+</main>
+
+<nav class="bottom-nav">
+  <a href="../../../osce-plano.html">← Voltar ao plano</a>
+  <span class="bottom-total" id="bottomTotal"></span>
+</nav>
+
+<script>
+(function() {
+  var KEY = 'osce_v1_' + location.pathname;
+  var state = JSON.parse(localStorage.getItem(KEY) || '{}');
+  var boxes = document.querySelectorAll('input[type=checkbox]');
+  var total = boxes.length;
+
+  boxes.forEach(function(cb, idx) {
+    if (state[idx]) cb.checked = true;
+    cb.addEventListener('change', function() {
+      state[idx] = cb.checked;
+      localStorage.setItem(KEY, JSON.stringify(state));
+      updateAll();
+    });
+  });
+
+  function updateAll() {
+    var done = 0;
+    boxes.forEach(function(c){ if (c.checked) done++; });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    var bar = document.getElementById('hdrBar');
+    var fill = document.getElementById('hdrFill');
+    var lbl = document.getElementById('hdrLabel');
+    var bot = document.getElementById('bottomTotal');
+    if (total > 0) {
+      bar.style.display = 'block';
+      fill.style.width = pct + '%';
+      lbl.textContent = done + '/' + total + ' itens marcados (' + pct + '%)';
+      bot.textContent = done + '/' + total + ' checados';
+    }
+    document.querySelectorAll('.checklist').forEach(function(cl) {
+      var cbs = cl.querySelectorAll('input[type=checkbox]');
+      var cd = 0;
+      cbs.forEach(function(c){ if (c.checked) cd++; });
+      var prog = cl.querySelector('.prog-text');
+      if (prog) prog.textContent = cd + '/' + cbs.length + ' marcados';
+    });
+  }
+
+  updateAll();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sondagem Nasogástrica (SNG) · OSCE</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e3da;
+    --text: #1a1a1a;
+    --muted: #666;
+    --accent: #1a1a1a;
+    --green: #2d6a4f;
+    --green-bg: #e8f5ee;
+    --blue: #0d47a1;
+    --blue-bg: #e3f2fd;
+    --r: 8px;
+    --font-body: Georgia, 'Times New Roman', serif;
+    --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.75;
+    min-height: 100vh;
+    padding-bottom: 70px;
+  }
+
+  .site-header {
+    background: var(--accent);
+    color: #f5f0e8;
+    padding: 16px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+  .header-inner { max-width: 780px; margin: 0 auto; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--font-ui); font-size: 11px; letter-spacing: .4px;
+    color: #a89f8c; text-decoration: none; margin-bottom: 8px;
+    border: 1px solid #444; border-radius: 20px; padding: 2px 10px;
+    transition: color .15s, border-color .15s;
+  }
+  .back-btn:hover { color: #f5f0e8; border-color: #888; }
+  .header-eyebrow {
+    font-family: var(--font-ui); font-size: 10px; letter-spacing: 2.5px;
+    color: #a89f8c; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .header-title {
+    font-size: 19px; font-weight: normal; letter-spacing: -.3px; line-height: 1.3;
+  }
+  .check-progress-bar {
+    height: 3px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 10px;
+  }
+  .check-progress-fill {
+    height: 100%; background: linear-gradient(90deg,#f4c842,#7ecf8a);
+    border-radius: 2px; transition: width .4s ease;
+  }
+  .check-total-label {
+    font-family: var(--font-ui); font-size: 10px; color: #a89f8c; margin-top: 3px;
+  }
+
+  .main { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
+
+  .page-h1 { display: none; }
+  h2.section-heading {
+    font-family: var(--font-ui); font-size: 11px; font-weight: bold;
+    letter-spacing: 1.8px; text-transform: uppercase; color: #777;
+    margin: 30px 0 10px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--border);
+  }
+  h3.section-heading {
+    font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+    margin: 22px 0 8px; color: var(--text);
+  }
+  h4.section-heading, h5.section-heading {
+    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+    margin: 16px 0 6px; color: var(--muted);
+  }
+  p { margin: 10px 0; font-size: 15px; }
+  p.eyebrow-meta {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted);
+    font-style: italic; margin: 4px 0 20px;
+    border-left: 3px solid var(--border); padding-left: 10px;
+  }
+  code {
+    background: #f0ede8; border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; font-size: 13px;
+    font-family: 'Consolas', 'Monaco', monospace;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  ul, ol { padding-left: 22px; margin: 10px 0; }
+  li { margin: 5px 0; font-size: 15px; }
+
+  .table-wrap {
+    overflow-x: auto; margin: 16px 0;
+    border-radius: var(--r); border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  table { width: 100%; border-collapse: collapse; font-family: var(--font-ui); font-size: 13px; }
+  th {
+    background: #1a1a1a; color: #f5f0e8;
+    padding: 9px 12px; text-align: left; font-weight: 600;
+    font-size: 11px; letter-spacing: .5px;
+  }
+  td { padding: 8px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f5f2ee; }
+  tr:hover td { background: #ede8e2; }
+
+  .checklist {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 12px 14px 10px; margin: 16px 0;
+    display: flex; flex-direction: column; gap: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    cursor: pointer; padding: 6px 4px;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 14px; line-height: 1.5; transition: background .1s;
+    border-radius: 4px;
+  }
+  .check-item:last-of-type { border-bottom: none; }
+  .check-item:hover { background: #f8f5f0; }
+  .check-item input[type=checkbox] {
+    width: 18px; height: 18px; min-width: 18px;
+    margin-top: 2px; accent-color: var(--green); cursor: pointer;
+  }
+  .check-item input[type=checkbox]:checked + span {
+    color: var(--muted); text-decoration: line-through;
+  }
+  .check-item span { flex: 1; }
+  .check-sub { margin: 6px 0 2px 4px; padding-left: 18px; }
+  .check-sub li { font-size: 13px; color: var(--muted); margin: 3px 0; }
+  .check-note { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .check-progress {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);
+  }
+  .prog-text {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted); font-weight: 600;
+  }
+
+  .professor-block {
+    background: var(--blue-bg); border-left: 4px solid #1976d2;
+    border-radius: 0 var(--r) var(--r) 0; padding: 14px 16px; margin: 20px 0 8px;
+    font-size: 14px; line-height: 1.65; color: #0a2e6e;
+  }
+  .question-label {
+    font-family: var(--font-ui); font-weight: 700; font-size: 14px;
+    margin: 20px 0 6px; color: var(--text); padding-left: 2px;
+  }
+  .answer-block {
+    background: var(--green-bg); border-left: 4px solid var(--green);
+    border-radius: 0 var(--r) var(--r) 0; padding: 12px 16px; margin: 6px 0 20px;
+    font-size: 14px; line-height: 1.65; color: #1b4332;
+  }
+  blockquote {
+    border-left: 3px solid var(--border); padding: 8px 14px;
+    margin: 12px 0; color: var(--muted); font-style: italic; font-size: 14px;
+  }
+
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1a1a1a; padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 200; border-top: 1px solid #333;
+  }
+  .bottom-nav a {
+    color: #a89f8c; text-decoration: none; font-family: var(--font-ui);
+    font-size: 12px; padding: 5px 14px; border: 1px solid #444;
+    border-radius: 20px; transition: color .15s, border-color .15s;
+  }
+  .bottom-nav a:hover { color: #f5f0e8; border-color: #888; }
+  .bottom-total { font-family: var(--font-ui); font-size: 12px; color: #a89f8c; }
+
+  @media (max-width: 600px) {
+    .header-title { font-size: 16px; }
+    td, th { padding: 6px 8px; font-size: 12px; }
+    .check-item { font-size: 13px; }
+    p, li { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../../osce-plano.html" class="back-btn">← Plano de estudos</a>
+    <div class="header-eyebrow">Cirurgia</div>
+    <div class="header-title">Sondagem Nasogástrica (SNG)</div>
+    <div class="check-progress-bar" id="hdrBar" style="display:none">
+      <div class="check-progress-fill" id="hdrFill" style="width:0%"></div>
+    </div>
+    <div class="check-total-label" id="hdrLabel"></div>
+  </div>
+</header>
+
+<main class="main">
+<h1 class="page-h1">Sondagem Nasogástrica (SNG)</h1>
+<p class="eyebrow-meta">Cirurgia | Método: Checklist de Procedimento · Foco em Erros</p>
+<hr>
+<h2 class="section-heading">Definição e Indicações</h2>
+<p>A sonda nasogástrica (SNG) é um tubo flexível introduzido pela narina até o estômago.</p>
+<p><strong>Indicações:</strong></p>
+<ul><li><strong>Descompressão gástrica</strong> (pós-op, obstrução, íleo paralítico)</li><li><strong>Remoção de conteúdo gástrico</strong> (lavagem em intoxicações, controle de sangramento GI alto)</li><li><strong>Nutrição enteral</strong> (incapacidade de deglutição segura)</li><li><strong>Administração de medicamentos</strong> (paciente sem via oral)</li><li><strong>Monitorização de sangramento</strong> pós-operatório</li></ul>
+<hr>
+<h2 class="section-heading">Tipos de Sondas</h2>
+<figure style="margin:22px 0;text-align:center"><img src="drenos_sondas_pdf_aula_9_drenos_e_sondas_6s_unisa_pdf_pg41_img2.png" alt="Sonda gastrica simples Salem duas luzes radiopaca" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Sonda Gástrica Simples (Salem): naso-gástrica radiopaca de plástico claro, duas luzes — usada para descompressão gástrica e manter estômago vazio</figcaption></figure>
+
+<div class="table-wrap"><table>
+<thead><tr><th>Sonda</th><th>Luz</th><th>Material</th><th>Uso</th></tr></thead><tbody>
+<tr><td><strong>Levin</strong></td><td>Única (simples)</td><td>Plástico ou borracha; marcas circulares de guia</td><td>Drenagem/descompressão gástrica</td></tr>
+<tr><td><strong>Salem (gástrica dupla luz)</strong></td><td>Dupla (1 para drenagem + 1 de ventilação)</td><td>PVC radiopaco</td><td>Descompressão + manutenção do estômago vazio; evita colabamento</td></tr>
+<tr><td><strong>Dobhoff</strong></td><td>Simples</td><td>Poliuretano macio com ponta pesada e guia metálico</td><td>Nutrição enteral de longa duração; posição pós-pilórica (nasojejunal)</td></tr>
+<tr><td><strong>Sengstaken-Blakemore</strong></td><td>Tripla (balão gástrico + balão esofagianes + lavagem)</td><td>Especial</td><td><strong>Varizes esofagianas sangrantes</strong> (uso emergencial como ponte para endoscopia)</td></tr>
+<tr><td><strong>Miller-Abbott</strong></td><td>Dupla (1 para mercúrio/ar no balão + 1 para aspiração)</td><td>3 metros</td><td>Descompressão do intestino delgado</td></tr>
+</tbody></table></div>
+<blockquote><strong>Sonda de Salem:</strong> preferida no pós-operatório — a 2ª luz de ventilação impede o colapso do tubo e melhora a drenagem</blockquote>
+<hr>
+<h2 class="section-heading">Material Necessário</h2>
+<ul><li>Sonda nasogástrica do calibre adequado</li><li>Luva de procedimento (não necessariamente estéril para técnica limpa)</li><li>Gel lubrificante (lidocaína gel em paciente acordado)</li><li>Fita adesiva para fixação</li><li>Seringa 50 mL (Janela)</li><li>Estetoscópio</li><li>Copo d'água com canudo (para ajudar na deglutição, se o paciente cooperar)</li><li>Cuba rim ou saco coletor</li></ul>
+<hr>
+<h2 class="section-heading">Checklist — Passos do Procedimento</h2>
+<h3 class="section-heading">Preparo</h3>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span>Identificar paciente; explicar o procedimento</span></label><label class="check-item"><input type="checkbox"><span>Verificar <strong>contraindicações</strong> (ver abaixo)</span></label><label class="check-item"><input type="checkbox"><span>Posicionar: <strong>sentado com a cabeça levemente fletida para frente</strong> (facilita passagem da sonda pelo esôfago)<ul class="check-sub"><li>Se inconsciente: decúbito dorsal, cabeça centralizada</li></ul></span></label><label class="check-item"><input type="checkbox"><span><strong>Medir o comprimento de inserção:</strong><ul class="check-sub"><li>Da ponta do nariz → ao lobo da orelha → ao apêndice xifóide</li><li>Adulto: aproximadamente <strong>45–55 cm</strong>; marcar com fita adesiva</li></ul></span></label><div class="check-progress"><span class="prog-text">0/4 marcados</span></div></div>
+<h3 class="section-heading">Inserção</h3>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span>Higienizar as mãos; calçar luvas</span></label><label class="check-item"><input type="checkbox"><span>Lubrificar a ponta da sonda com gel ou lidocaína gel</span></label><label class="check-item"><input type="checkbox"><span>Verificar qual narina está mais permeável (pedir ao paciente para respirar por uma narina de cada vez)</span></label><label class="check-item"><input type="checkbox"><span>Inserir a sonda pela narina selecionada, direcionando <strong>para baixo e para trás</strong> (seguir o assoalho nasal, não para cima)</span></label><label class="check-item"><input type="checkbox"><span>Ao sentir resistência na nasofaringe (~15 cm): pedir ao paciente para <strong>deglutir</strong> (com água se possível)</span></label><label class="check-item"><input type="checkbox"><span><strong>Avançar durante a deglutição</strong> — a sonda passa pelo esfíncter esofágico superior</span></label><label class="check-item"><input type="checkbox"><span>Avançar até a marca pré-definida</span></label><label class="check-item"><input type="checkbox"><span>Fixar provisoriamente com a mão enquanto confirma a posição</span></label><div class="check-progress"><span class="prog-text">0/8 marcados</span></div></div>
+<h3 class="section-heading">Confirmação de Posição — OBRIGATÓRIO</h3>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span><strong>1º método (mais confiável): aspirar conteúdo gástrico</strong> com seringa e verificar pH ≤ 5 (fita de pH) — confirma posição gástrica</span></label><label class="check-item"><input type="checkbox"><span><strong>2º método: ausculta</strong> → injetar 10–20 mL de ar e auscultar o epigástrio (borbulhamento) — <strong>método menos confiável; não usar isoladamente</strong></span></label><label class="check-item"><input type="checkbox"><span><strong>Gold standard para dúvida:</strong> <strong>radiografia</strong> (RX) de abdome — única forma de confirmar com certeza quando há dúvida</span></label><label class="check-item"><input type="checkbox"><span>⚠️ <strong>NUNCA iniciar alimentação sem confirmar a posição</strong></span></label><div class="check-progress"><span class="prog-text">0/4 marcados</span></div></div>
+<h3 class="section-heading">Fixação</h3>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span>Fixar a sonda na asa do nariz com fita adesiva (não exercer tração)</span></label><label class="check-item"><input type="checkbox"><span>Registrar: calibre, comprimento inserido, método de confirmação, aspecto do conteúdo aspirado</span></label><div class="check-progress"><span class="prog-text">0/2 marcados</span></div></div>
+<hr>
+<h2 class="section-heading">Contraindicações</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Contraindicação</th><th>Motivo</th></tr></thead><tbody>
+<tr><td><strong>Fratura de base do crânio / TCE com suspeita de lâmina cribriforme fraturada</strong></td><td>Risco de inserção intracraniana pela via nasal → usar via oral (orogástrica)</td></tr>
+<tr><td><strong>Obstrução nasal bilateral completa</strong></td><td>Usar via oral</td></tr>
+<tr><td><strong>Estenose / lesão esofagiana conhecida</strong></td><td>Risco de perfuração</td></tr>
+<tr><td><strong>Coagulopatia grave</strong> (relativo)</td><td>Risco de epistaxe</td></tr>
+<tr><td><strong>Varizes esofagianas</strong> (relativo para SNG comum)</td><td>Usar Sengstaken-Blakemore em sangramento; a SNG comum pode traumatizar</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Erros Clássicos e Como Evitá-los</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Erro</th><th>Consequência</th><th>Como Evitar</th></tr></thead><tbody>
+<tr><td>Inserir em paciente com fratura de base do crânio pela via nasal</td><td>Sonda intracraniana → lesão fatal</td><td>Usar via orogástrica ou questionar fratura de base</td></tr>
+<tr><td>Não confirmar posição antes de usar</td><td>Administração de dieta/medicação no pulmão → pneumonia aspirativa</td><td>Confirmar SEMPRE antes de qualquer infusão</td></tr>
+<tr><td>Usar ausculta do epigástrio como único método de confirmação</td><td>Falso positivo se a sonda estiver no brônquio</td><td>Associar aspiração + pH ou fazer RX</td></tr>
+<tr><td>Direcionar a sonda para cima na narina</td><td>Trauma de corneto</td><td>Dirigir para baixo e para trás (paralela ao assoalho nasal)</td></tr>
+<tr><td>Forçar a sonda quando há resistência</td><td>Criação de falsa via / epistaxe</td><td>Retirar e tentar pela outra narina ou usar via oral</td></tr>
+<tr><td>Não fixar corretamente</td><td>Deslocamento; paciente retira sem perceber</td><td>Verificar o comprimento da sonda antes de cada uso</td></tr>
+<tr><td>Sonda posicionada no piloro ou duodeno sem intenção</td><td>Dificuldade de drenagem gástrica eficaz</td><td>Posicionar na câmara gástrica e confirmar no RX</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">Sonda de Sengstaken-Blakemore — Resumo</h2>
+<p><strong>Indicação:</strong> varizes esofagianas ou gástricas com sangramento ativo (falha endoscópica ou como ponte)</p>
+<p><strong>3 luzes:</strong></p>
+<ol><li><strong>Luz para insuflar balão gástrico</strong> → ancora no estômago (inflar com 200–250 mL de ar)</li><li><strong>Luz para insuflar balão esofagianes</strong> → compressão das varizes (inflar com 50–100 mL, pressão < 40 mmHg)</li><li><strong>Luz de lavagem gástrica</strong> → aspiração e lavagem do estômago</li></ol>
+<p><strong>Complicações:</strong> ruptura esofagianes, aspiração, obstrução de via aérea → paciente com SB deve estar intubado</p>
+<hr>
+<h2 class="section-heading">Alertas OSCE ⚠️</h2>
+<ul><li><strong>Fratura de base do crânio = sonda orogástrica</strong> (nunca nasogástrica)</li><li>Ausculta do epigástrio NÃO é método isolado confiável para confirmar posição</li><li>Sonda nasojejunal (Dobhoff): confirmar posição pós-pilórica obrigatoriamente com RX</li><li>Sengstaken-Blakemore: balão gástrico sempre inflado antes do esofagianes; nunca inflar apenas o esofagianes (risco de migração e obstrução)</li><li>Remover SNG ao menor sinal de complicação (pneumonia aspirativa, epistaxe, lesão por pressão alar)</li></ul>
+<hr>
+<h2 class="section-heading">Fonte</h2>
+<ul><li>Gerado a partir de: <code>conteudo_drenos_e_sondas.md</code> (Aula 9 — Drenos e Sondas — Cirurgia UNISA)</li></ul>
+</main>
+
+<nav class="bottom-nav">
+  <a href="../../osce-plano.html">← Voltar ao plano</a>
+  <span class="bottom-total" id="bottomTotal"></span>
+</nav>
+
+<script>
+(function() {
+  var KEY = 'osce_v1_' + location.pathname;
+  var state = JSON.parse(localStorage.getItem(KEY) || '{}');
+  var boxes = document.querySelectorAll('input[type=checkbox]');
+  var total = boxes.length;
+
+  boxes.forEach(function(cb, idx) {
+    if (state[idx]) cb.checked = true;
+    cb.addEventListener('change', function() {
+      state[idx] = cb.checked;
+      localStorage.setItem(KEY, JSON.stringify(state));
+      updateAll();
+    });
+  });
+
+  function updateAll() {
+    var done = 0;
+    boxes.forEach(function(c){ if (c.checked) done++; });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    var bar = document.getElementById('hdrBar');
+    var fill = document.getElementById('hdrFill');
+    var lbl = document.getElementById('hdrLabel');
+    var bot = document.getElementById('bottomTotal');
+    if (total > 0) {
+      bar.style.display = 'block';
+      fill.style.width = pct + '%';
+      lbl.textContent = done + '/' + total + ' itens marcados (' + pct + '%)';
+      bot.textContent = done + '/' + total + ' checados';
+    }
+    document.querySelectorAll('.checklist').forEach(function(cl) {
+      var cbs = cl.querySelectorAll('input[type=checkbox]');
+      var cd = 0;
+      cbs.forEach(function(c){ if (c.checked) cd++; });
+      var prog = cl.querySelector('.prog-text');
+      if (prog) prog.textContent = cd + '/' + cbs.length + ' marcados';
+    });
+  }
+
+  updateAll();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anemias Macrocíticas e Megaloblásticas · OSCE</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e3da;
+    --text: #1a1a1a;
+    --muted: #666;
+    --accent: #1a1a1a;
+    --green: #2d6a4f;
+    --green-bg: #e8f5ee;
+    --blue: #0d47a1;
+    --blue-bg: #e3f2fd;
+    --r: 8px;
+    --font-body: Georgia, 'Times New Roman', serif;
+    --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.75;
+    min-height: 100vh;
+    padding-bottom: 70px;
+  }
+
+  .site-header {
+    background: var(--accent);
+    color: #f5f0e8;
+    padding: 16px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+  .header-inner { max-width: 780px; margin: 0 auto; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--font-ui); font-size: 11px; letter-spacing: .4px;
+    color: #a89f8c; text-decoration: none; margin-bottom: 8px;
+    border: 1px solid #444; border-radius: 20px; padding: 2px 10px;
+    transition: color .15s, border-color .15s;
+  }
+  .back-btn:hover { color: #f5f0e8; border-color: #888; }
+  .header-eyebrow {
+    font-family: var(--font-ui); font-size: 10px; letter-spacing: 2.5px;
+    color: #a89f8c; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .header-title {
+    font-size: 19px; font-weight: normal; letter-spacing: -.3px; line-height: 1.3;
+  }
+  .check-progress-bar {
+    height: 3px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 10px;
+  }
+  .check-progress-fill {
+    height: 100%; background: linear-gradient(90deg,#f4c842,#7ecf8a);
+    border-radius: 2px; transition: width .4s ease;
+  }
+  .check-total-label {
+    font-family: var(--font-ui); font-size: 10px; color: #a89f8c; margin-top: 3px;
+  }
+
+  .main { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
+
+  .page-h1 { display: none; }
+  h2.section-heading {
+    font-family: var(--font-ui); font-size: 11px; font-weight: bold;
+    letter-spacing: 1.8px; text-transform: uppercase; color: #777;
+    margin: 30px 0 10px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--border);
+  }
+  h3.section-heading {
+    font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+    margin: 22px 0 8px; color: var(--text);
+  }
+  h4.section-heading, h5.section-heading {
+    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+    margin: 16px 0 6px; color: var(--muted);
+  }
+  p { margin: 10px 0; font-size: 15px; }
+  p.eyebrow-meta {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted);
+    font-style: italic; margin: 4px 0 20px;
+    border-left: 3px solid var(--border); padding-left: 10px;
+  }
+  code {
+    background: #f0ede8; border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; font-size: 13px;
+    font-family: 'Consolas', 'Monaco', monospace;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  ul, ol { padding-left: 22px; margin: 10px 0; }
+  li { margin: 5px 0; font-size: 15px; }
+
+  .table-wrap {
+    overflow-x: auto; margin: 16px 0;
+    border-radius: var(--r); border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  table { width: 100%; border-collapse: collapse; font-family: var(--font-ui); font-size: 13px; }
+  th {
+    background: #1a1a1a; color: #f5f0e8;
+    padding: 9px 12px; text-align: left; font-weight: 600;
+    font-size: 11px; letter-spacing: .5px;
+  }
+  td { padding: 8px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f5f2ee; }
+  tr:hover td { background: #ede8e2; }
+
+  .checklist {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 12px 14px 10px; margin: 16px 0;
+    display: flex; flex-direction: column; gap: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    cursor: pointer; padding: 6px 4px;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 14px; line-height: 1.5; transition: background .1s;
+    border-radius: 4px;
+  }
+  .check-item:last-of-type { border-bottom: none; }
+  .check-item:hover { background: #f8f5f0; }
+  .check-item input[type=checkbox] {
+    width: 18px; height: 18px; min-width: 18px;
+    margin-top: 2px; accent-color: var(--green); cursor: pointer;
+  }
+  .check-item input[type=checkbox]:checked + span {
+    color: var(--muted); text-decoration: line-through;
+  }
+  .check-item span { flex: 1; }
+  .check-sub { margin: 6px 0 2px 4px; padding-left: 18px; }
+  .check-sub li { font-size: 13px; color: var(--muted); margin: 3px 0; }
+  .check-note { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .check-progress {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);
+  }
+  .prog-text {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted); font-weight: 600;
+  }
+
+  .professor-block {
+    background: var(--blue-bg); border-left: 4px solid #1976d2;
+    border-radius: 0 var(--r) var(--r) 0; padding: 14px 16px; margin: 20px 0 8px;
+    font-size: 14px; line-height: 1.65; color: #0a2e6e;
+  }
+  .question-label {
+    font-family: var(--font-ui); font-weight: 700; font-size: 14px;
+    margin: 20px 0 6px; color: var(--text); padding-left: 2px;
+  }
+  .answer-block {
+    background: var(--green-bg); border-left: 4px solid var(--green);
+    border-radius: 0 var(--r) var(--r) 0; padding: 12px 16px; margin: 6px 0 20px;
+    font-size: 14px; line-height: 1.65; color: #1b4332;
+  }
+  blockquote {
+    border-left: 3px solid var(--border); padding: 8px 14px;
+    margin: 12px 0; color: var(--muted); font-style: italic; font-size: 14px;
+  }
+
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1a1a1a; padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 200; border-top: 1px solid #333;
+  }
+  .bottom-nav a {
+    color: #a89f8c; text-decoration: none; font-family: var(--font-ui);
+    font-size: 12px; padding: 5px 14px; border: 1px solid #444;
+    border-radius: 20px; transition: color .15s, border-color .15s;
+  }
+  .bottom-nav a:hover { color: #f5f0e8; border-color: #888; }
+  .bottom-total { font-family: var(--font-ui); font-size: 12px; color: #a89f8c; }
+
+  @media (max-width: 600px) {
+    .header-title { font-size: 16px; }
+    td, th { padding: 6px 8px; font-size: 12px; }
+    .check-item { font-size: 13px; }
+    p, li { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../../../osce-plano.html" class="back-btn">← Plano de estudos</a>
+    <div class="header-eyebrow">Clínica Médica · Hematologia</div>
+    <div class="header-title">Anemias Macrocíticas e Megaloblásticas</div>
+    <div class="check-progress-bar" id="hdrBar" style="display:none">
+      <div class="check-progress-fill" id="hdrFill" style="width:0%"></div>
+    </div>
+    <div class="check-total-label" id="hdrLabel"></div>
+  </div>
+</header>
+
+<main class="main">
+<h1 class="page-h1">Anemias Macrocíticas e Megaloblásticas</h1>
+<p class="eyebrow-meta">Clínica Médica · Hematologia | Método: Resumo Clínico</p>
+<hr>
+<h2 class="section-heading">Definição</h2>
+<p><strong>Macrocitose:</strong> VCM > 100 fL</p>
+<p><strong>Megaloblástica:</strong> macrocitose por defeito na síntese de DNA (falta de timidina → replicação comprometida)</p>
+<ul><li>Causas: deficiência de <strong>vitamina B12</strong> ou <strong>folato</strong></li></ul>
+<p><strong>Não megaloblástica:</strong> macrocitose por outra razão</p>
+<ul><li><strong>Alcoolismo</strong> (causa mais comum de macrocitose não megaloblástica)</li><li>Hepatopatia crônica</li><li>Hipotireoidismo</li><li>Reticulocitose (hemólise → macrocitose real)</li><li>Medicamentos (metotrexato, hidroxiureia, azatioprina, AZT)</li></ul>
+<hr>
+<h2 class="section-heading">Achados do Hemograma Megaloblástico</h2>
+<ul><li>VCM frequentemente > 110 fL (às vezes > 130)</li><li><strong>Neutrófilos hipersegmentados</strong> (≥ 5 lóbulos em > 5% dos neutrófilos; ou qualquer neutrófilo com ≥ 6 lóbulos) — mais precoce</li><li>Macroovalócitos no esfregaço</li><li><strong>Pancitopenia</strong> (em casos graves): anemia + leucopenia + trombocitopenia</li><li><strong>Reticulocitopenia</strong> (eritropoese ineficaz)</li><li>DHL <strong>muito elevado</strong> + BI levemente elevada (hemólise intramedular = destruição das células progenitoras megaloblásticas)</li></ul>
+<hr>
+<h2 class="section-heading">Diferenciação B12 vs Folato</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Característica</th><th><strong>Deficiência B12</strong></th><th><strong>Deficiência de Folato</strong></th></tr></thead><tbody>
+<tr><td>B12 sérica</td><td>< 200 pg/mL</td><td>Normal</td></tr>
+<tr><td>Folato sérico/eritrocitário</td><td>Normal</td><td>< 2 ng/mL</td></tr>
+<tr><td>Homocisteína</td><td>↑</td><td>↑</td></tr>
+<tr><td><strong>Ácido metilmalônico</strong></td><td><strong>↑</strong> (específico)</td><td>Normal</td></tr>
+<tr><td>Manifestação neurológica</td><td><strong>SIM (grave)</strong></td><td>Não</td></tr>
+<tr><td>Estoque corporal</td><td>2–5 anos (fígado)</td><td>3–4 meses (fígado)</td></tr>
+<tr><td>Causas principais</td><td>Anemia perniciosa; gastrectomia; vegetarianismo estrito; deficiência de FI; Crohn distal</td><td>Alcoolismo; desnutrição; gestação; metotrexato; fenobarbital</td></tr>
+</tbody></table></div>
+<blockquote><strong>Regra de ouro:</strong> NUNCA tratar com folato antes de excluir deficiência de B12 — folato pode corrigir a anemia, mas a neuropatia por B12 continua progressiva (dano irreversível).</blockquote>
+<hr>
+<h2 class="section-heading">Manifestações Neurológicas da Deficiência de B12</h2>
+<p><strong>Degeneração subaguda combinada da medula:</strong></p>
+<ul><li>Neuropatia periférica: parestesias em luva e meia (pés antes de mãos)</li><li>Distúrbio da marcha (ação do cordão posterior: perda de propriocepção e vibratória)</li><li>Déficit cognitivo, demência, depressão, psicose ("loucura megaloblástica")</li><li><strong>Importante:</strong> neurológico pode preceder anemia; pode ser irreversível</li></ul>
+<hr>
+<h2 class="section-heading">Anemia Perniciosa</h2>
+<p><strong>Causa mais comum de deficiência de B12 no adulto em países desenvolvidos</strong></p>
+<p><strong>Mecanismo:</strong> gastrite atrófica autoimune → destruição células parietais → ↓ fator intrínseco (FI) → ↓ absorção B12 no íleo terminal</p>
+<p><strong>Diagnóstico:</strong></p>
+<ul><li>Anti-fator intrínseco: 70% (mais específico)</li><li>Anti-células parietais: 90% (menos específico)</li><li>Gastroscopia: gastrite atrófica (mucosa plana, ausência de pregas)</li><li><strong>Risco de adenocarcinoma gástrico</strong> (vigilância endoscópica)</li></ul>
+<p><strong>Tratamento:</strong> B12 parenteral (IM) — intramuscular de escolha (não depende de FI)</p>
+<hr>
+<h2 class="section-heading">Tratamento das Anemias Megaloblásticas</h2>
+<h3 class="section-heading">Deficiência de Vitamina B12</h3>
+<ul><li><strong>1ª linha:</strong> Cianocobalamina 1000 μg IM:</li><li>1x/dia por 7 dias → 1x/semana por 4 semanas → 1x/mês indefinidamente (anemia perniciosa)</li><li>VO: possível em doses altas (1000–2000 μg/dia) — absorção passiva compensatória; menos confiável</li><li>Resposta: reticulócitos pico em <strong>5–8 dias</strong>; Hb normaliza em <strong>1–2 meses</strong>; neurológico melhora em <strong>3–12 meses</strong> (nem sempre completo)</li></ul>
+<h3 class="section-heading">Deficiência de Folato</h3>
+<ul><li><strong>Excluir B12 antes de tratar isoladamente!</strong></li><li>Ácido fólico 1–5 mg/dia VO por 1–4 meses</li><li>Gestantes: 400 μg/dia profilático (até 5 mg/dia se uso de metotrexato ou epilépticos)</li></ul>
+<hr>
+<h2 class="section-heading">Macrocitose por Alcoolismo</h2>
+<p><strong>Diferença importante:</strong></p>
+<ul><li>VCM normalmente < 110 fL (raramente ultrapassa muito)</li><li>Eritrócitos arredondados (não ovalados como na megaloblástica)</li><li>Sem hipersegmentação de neutrófilos (não é megaloblástica)</li><li>GGT ↑↑ (marcador de hepatopatia alcoólica)</li><li>Mecanismo: efeito tóxico direto do álcool na membrana eritrocitária + deficiência de folato coexistente</li></ul>
+<hr>
+<h2 class="section-heading">Abordagem Diagnóstica Rápida</h2>
+<p>``` VCM > 100 fL ↓ Esfregaço: neutrófilos hipersegmentados?</p>
+<div class="table-wrap"><table>
+</tbody></table></div>
+<p>Sim                  Não ↓                    ↓ Megaloblástica      Não megaloblástica ↓                (alcoolismo, hipotireoidismo, B12 + folato            hepatopatia, reticulócitos) ↓ B12 baixa → + ácido metilmalônico (confirmar) ↓ Anemia perniciosa? → anti-FI, anti-CP ```</p>
+<hr>
+<h2 class="section-heading">Alertas OSCE ⚠️</h2>
+<ul><li>Neutrófilos hipersegmentados = sinal mais precoce de megaloblastose (antes da anemia)</li><li>B12 baixa + neurológico = tratar ANTES de esperar confirmação laboratorial completa (risco de dano permanente)</li><li>Alcoolismo = macrocitose SEM hipersegmentação (não confundir com megaloblástica)</li><li>Anemia perniciosa: tratar com B12 IM indefinidamente + vigilância de CA gástrico</li><li>DHL muito elevado + BI moderada na megaloblástica = hemólise intramedular (eritropoese ineficaz)</li></ul>
+<hr>
+<h2 class="section-heading">Fonte</h2>
+<ul><li>Gerado a partir de: <code>conteudo_anemias_macrociticas.md</code> (Aula Anemias Macrocíticas — Hematologia CM)</li></ul>
+</main>
+
+<nav class="bottom-nav">
+  <a href="../../../osce-plano.html">← Voltar ao plano</a>
+  <span class="bottom-total" id="bottomTotal"></span>
+</nav>
+
+<script>
+(function() {
+  var KEY = 'osce_v1_' + location.pathname;
+  var state = JSON.parse(localStorage.getItem(KEY) || '{}');
+  var boxes = document.querySelectorAll('input[type=checkbox]');
+  var total = boxes.length;
+
+  boxes.forEach(function(cb, idx) {
+    if (state[idx]) cb.checked = true;
+    cb.addEventListener('change', function() {
+      state[idx] = cb.checked;
+      localStorage.setItem(KEY, JSON.stringify(state));
+      updateAll();
+    });
+  });
+
+  function updateAll() {
+    var done = 0;
+    boxes.forEach(function(c){ if (c.checked) done++; });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    var bar = document.getElementById('hdrBar');
+    var fill = document.getElementById('hdrFill');
+    var lbl = document.getElementById('hdrLabel');
+    var bot = document.getElementById('bottomTotal');
+    if (total > 0) {
+      bar.style.display = 'block';
+      fill.style.width = pct + '%';
+      lbl.textContent = done + '/' + total + ' itens marcados (' + pct + '%)';
+      bot.textContent = done + '/' + total + ' checados';
+    }
+    document.querySelectorAll('.checklist').forEach(function(cl) {
+      var cbs = cl.querySelectorAll('input[type=checkbox]');
+      var cd = 0;
+      cbs.forEach(function(c){ if (c.checked) cd++; });
+      var prog = cl.querySelector('.prog-text');
+      if (prog) prog.textContent = cd + '/' + cbs.length + ' marcados';
+    });
+  }
+
+  updateAll();
+})();
+</script>
+</body>
+</html>

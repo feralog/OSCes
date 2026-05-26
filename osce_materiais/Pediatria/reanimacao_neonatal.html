@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reanimação Neonatal · OSCE</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e3da;
+    --text: #1a1a1a;
+    --muted: #666;
+    --accent: #1a1a1a;
+    --green: #2d6a4f;
+    --green-bg: #e8f5ee;
+    --blue: #0d47a1;
+    --blue-bg: #e3f2fd;
+    --r: 8px;
+    --font-body: Georgia, 'Times New Roman', serif;
+    --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.75;
+    min-height: 100vh;
+    padding-bottom: 70px;
+  }
+
+  .site-header {
+    background: var(--accent);
+    color: #f5f0e8;
+    padding: 16px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+  .header-inner { max-width: 780px; margin: 0 auto; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--font-ui); font-size: 11px; letter-spacing: .4px;
+    color: #a89f8c; text-decoration: none; margin-bottom: 8px;
+    border: 1px solid #444; border-radius: 20px; padding: 2px 10px;
+    transition: color .15s, border-color .15s;
+  }
+  .back-btn:hover { color: #f5f0e8; border-color: #888; }
+  .header-eyebrow {
+    font-family: var(--font-ui); font-size: 10px; letter-spacing: 2.5px;
+    color: #a89f8c; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .header-title {
+    font-size: 19px; font-weight: normal; letter-spacing: -.3px; line-height: 1.3;
+  }
+  .check-progress-bar {
+    height: 3px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 10px;
+  }
+  .check-progress-fill {
+    height: 100%; background: linear-gradient(90deg,#f4c842,#7ecf8a);
+    border-radius: 2px; transition: width .4s ease;
+  }
+  .check-total-label {
+    font-family: var(--font-ui); font-size: 10px; color: #a89f8c; margin-top: 3px;
+  }
+
+  .main { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
+
+  .page-h1 { display: none; }
+  h2.section-heading {
+    font-family: var(--font-ui); font-size: 11px; font-weight: bold;
+    letter-spacing: 1.8px; text-transform: uppercase; color: #777;
+    margin: 30px 0 10px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--border);
+  }
+  h3.section-heading {
+    font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+    margin: 22px 0 8px; color: var(--text);
+  }
+  h4.section-heading, h5.section-heading {
+    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+    margin: 16px 0 6px; color: var(--muted);
+  }
+  p { margin: 10px 0; font-size: 15px; }
+  p.eyebrow-meta {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted);
+    font-style: italic; margin: 4px 0 20px;
+    border-left: 3px solid var(--border); padding-left: 10px;
+  }
+  code {
+    background: #f0ede8; border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; font-size: 13px;
+    font-family: 'Consolas', 'Monaco', monospace;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  ul, ol { padding-left: 22px; margin: 10px 0; }
+  li { margin: 5px 0; font-size: 15px; }
+
+  .table-wrap {
+    overflow-x: auto; margin: 16px 0;
+    border-radius: var(--r); border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  table { width: 100%; border-collapse: collapse; font-family: var(--font-ui); font-size: 13px; }
+  th {
+    background: #1a1a1a; color: #f5f0e8;
+    padding: 9px 12px; text-align: left; font-weight: 600;
+    font-size: 11px; letter-spacing: .5px;
+  }
+  td { padding: 8px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f5f2ee; }
+  tr:hover td { background: #ede8e2; }
+
+  .checklist {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 12px 14px 10px; margin: 16px 0;
+    display: flex; flex-direction: column; gap: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    cursor: pointer; padding: 6px 4px;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 14px; line-height: 1.5; transition: background .1s;
+    border-radius: 4px;
+  }
+  .check-item:last-of-type { border-bottom: none; }
+  .check-item:hover { background: #f8f5f0; }
+  .check-item input[type=checkbox] {
+    width: 18px; height: 18px; min-width: 18px;
+    margin-top: 2px; accent-color: var(--green); cursor: pointer;
+  }
+  .check-item input[type=checkbox]:checked + span {
+    color: var(--muted); text-decoration: line-through;
+  }
+  .check-item span { flex: 1; }
+  .check-sub { margin: 6px 0 2px 4px; padding-left: 18px; }
+  .check-sub li { font-size: 13px; color: var(--muted); margin: 3px 0; }
+  .check-note { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .check-progress {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);
+  }
+  .prog-text {
+    font-family: var(--font-ui); font-size: 12px; color: var(--muted); font-weight: 600;
+  }
+
+  .professor-block {
+    background: var(--blue-bg); border-left: 4px solid #1976d2;
+    border-radius: 0 var(--r) var(--r) 0; padding: 14px 16px; margin: 20px 0 8px;
+    font-size: 14px; line-height: 1.65; color: #0a2e6e;
+  }
+  .question-label {
+    font-family: var(--font-ui); font-weight: 700; font-size: 14px;
+    margin: 20px 0 6px; color: var(--text); padding-left: 2px;
+  }
+  .answer-block {
+    background: var(--green-bg); border-left: 4px solid var(--green);
+    border-radius: 0 var(--r) var(--r) 0; padding: 12px 16px; margin: 6px 0 20px;
+    font-size: 14px; line-height: 1.65; color: #1b4332;
+  }
+  blockquote {
+    border-left: 3px solid var(--border); padding: 8px 14px;
+    margin: 12px 0; color: var(--muted); font-style: italic; font-size: 14px;
+  }
+
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1a1a1a; padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 200; border-top: 1px solid #333;
+  }
+  .bottom-nav a {
+    color: #a89f8c; text-decoration: none; font-family: var(--font-ui);
+    font-size: 12px; padding: 5px 14px; border: 1px solid #444;
+    border-radius: 20px; transition: color .15s, border-color .15s;
+  }
+  .bottom-nav a:hover { color: #f5f0e8; border-color: #888; }
+  .bottom-total { font-family: var(--font-ui); font-size: 12px; color: #a89f8c; }
+
+  @media (max-width: 600px) {
+    .header-title { font-size: 16px; }
+    td, th { padding: 6px 8px; font-size: 12px; }
+    .check-item { font-size: 13px; }
+    p, li { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../../osce-plano.html" class="back-btn">← Plano de estudos</a>
+    <div class="header-eyebrow">Pediatria · Neonatologia</div>
+    <div class="header-title">Reanimação Neonatal</div>
+    <div class="check-progress-bar" id="hdrBar" style="display:none">
+      <div class="check-progress-fill" id="hdrFill" style="width:0%"></div>
+    </div>
+    <div class="check-total-label" id="hdrLabel"></div>
+  </div>
+</header>
+
+<main class="main">
+<h1 class="page-h1">Reanimação Neonatal</h1>
+<p class="eyebrow-meta">Pediatria · Neonatologia | Método: Checklist + Simulação OSCE</p>
+<h2 class="section-heading">Fluxograma de Decisão — ≥ 34 Semanas</h2>
+<figure style="margin:22px 0;text-align:center"><img src="atendimento_ao_rece_m_nascido_2026_1_pg06.png" alt="Fluxograma 3 perguntas vitais" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">3 Perguntas Vitais: todas SIM → pele-a-pele | qualquer NÃO → mesa de reanimação imediatamente</figcaption></figure>
+
+<figure style="margin:22px 0;text-align:center"><img src="atendimento_ao_rece_m_nascido_2026_1_pg07.png" alt="Minuto de Ouro reanimacao" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Minuto de Ouro: VPP iniciada no 1º minuto de vida. Gatilho: qualquer NÃO (prematuridade, apneia, hipotonia)</figcaption></figure>
+
+<figure style="margin:22px 0;text-align:center"><img src="atendimento_ao_rece_m_nascido_2026_1_pg08.png" alt="Passos iniciais 30 segundos" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Primeiros 30s: Aquecer → Secar → Posicionar → Aspirar (só se obstrução visível). Reavaliar FC + respiração</figcaption></figure>
+
+<p>``` NASCIMENTO ↓ [ A termo? Respirando/chorando? Tônus em flexão? ] ↓ NÃO a qualquer um MESA DE REANIMAÇÃO ↓ PASSOS INICIAIS (em ≤ 30 seg):</p>
+<ol><li>Promover calor (sala 23-26°C, campos aquecidos, calor radiante)</li><li>Secar e estimular (corpo e cabeça) → desprezar campos úmidos → touca</li><li>Posicionar cabeça em leve extensão (permeabilidade das vias aéreas)</li><li>Aspirar boca e narinas SE excesso de secreções (sonda traqueal, pressão máx 100 mmHg)</li></ol>
+<p>↓ AVALIAR FC E RESPIRAÇÃO ↓ FC > 100 bpm + respiração regular → Cuidados de rotina FC < 100 bpm OU apneia/respiração irregular ↓ VPP (Ventilação com Pressão Positiva) — INICIAR no "MINUTO DE OURO" ↓ (30 segundos de VPP) AVALIAR FC E RESPIRAÇÃO ↓ FC > 100 + respiração regular → Suspender VPP, monitorar FC 60–100 sem melhora → Verificar técnica da VPP (CORRIGIR antes de O₂) FC < 60 após VPP adequada (com O₂ 60–100%) ↓ MASSAGEM CARDÍACA + VPP (relação 3:1) ↓ (60 segundos) AVALIAR FC ↓ FC < 60 → ADRENALINA EV (ou traqueal) + continuar massagem ```</p>
+<hr>
+<h2 class="section-heading">Checklist — VPP (Ventilação com Pressão Positiva)</h2>
+<figure style="margin:22px 0;text-align:center"><img src="atendimento_ao_rece_m_nascido_2026_1_pg09.png" alt="Avaliacao vitalidade indicacao VPP" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">VPP indicada: FC <100 bpm OU apneia/respiração irregular após passos iniciais</figcaption></figure>
+
+<figure style="margin:22px 0;text-align:center"><img src="atendimento_ao_rece_m_nascido_2026_1_pg11.png" alt="Alvos saturacao O2 pre-ductal" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Alvos SatO₂ pré-ductal: 1 min=70-80% | 5 min=80-90% | 10 min=85-95%. Não ofertar O₂ extra dentro dos alvos</figcaption></figure>
+
+<figure style="margin:22px 0;text-align:center"><img src="atendimento_ao_rece_m_nascido_2026_1_pg13.png" alt="Algoritmo SBP 2022 completo" style="max-width:100%;border-radius:8px;border:1px solid #ddd;box-shadow:0 2px 10px rgba(0,0,0,.1)"><figcaption style="font-size:11px;color:#888;margin-top:6px;font-family:system-ui,sans-serif;font-style:italic">Algoritmo SBP 2022: fluxo completo — passos iniciais → VPP → massagem 3:1 → adrenalina EV/traqueal</figcaption></figure>
+
+<div class="checklist"><label class="check-item"><input type="checkbox"><span><strong>Indicação</strong>: FC <100 bpm OU apneia/respiração irregular</span></label><label class="check-item"><input type="checkbox"><span>Iniciar dentro do <strong>"minuto de ouro"</strong> (1º minuto de vida)</span></label><label class="check-item"><input type="checkbox"><span>Máscara cobrindo boca E nariz (vedação completa — técnica da letra "C" com os dedos)</span></label><label class="check-item"><input type="checkbox"><span>Frequência: <strong>40–60 movimentos/min</strong> ("aperta–solta–solta")</span></label><label class="check-item"><input type="checkbox"><span>Pressão inspiratória inicial: ~25 cmH₂O; ajustar conforme movimento torácico</span></label><label class="check-item"><input type="checkbox"><span>Iniciar com <strong>ar ambiente</strong> (FiO₂ 21%) → ajustar com oxímetro</span></label><label class="check-item"><input type="checkbox"><span>Acoplar oxímetro de pulso no <strong>membro superior direito</strong> (pré-ductal)</span></label><label class="check-item"><input type="checkbox"><span>Acoplar <strong>monitor cardíaco</strong> (eletrodos)</span></label><label class="check-item"><input type="checkbox"><span>Fazer VPP por <strong>30 segundos</strong> → reavaliar</span></label><div class="check-progress"><span class="prog-text">0/9 marcados</span></div></div>
+<h3 class="section-heading">VPP com Falha — CHECAR ANTES DE OFERECER O₂:</h3>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span>Ajuste entre face e máscara</span></label><label class="check-item"><input type="checkbox"><span>Posição da cabeça (leve extensão)</span></label><label class="check-item"><input type="checkbox"><span>Aspirar secreções</span></label><label class="check-item"><input type="checkbox"><span>Manter boca levemente aberta</span></label><label class="check-item"><input type="checkbox"><span>Pressão do balão adequada</span></label><div class="check-progress"><span class="prog-text">0/5 marcados</span></div></div>
+<blockquote>Se após correção da técnica não houver melhora → considerar máscara laríngea ou <strong>intubação orotraqueal</strong></blockquote>
+<hr>
+<h2 class="section-heading">Checklist — Massagem Cardíaca</h2>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span><strong>Indicação</strong>: FC <60 bpm após 30 segundos de VPP com técnica adequada + O₂ 60–100%</span></label><label class="check-item"><input type="checkbox"><span>Técnica: <strong>dois polegares sobrepostos</strong> no terço inferior do esterno, logo abaixo da linha intermamilar; palmas circundam o tórax</span></label><label class="check-item"><input type="checkbox"><span>Posição: profissional que massageia fica <strong>atrás da cabeça</strong> do RN; quem ventila fica ao lado</span></label><label class="check-item"><input type="checkbox"><span>Relação: <strong>3 compressões : 1 ventilação</strong> = 90 comp + 30 vent = <strong>120 eventos/min</strong></span></label><label class="check-item"><input type="checkbox"><span>O₂ em <strong>100%</strong> durante a massagem</span></label><label class="check-item"><input type="checkbox"><span>Após 60 seg de massagem → avaliar FC<ul class="check-sub"><li>FC ≥60 → suspender massagem, manter VPP</li><li>FC <60 → adrenalina</li></ul></span></label><div class="check-progress"><span class="prog-text">0/6 marcados</span></div></div>
+<hr>
+<h2 class="section-heading">Checklist — Adrenalina</h2>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span><strong>Indicação</strong>: FC <60 bpm após massagem cardíaca eficaz</span></label><label class="check-item"><input type="checkbox"><span>Diluição: <strong>1 mL de adrenalina + 9 mL de SF 0,9% = 1:10.000</strong></span></label><label class="check-item"><input type="checkbox"><span>Via traqueal: <strong>0,1 mg/kg</strong> (0,1 mL/kg da solução 1:10.000)</span></label><label class="check-item"><input type="checkbox"><span>Via EV (cateterismo umbilical): <strong>0,01–0,03 mg/kg</strong> (0,1–0,3 mL/kg da solução 1:10.000)</span></label><label class="check-item"><input type="checkbox"><span>Repetir a cada <strong>3–5 minutos</strong> se FC permanecer <60</span></label><label class="check-item"><input type="checkbox"><span>Via EV preferida quando disponível (absorção traqueal imprevisível)</span></label><div class="check-progress"><span class="prog-text">0/6 marcados</span></div></div>
+<hr>
+<h2 class="section-heading">Saturação Alvo por Minuto de Vida (pré-ductal, membro superior direito)</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Tempo</th><th>SatO₂ Alvo</th></tr></thead><tbody>
+<tr><td>1 min</td><td>60–65%</td></tr>
+<tr><td>2 min</td><td>65–70%</td></tr>
+<tr><td>3 min</td><td>70–75%</td></tr>
+<tr><td>4 min</td><td>75–80%</td></tr>
+<tr><td>5 min</td><td>80–85%</td></tr>
+<tr><td>10 min</td><td>85–95%</td></tr>
+</tbody></table></div>
+<hr>
+<h2 class="section-heading">ESTAÇÃO OSCE — Simulação</h2>
+<div class="professor-block"><strong>[PROFESSOR]:</strong> RN de 38 semanas, parto cesáreo, ao nascimento não chora, tônus flácido, FC 80 bpm. Líquido amniótico claro.</div>
+<div class="question-label"><strong>Pergunta 1:</strong> Qual a primeira conduta?</div>
+<blockquote>Levar imediatamente para a mesa de reanimação e iniciar os passos iniciais: promover calor, secar/estimular, posicionar a cabeça, aspirar se necessário — em no máximo 30 segundos.</blockquote>
+<div class="question-label"><strong>Pergunta 2:</strong> Após os passos iniciais, FC 90 bpm, respiração irregular. O que fazer?</div>
+<blockquote>Iniciar VPP com máscara, frequência 40–60 mov/min, pressão ~25 cmH₂O, ar ambiente, com oxímetro no membro superior direito. VPP deve ser iniciada ainda no "minuto de ouro". Avaliar após 30 segundos.</blockquote>
+<div class="question-label"><strong>Pergunta 3:</strong> Após 30 seg de VPP com técnica correta, FC 50 bpm. Qual a próxima etapa?</div>
+<blockquote>Iniciar massagem cardíaca. Dois polegares no terço inferior do esterno, relação 3:1 com VPP, total de 120 eventos/min. O₂ em 100%. Reavaliar FC após 60 segundos.</blockquote>
+<div class="question-label"><strong>Pergunta 4:</strong> Após 60 seg de massagem, FC ainda 45 bpm. O que fazer?</div>
+<blockquote>Adrenalina 1:10.000 — via traqueal 0,1 mg/kg OU via EV (catéter umbilical) 0,01–0,03 mg/kg. Continuar massagem e VPP. Repetir adrenalina a cada 3–5 min se necessário.</blockquote>
+<hr>
+<h2 class="section-heading">Diferenças para RN ≤ 34 Semanas (Pré-Termo)</h2>
+<ul><li>Temperatura da sala: 26 °C; receptor de plástico transparente para evitar perda de calor</li><li>Intubação precoce e surfactante endotraqueal se indicado</li><li>Glicose: risco de hipoglicemia — monitorar</li><li>CPAP nasal precocemente para prematuros que respiram (evita atelectasia)</li><li>RAL (raltegravir) contraindicado se IG <37 semanas</li></ul>
+<hr>
+<h2 class="section-heading">Pontos que o Professor Vai Checar</h2>
+<div class="checklist"><label class="check-item"><input type="checkbox"><span>Inicia VPP no "minuto de ouro" (não espera 5 minutos)</span></label><label class="check-item"><input type="checkbox"><span>Frequência correta de VPP: 40–60/min ("aperta-solta-solta")</span></label><label class="check-item"><input type="checkbox"><span>Massagem só após 30 seg de VPP adequada sem melhora com FC <60</span></label><label class="check-item"><input type="checkbox"><span>Relação correta: 3 compressões : 1 ventilação</span></label><label class="check-item"><input type="checkbox"><span>Adrenalina somente após massagem eficaz sem resposta</span></label><label class="check-item"><input type="checkbox"><span>Diluição correta: 1:10.000 (não usar adrenalina concentrada 1:1.000)</span></label><div class="check-progress"><span class="prog-text">0/6 marcados</span></div></div>
+<h2 class="section-heading">Alertas OSCE ⚠️</h2>
+<ul><li><strong>Minuto de ouro</strong>: VPP deve começar antes de 1 minuto de vida</li><li><strong>NÃO aspirar de rotina</strong> RN com mecônio e boa vitalidade (retirou-se a aspiração rotineira)</li><li>Massagem só começa com FC <60 após VPP CORRETA — verificar técnica primeiro</li><li>Relação massagem:ventilação no RN é <strong>3:1</strong> (diferente do adulto 30:2)</li><li>O₂ suplementar só após falha de VPP em ar ambiente — não iniciar O₂ diretamente</li></ul>
+<hr>
+<h2 class="section-heading">Fonte</h2>
+<ul><li>Gerado a partir de: <code>conteudo_cuidados_com_o_rn.md</code> (Aulas 01 Teórica + Prática — Reanimação Neonatal)</li><li>Seções consultadas: fluxograma de reanimação, VPP, massagem cardíaca, adrenalina, saturação alvo</li><li>Gaps identificados: protocolo para <34 semanas não detalhado no material — complementado com conhecimento geral (SBP/ILCOR 2021)</li></ul>
+</main>
+
+<nav class="bottom-nav">
+  <a href="../../osce-plano.html">← Voltar ao plano</a>
+  <span class="bottom-total" id="bottomTotal"></span>
+</nav>
+
+<script>
+(function() {
+  var KEY = 'osce_v1_' + location.pathname;
+  var state = JSON.parse(localStorage.getItem(KEY) || '{}');
+  var boxes = document.querySelectorAll('input[type=checkbox]');
+  var total = boxes.length;
+
+  boxes.forEach(function(cb, idx) {
+    if (state[idx]) cb.checked = true;
+    cb.addEventListener('change', function() {
+      state[idx] = cb.checked;
+      localStorage.setItem(KEY, JSON.stringify(state));
+      updateAll();
+    });
+  });
+
+  function updateAll() {
+    var done = 0;
+    boxes.forEach(function(c){ if (c.checked) done++; });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    var bar = document.getElementById('hdrBar');
+    var fill = document.getElementById('hdrFill');
+    var lbl = document.getElementById('hdrLabel');
+    var bot = document.getElementById('bottomTotal');
+    if (total > 0) {
+      bar.style.display = 'block';
+      fill.style.width = pct + '%';
+      lbl.textContent = done + '/' + total + ' itens marcados (' + pct + '%)';
+      bot.textContent = done + '/' + total + ' checados';
+    }
+    document.querySelectorAll('.checklist').forEach(function(cl) {
+      var cbs = cl.querySelectorAll('input[type=checkbox]');
+      var cd = 0;
+      cbs.forEach(function(c){ if (c.checked) cd++; });
+      var prog = cl.querySelector('.prog-text');
+      if (prog) prog.textContent = cd + '/' + cbs.length + ' marcados';
+    });
+  }
+
+  updateAll();
+})();
+</script>
+</body>
+</html>
