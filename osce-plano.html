@@ -403,8 +403,9 @@ function buildDayView() {
   d.blocos.forEach(bloco => {
     const sc = SPEC_COLORS[bloco.specialty] || { bg:'#f5f5f5', text:'#333', border:'#ccc' };
     const bDone = countDone(bloco.temas);
+    const fcTarget = bloco.specialty === 'GO' ? ' target="_blank"' : '';
     const fcLink = FLASHCARDS[bloco.specialty]
-      ? `<a class="flashcard-link" href="${FLASHCARDS[bloco.specialty]}" target="_blank"
+      ? `<a class="flashcard-link" href="${FLASHCARDS[bloco.specialty]}"${fcTarget}
             style="background:${sc.bg};color:${sc.text};border-color:${sc.border}">🃏 Flashcards</a>`
       : '';
 
@@ -430,7 +431,7 @@ function buildDayView() {
           <div class="tema-nome">${tema.nome}</div>
         </div>
         <div class="tema-actions">
-          ${file ? `<a class="open-btn" href="${file}" target="_blank">${ext} Abrir</a>` : ''}
+          ${file ? `<a class="open-btn" href="${file}">${ext} Abrir</a>` : ''}
           <span class="metodo-badge" style="background:${sc.bg};color:${sc.text};border-color:${sc.border}">${icon} ${tema.metodo}</span>
         </div>
       </div>`;
